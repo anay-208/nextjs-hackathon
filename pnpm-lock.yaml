@@ -21,6 +21,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.1
+      '@next/eslint-plugin-next':
+        specifier: ^15.2.4
+        version: 15.2.4
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.3
@@ -39,6 +42,9 @@ importers:
       eslint-config-next:
         specifier: 15.3.0-canary.40
         version: 15.3.0-canary.40(eslint@9.24.0(jiti@2.4.2))(typescript@5.8.3)
+      eslint-plugin-react-hooks:
+        specifier: ^5.2.0
+        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
       tailwindcss:
         specifier: ^4
         version: 4.1.3
@@ -233,6 +239,9 @@ packages:
 
   '@next/env@15.3.0-canary.40':
     resolution: {integrity: sha512-2yMw1FiWMdFRtFy9hsL+ctMSaqlrxMS1dUH37D7qZqf3eNJfSFpE2xQg3dDwqmKT8lRaAJUCBjoY3pBzmkEToQ==}
+
+  '@next/eslint-plugin-next@15.2.4':
+    resolution: {integrity: sha512-O8ScvKtnxkp8kL9TpJTTKnMqlkZnS+QxwoQnJwPGBxjBbzd6OVVPEJ5/pMNrktSyXQD/chEfzfFzYLM6JANOOQ==}
 
   '@next/eslint-plugin-next@15.3.0-canary.40':
     resolution: {integrity: sha512-E1nnA+27rw7aEzj3vXA7c29z1DSdUwd+wi9bbMohnZvA+fFiGbMva0+dK0hmw0GIMjGctvsP42tRdLTvLpVWHg==}
@@ -1849,6 +1858,10 @@ snapshots:
     optional: true
 
   '@next/env@15.3.0-canary.40': {}
+
+  '@next/eslint-plugin-next@15.2.4':
+    dependencies:
+      fast-glob: 3.3.1
 
   '@next/eslint-plugin-next@15.3.0-canary.40':
     dependencies:
