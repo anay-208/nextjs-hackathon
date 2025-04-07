@@ -29,21 +29,12 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-
-
-
-
-
-
-
-
-
 ## Creating the database
 
 This project uses PostgreSQL for the database, the easiest way to get it up and running is by using Docker. Start the database with this command:
 
 ```sh
-docker compose up
+docker compose up -d
 ```
 
 And use this for the environment variable:
@@ -57,10 +48,6 @@ If for some reason you want to start the database from scratch you can use the f
 ```sh
 docker compose down -v
 ```
-
-
-
-
 
 ## Deploy on Vercel
 
