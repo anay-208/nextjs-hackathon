@@ -1,5 +1,25 @@
-import { integer, pgTable } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 
-export const users = pgTable("user", {
+const timestamps = {
+  created_at: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  updated_at: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
+};
+
+export const journalingPages = pgTable("journaling_page", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+  title: varchar({ length: 256 }),
+  content: text(),
+
+  is_pinned: boolean(),
+  is_public: boolean(),
+
+  ...timestamps,
 });
