@@ -1,3 +1,4 @@
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -23,3 +24,6 @@ export const journalingPages = pgTable("journaling_page", {
 
   ...timestamps,
 });
+
+export type SelectJournalType = InferSelectModel<typeof journalingPages>;
+export type InsertJournalType = InferInsertModel<typeof journalingPages>;
