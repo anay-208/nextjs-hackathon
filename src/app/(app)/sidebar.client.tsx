@@ -74,7 +74,7 @@ function SidebarButton(props: ComponentProps<"div"> & {
       href={props.href}
       className={cn(
         "size-10 flex items-center justify-center rounded-xl text-[#898997] clickable transition-transform",
-        props.active ? "bg-[#fff] text-[#494960]" : "hover:bg-[#fff8]"
+        props.active ? "bg-[#49496018] text-[#494960]" : "hover:bg-[#49496011]"
       )}
     >
       {props.icon}
