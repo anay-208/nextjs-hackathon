@@ -19,7 +19,6 @@ export default async function Page({
     (page - 1) * JournalDashboardSize,
     page * JournalDashboardSize,
   );
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-start gap-5 py-10">
       <h1 className="text-4xl font-bold">My Journal</h1>
