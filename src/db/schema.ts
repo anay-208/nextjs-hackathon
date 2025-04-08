@@ -15,14 +15,15 @@ const timestamps = {
 
 export const journalingPages = pgTable("journaling_page", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  author_id: integer().notNull(),
 
-  title: varchar({ length: 256 }),
-  content: text(),
+  title: varchar({ length: 256 }).default("Untitled"),
+  content: text().default("").notNull(),
 
-  is_pinned: boolean(),
-  is_public: boolean(),
+  is_pinned: boolean().default(false).notNull(),
+  is_public: boolean().default(false).notNull(),
 
-  summary: text(),
+  summary: text().default("").notNull(),
 
   ...timestamps,
 });
