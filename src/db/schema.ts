@@ -22,6 +22,8 @@ export const journalingPages = pgTable("journaling_page", {
   is_pinned: boolean(),
   is_public: boolean(),
 
+  summary: text(),
+
   ...timestamps,
 });
 

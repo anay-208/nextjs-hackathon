@@ -98,3 +98,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+@utility clickable {
+  @apply cursor-pointer translate-y-0.5
+}
