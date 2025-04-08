@@ -25,6 +25,7 @@ const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
         },
       ],
     }),
+    summary: `This is a pretty long summary of entry number ${i + 1}. Which summarizes everything in entry number ${i + 1} with cool text regarding summaries for entry number ${i + 1}. The summary also summarizes other info regarding entry number ${i + 1}. So all in all a lot of summarization of the summaries for the summary which we can check out here with our eyes regarding the summary.`,
     created_at: date,
     updated_at: date,
     is_pinned: i === 5,
