@@ -1,6 +1,5 @@
-import Tiptap from "@/app/dashboard/journaling/tiptap.client";
-import "./tiptap.css";
 import { Suspense } from "react";
+import Tiptap from "./tiptap.client";
 import { SelectJournalType } from "@/db/schema";
 const getData = async () => {
   "use cache";

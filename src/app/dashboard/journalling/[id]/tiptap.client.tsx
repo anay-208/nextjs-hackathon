@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from "react";
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
-import { Button } from "@/components/ui/button";
 import { SelectJournalType } from "@/db/schema";
 
 const createDefaultContent = (): JSONContent => {
@@ -24,7 +23,7 @@ export default function Tiptap({
   initialData?: SelectJournalType;
 }) {
   const [editorContent, setEditorContent] = useState<JSONContent | null>(null);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  //const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [title, setTitle] = useState(initialData?.title || "");
 
   useEffect(() => {
@@ -66,7 +65,7 @@ export default function Tiptap({
   const handlePublish = useCallback(() => {
     if (!editorContent) return;
     localStorage.removeItem(title);
-    setLastSaved(new Date());
+    //setLastSaved(new Date());
     alert("Saved!");
   }, [editorContent, title]);
 
@@ -74,7 +73,7 @@ export default function Tiptap({
     const saveInterval = setInterval(() => {
       if (title && editorContent) {
         localStorage.setItem(title, JSON.stringify(editorContent));
-        setLastSaved(new Date());
+        //setLastSaved(new Date());
       }
     }, 30000);
     return () => clearInterval(saveInterval);
