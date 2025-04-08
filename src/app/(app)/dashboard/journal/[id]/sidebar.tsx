@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllData } from "./data";
 import { SelectJournalType } from "@/db/schema";
 import { Pin, PlusCircle } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function getGroupLabel(date: Date) {
   const now = new Date();
@@ -60,6 +61,35 @@ export async function Sidebar({ activeID }: { activeID: string }) {
                     <Pin className="group-hover:text-muted-foreground size-4 text-transparent" />
                   )}
                 </button>
+              </div>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function SidebarSkeleton() {
+  return (
+    <div className="h-full w-full space-y-4">
+      <div className="flex h-fit w-full flex-row items-start justify-start gap-2">
+        <PlusCircle className="text-muted-foreground size-6" />
+        <Skeleton className="h-4 w-24" />
+      </div>
+
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="space-y-1">
+          <Skeleton className="h-4 w-20" />
+
+          <ul className="flex flex-col items-start justify-start space-y-1">
+            {Array.from({ length: 3 }).map((_, j) => (
+              <div
+                key={j}
+                className="flex h-fit w-full flex-row items-center justify-start gap-2 rounded-sm p-1"
+              >
+                <Skeleton className="h-4 w-full flex-1" />
+                <Skeleton className="size-4 shrink-0" />
               </div>
             ))}
           </ul>
