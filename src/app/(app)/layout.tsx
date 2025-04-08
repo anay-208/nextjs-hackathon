@@ -5,7 +5,7 @@ export default function AppLayout(props: {
   children: ReactNode
 }) {
   return (
-    <div className="bg-[#dcdce0] h-screen flex *:min-w-0 **:border-red-500">
+    <div className="bg-[#e8e8f0] h-screen flex *:min-w-0 **:border-red-500">
 
       {/* Main Sidebar */}
       <div className="flex flex-col px-3 self-stretch items-center pt-8 pb-4 gap-1">
