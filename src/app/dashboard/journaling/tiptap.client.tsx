@@ -65,8 +65,6 @@ export default function Tiptap({
 
   const handlePublish = useCallback(() => {
     if (!editorContent) return;
-    console.log("Published HTML:", JSON.stringify(editorContent));
-    console.log("Title:", title);
     localStorage.removeItem(title);
     setLastSaved(new Date());
     alert("Saved!");
