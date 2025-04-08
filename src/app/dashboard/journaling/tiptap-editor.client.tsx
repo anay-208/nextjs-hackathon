@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useCallback, useEffect, useState } from "react";
+import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
@@ -45,9 +45,9 @@ import { ImageDialog } from "./image-dialog.client";
 import { ConfirmDialog } from "./confirm-dialog.client";
 
 interface Props {
-  onUpdate: (content: string) => void;
-  editorContent: string;
-  setEditorContent: React.Dispatch<React.SetStateAction<string>>;
+  onUpdate: (content: JSONContent) => void;
+  editorContent: JSONContent;
+  setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
 }
 
 const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
@@ -90,9 +90,9 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
     ],
     content: editorContent,
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      setEditorContent(html);
-      onUpdate(html);
+      const content = editor.getJSON();
+      setEditorContent(content);
+      onUpdate(content);
     },
     editorProps: {
       attributes: {
@@ -240,7 +240,7 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
         e.preventDefault();
         onMouseDown();
       }}
-      className={`${isActive() ? "bg-primary text-primary-foreground" : ""} hover:bg-primary hover:text-primary-foreground transition-colors`}
+      className={`${isActive() ? "bg-primary text-primary-foreground" : ""} hover:bg-primary transition-colors`}
       title={tooltip}
     >
       <Icon className="size-4" />
@@ -249,8 +249,12 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
   );
 
   return (
-    <div className="overflow-hidden rounded-lg border">
-      <div className="bg-muted flex flex-wrap items-center gap-1 border-b p-2">
+    <div className="relative h-full overflow-hidden rounded-lg">
+      <EditorContent
+        editor={editor}
+        className="h-full w-full max-w-none pb-16 focus:outline-none"
+      />
+      <div className="border-accent-foreground absolute right-0 bottom-2 left-0 flex w-full flex-wrap items-center gap-1 rounded-lg border-2 p-2">
         <ToolbarButton
           onMouseDown={() => editor.chain().focus().toggleBold().run()}
           icon={Bold}
@@ -437,10 +441,6 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
           tooltip="Redo"
         />
       </div>
-      <EditorContent
-        editor={editor}
-        className="prose dark:prose-invert min-h-[200px] max-w-none p-4 focus:outline-none"
-      />
       <ImageDialog
         isOpen={isImageDialogOpen}
         onClose={() => setIsImageDialogOpen(false)}
