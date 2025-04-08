@@ -16,7 +16,9 @@ export default async function Page({
   }
   return (
     <div className="flex min-h-[100svh] w-full flex-row items-stretch justify-between gap-5 p-5">
-      <Sidebar activeID={id} />
+      <div className="border-accent-foreground hidden w-[15%] shrink-0 space-y-4 rounded-lg border-2 p-2 lg:block">
+        <Sidebar activeID={id} />
+      </div>
       <div className="min-w-0 flex-1">
         <Suspense fallback={<div className="p-4">Loading...</div>}>
           <Tiptap initialData={journalData} />

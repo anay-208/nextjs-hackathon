@@ -28,7 +28,7 @@ export async function Sidebar({ activeID }: { activeID: string }) {
   }
 
   return (
-    <div className="border-accent-foreground w-[15%] shrink-0 space-y-4 rounded-lg border-2 p-2">
+    <div className="h-full w-full">
       <div className="flex h-fit w-full flex-row items-start justify-start gap-2">
         <PlusCircle className="text-muted-foreground size-6" /> New Entry
       </div>
