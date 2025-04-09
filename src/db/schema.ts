@@ -7,13 +7,6 @@ const timestamps = {
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 };
 
-export const usersTable = pgTable("users", {
-  id: integer("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  name: json("name").notNull(),
-  password: text("password").notNull(),
-  ...timestamps,
-});
 
 export const expenseTable = pgTable('expense', {
     id: serial('id').primaryKey(),
@@ -49,10 +42,10 @@ export type InsertJournalType = InferInsertModel<typeof journalingPages>;
 
 
 
-// For better-auth
+// For better-auth auto generated
 
 
-export const user = pgTable("user", {
+export const userTable = pgTable("user", {
 					id: text("id").primaryKey(),
 					name: text('name').notNull(),
  email: text('email').notNull().unique(),
@@ -63,7 +56,7 @@ export const user = pgTable("user", {
  isAnonymous: boolean('is_anonymous')
 				});
 
-export const session = pgTable("session", {
+export const sessionTable = pgTable("session", {
 					id: text("id").primaryKey(),
 					expiresAt: timestamp('expires_at').notNull(),
  token: text('token').notNull().unique(),
@@ -74,7 +67,7 @@ export const session = pgTable("session", {
  userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' })
 				});
 
-export const account = pgTable("account", {
+export const accountTable = pgTable("account", {
 					id: text("id").primaryKey(),
 					accountId: text('account_id').notNull(),
  providerId: text('provider_id').notNull(),
@@ -90,7 +83,7 @@ export const account = pgTable("account", {
  updatedAt: timestamp('updated_at').notNull()
 				});
 
-export const verification = pgTable("verification", {
+export const verificationTable = pgTable("verification", {
 					id: text("id").primaryKey(),
 					identifier: text('identifier').notNull(),
  value: text('value').notNull(),

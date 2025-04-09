@@ -53,6 +53,7 @@ docker compose down -v
 
 To migrate DB, run
 ```sh
+pnpm migration:generate
 pnpm migration:push
 ```
 
