@@ -5,9 +5,6 @@ import { anonymous } from "better-auth/plugins"
 import "server-only"
 
 export const auth = betterAuth({
-    emailAndPassword: {
-        enabled: true
-    },
     // TODO: Social Providers
     database: drizzleAdapter(db, {
         provider: "pg", 
