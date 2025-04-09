@@ -43,9 +43,9 @@ export type InsertJournalType = InferInsertModel<typeof journalingPages>;
 
 
 // For better-auth auto generated
+// table is not postfixed as it won't work then 
 
-
-export const userTable = pgTable("user", {
+export const user = pgTable("user", {
 					id: text("id").primaryKey(),
 					name: text('name').notNull(),
  email: text('email').notNull().unique(),
@@ -56,7 +56,7 @@ export const userTable = pgTable("user", {
  isAnonymous: boolean('is_anonymous')
 				});
 
-export const sessionTable = pgTable("session", {
+export const session = pgTable("session", {
 					id: text("id").primaryKey(),
 					expiresAt: timestamp('expires_at').notNull(),
  token: text('token').notNull().unique(),
@@ -67,7 +67,7 @@ export const sessionTable = pgTable("session", {
  userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' })
 				});
 
-export const accountTable = pgTable("account", {
+export const account = pgTable("account", {
 					id: text("id").primaryKey(),
 					accountId: text('account_id').notNull(),
  providerId: text('provider_id').notNull(),
@@ -83,7 +83,7 @@ export const accountTable = pgTable("account", {
  updatedAt: timestamp('updated_at').notNull()
 				});
 
-export const verificationTable = pgTable("verification", {
+export const verification = pgTable("verification", {
 					id: text("id").primaryKey(),
 					identifier: text('identifier').notNull(),
  value: text('value').notNull(),
