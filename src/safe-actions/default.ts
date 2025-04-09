@@ -1,8 +1,8 @@
 import { createSafeActionClient, DEFAULT_SERVER_ERROR_MESSAGE } from "next-safe-action";
 import { ActionError } from "./consts";
+import "server-only";
 
-
-export const actionClient = createSafeActionClient({
+export const defaultActionClient = createSafeActionClient({
   // Can also be an async function.
   handleServerError(e) {
 
