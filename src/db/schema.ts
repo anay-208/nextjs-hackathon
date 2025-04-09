@@ -1,10 +1,7 @@
-import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   boolean,
-  integer,
   numeric,
   pgTable,
-  serial,
   text,
   timestamp,
   varchar,
@@ -16,16 +13,16 @@ const timestamps = {
 };
 
 export const expenseTable = pgTable("expense", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   description: text("description").notNull(),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
   date: timestamp("date").defaultNow().notNull(),
   ...timestamps,
 });
 
-export const journalingPages = pgTable("journaling_page", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  author_id: integer().notNull(),
+export const journalingTable = pgTable("journaling_page", {
+  id: text("id").primaryKey(),
+  author_id: text("author_id").notNull(),
 
   title: varchar({ length: 256 }).default("Untitled"),
   content: text().default("").notNull(),
@@ -37,9 +34,6 @@ export const journalingPages = pgTable("journaling_page", {
 
   ...timestamps,
 });
-
-export type SelectJournalType = InferSelectModel<typeof journalingPages>;
-export type InsertJournalType = InferInsertModel<typeof journalingPages>;
 
 // For better-auth auto generated
 // table is not postfixed as it won't work then

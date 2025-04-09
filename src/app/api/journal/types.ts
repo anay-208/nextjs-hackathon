@@ -1,10 +1,13 @@
-import { journalingPages } from "@/db/schema";
-import { InferInsertModel } from "drizzle-orm";
+import { journalingTable } from "@/db/schema";
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export type CreateJournalInput = Omit<
-  InferInsertModel<typeof journalingPages>,
+  InferInsertModel<typeof journalingTable>,
   "id" | "author_id"
 >;
 
 export type DB<T extends (...args: any) => any = (...args: any) => any> =
   Awaited<ReturnType<T>>;
+
+export type SelectJournalType = InferSelectModel<typeof journalingTable>;
+export type InsertJournalType = InferInsertModel<typeof journalingTable>;

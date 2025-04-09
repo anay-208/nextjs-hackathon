@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
-import { SelectJournalType } from "@/db/schema";
+import { SelectJournalType } from "@/app/api/journal/types";
 
 const createDefaultContent = (): JSONContent => {
   return {

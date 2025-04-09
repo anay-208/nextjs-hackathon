@@ -11,38 +11,41 @@ import {
 } from "./db";
 import { CreateJournalInput } from "./types";
 
-export const listJournals = ({
-  author_id,
+export const listJournals = async ({
   page = 0,
   pageSize = 10,
 }: {
-  author_id: number;
   page?: number;
   pageSize?: number;
 }) =>
   handle(
-    () => withAuth(() => dbListJournals({ author_id, page, pageSize })),
+    () =>
+      withAuth((user) =>
+        dbListJournals({ author_id: user.user.id, page, pageSize }),
+      ),
     "listJournals",
   );
 
-export const createJournal = (data: CreateJournalInput) =>
+export const createJournal = async (data: CreateJournalInput) =>
   handle(
     () =>
       withAuth((user) => dbCreateJournal({ ...data, author_id: user.user.id })),
     "createJournal",
   );
 
-export const getJournalCount = () =>
+export const getJournalCount = async () =>
   handle(
     () => withAuth((user) => dbGetJournalCount(user.user.id)),
     "getJournalCount",
   );
 
-export const getJournal = (id: number) =>
+export const getJournal = async (id: string) =>
   handle(() => withAuth(() => dbGetJournal(id)), "getJournal");
 
-export const deleteJournal = (id: number) =>
+export const deleteJournal = async (id: string) =>
   handle(() => withAuth(() => dbDeleteJournal(id)), "deleteJournal");
 
-export const updateJournal = (id: number, data: Partial<CreateJournalInput>) =>
-  handle(() => withAuth(() => dbUpdateJournal(id, data)), "updateJournal");
+export const updateJournal = async (
+  id: string,
+  data: Partial<CreateJournalInput>,
+) => handle(() => withAuth(() => dbUpdateJournal(id, data)), "updateJournal");
