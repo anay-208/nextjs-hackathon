@@ -1,4 +1,4 @@
-import { SelectJournalType } from "@/db/schema";
+import { SelectJournalType } from "@/app/api/journal/types";
 
 const now = new Date();
 const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
@@ -6,9 +6,9 @@ const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
   date.setDate(now.getDate() - i * 6); // Every entry 6 days apart
 
   return {
-    id: i + 1,
+    id: `${i + 1}`,
     title: `Sample Entry ${i + 1}`,
-    author_id: 17,
+    author_id: "17",
     content: JSON.stringify({
       type: "doc",
       content: [
@@ -43,5 +43,5 @@ export const getData = async (
   id: number,
 ): Promise<SelectJournalType | null> => {
   "use cache";
-  return journalData.find((j) => j.id === id) ?? null;
+  return journalData.find((j) => j.id === `${id}`) ?? null;
 };

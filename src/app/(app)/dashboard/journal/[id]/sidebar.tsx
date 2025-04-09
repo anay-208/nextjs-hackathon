@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getAllData } from "./data";
-import { SelectJournalType } from "@/db/schema";
 import { Pin, PlusCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SelectJournalType } from "@/app/api/journal/types";
 
 function getGroupLabel(date: Date) {
   const now = new Date();
