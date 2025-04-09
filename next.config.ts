@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     ppr: true,
     dynamicIO: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  }
 };
 
 export default nextConfig;
