@@ -1,5 +1,5 @@
 import { getAllData } from "./[id]/data";
-import { JournalCard, JournalCreateCard } from "./card";
+import { JournalCard, JournalCreateCard } from "./card.client";
 import "./[id]/tiptap.css";
 import { JournalDashboardSize } from "./constants";
 import { Pagination } from "./pagination";

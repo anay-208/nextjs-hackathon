@@ -1,4 +1,4 @@
-import { JournalCreateCard, JournalLoadingCard } from "./card";
+import { JournalCreateCard, JournalLoadingCard } from "./card.client";
 import { JournalDashboardSize } from "./constants";
 import { Pagination } from "./pagination";
 export default async function Loading() {

@@ -35,17 +35,13 @@ export function JournalLoadingCard() {
 
 export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
   return (
-    <Link
-      href={`/dashboard/journal/new`}
-      className={cn(
-        "border-accent-foreground bg-accent relative flex h-[200px] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-md border-2 p-2 px-2",
-        {
-          "cursor-not-allowed opacity-50": inactive,
-        },
-      )}
+    <button
+      onClick={async () => {}}
+      disabled={inactive}
+      className="border-accent-foreground bg-accent relative flex h-[200px] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-md border-2 p-2 px-2 disabled:cursor-not-allowed disabled:opacity-50"
     >
       <PlusCircle className="text-muted-foreground size-6" />
       <p className="text-xl font-bold">Create New</p>
-    </Link>
+    </button>
   );
 }
