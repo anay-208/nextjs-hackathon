@@ -19,6 +19,7 @@ export default async function Page({
   }
   const dataRes = await listJournals({
     page: page,
+    pageSize: JournalDashboardSize,
   });
   const data = dataRes.data ?? [];
   return (
