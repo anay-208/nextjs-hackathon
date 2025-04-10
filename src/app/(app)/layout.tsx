@@ -8,9 +8,7 @@ export default function AppLayout(props: {
     <div className="bg-[#f0f0f5] h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip">
 
       {/* Main Sidebar */}
-      <div className="flex flex-col px-3 self-stretch items-center pt-8 pb-4 gap-1 shrink-0">
-        <SidebarItems />
-      </div>
+      <SidebarItems />
 
       {/* Content */}
       <div className="grow p-2 pl-0 flex flex-col min-h-0">
