@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "migration:generate": "drizzle-kit generate",
-    "migration:push": "drizzle-kit push"
+    "migration:push": "drizzle-kit push",
+    "generate-better-auth-schema": "pnpm dlx @better-auth/cli generate --config ./src/auth/index.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
@@ -37,10 +38,12 @@
     "drizzle-orm": "^0.41.0",
     "drizzle-zod": "^0.7.1",
     "lucide-react": "^0.487.0",
-    "next": "15.3.0-canary.41",
+    "next": "15.3.0-canary.45",
+    "next-safe-action": "^7.10.5",
     "pg": "^8.14.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.3",
     "styled-components": "^6.1.17",
     "tailwind-merge": "^3.2.0",
