@@ -1,13 +1,12 @@
 import { getJournalCount } from "@/app/api/journal/actions";
-import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import Total from "./total.client";
 import { JournalDashboardSize } from "./constants";
+import Total from "./total.client";
 
 export async function Pagination({ currentPage }: { currentPage: number }) {
   const countRes = await getJournalCount();
-  let count = countRes.data ?? 0;
+  const count = countRes.data ?? 0;
   const totalPages = Math.ceil(count / JournalDashboardSize);
 
   return (
