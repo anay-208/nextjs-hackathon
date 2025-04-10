@@ -11,3 +11,12 @@ export type DB<T extends (...args: any) => any = (...args: any) => any> =
 
 export type SelectJournalType = InferSelectModel<typeof journalingTable>;
 export type InsertJournalType = InferInsertModel<typeof journalingTable>;
+
+export type ListJournalFilter = {
+  is_pinned?: boolean;
+};
+
+export type ListJournalSort = {
+  created_at?: "asc" | "desc";
+  updated_at?: "asc" | "desc";
+};

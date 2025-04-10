@@ -9,19 +9,33 @@ import {
   dbListJournals,
   dbUpdateJournal,
 } from "./db";
-import { CreateJournalInput } from "./types";
+import {
+  CreateJournalInput,
+  ListJournalFilter,
+  ListJournalSort,
+} from "./types";
 
 export const listJournals = async ({
+  filter,
+  sort,
   page = 0,
   pageSize = 10,
 }: {
   page?: number;
   pageSize?: number;
+  filter: ListJournalFilter;
+  sort: ListJournalSort;
 }) =>
   handle(
     () =>
       withAuth((user) =>
-        dbListJournals({ author_id: user.user.id, page, pageSize }),
+        dbListJournals({
+          author_id: user.user.id,
+          page,
+          pageSize,
+          filter,
+          sort,
+        }),
       ),
     "listJournals",
   );
