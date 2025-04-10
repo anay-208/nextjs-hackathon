@@ -7,6 +7,7 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { toast } from "sonner";
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -50,14 +51,34 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
   return (
     <button
       onClick={() => {
-        startTransition(async () => {
-          const generatedTitle = uniqueNamesGenerator({
-            dictionaries: [adjectives, colors, animals],
-            separator: "-",
-            style: "lowerCase",
-          });
-          await createJournal({ title: generatedTitle });
-          router.refresh();
+        startTransition(() => {
+          toast.promise(
+            (async () => {
+              const generatedTitle = uniqueNamesGenerator({
+                dictionaries: [adjectives, colors, animals],
+                separator: "-",
+                style: "lowerCase",
+              });
+              const idRes = await createJournal({ title: generatedTitle });
+              if (!idRes || !idRes.data)
+                throw new Error("Failed to create journal");
+              router.refresh();
+              return idRes.data.id;
+            })(),
+            {
+              loading: "Creating journal...",
+              success: (id) => ({
+                message: "Journal created!",
+                action: {
+                  label: "View Journal",
+                  onClick: () => {
+                    router.push(`/dashboard/journal/${id}`);
+                  },
+                },
+              }),
+              error: "Failed to create journal",
+            },
+          );
         });
       }}
       disabled={inactive || isPending}
