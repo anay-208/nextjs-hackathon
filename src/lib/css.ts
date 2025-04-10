@@ -7,5 +7,9 @@ import type * as React from 'react';
 declare module 'react' {
   interface CSSProperties {
     [index: `--${ string }`]: string;
+
+    // Common CSS properties
+    "--bg"?: string, // Bg value provider. Can be consumed using `-bg` token like `bg-bg` or `fg-bg` or `border-bg`
+    "--p"?: string,
   }
 }
