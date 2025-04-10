@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { MaterialSymbolsBook2 } from "../sidebar.client";
 import type { ComponentProps, SVGProps } from "react";
 import Link from "next/link";
-import { Book } from "lucide-react";
+import { MaterialSymbolsBook2 } from "../sidebar";
 
 export default function Page() {
   return <div className="-m-4">
