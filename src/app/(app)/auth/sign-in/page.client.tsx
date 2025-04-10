@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { authClient } from '@/auth/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { test } from '@/actions/test'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -13,7 +14,9 @@ export default function SignInPage() {
   const router = useRouter()
   
   useEffect(() => {
+    // TODO: remove
     authClient.getSession().then(console.log)
+    test().then(console.log)
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {

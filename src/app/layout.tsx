@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Life Log",
+  title: "Lifelog",
   description: "Notion on Steroids", //TODO: Finalize the metadata situation (https://github.com/anay-208/nextjs-hackathon/issues/8)
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${ inter.className } subpixel-antialiased`}>
         {children}
         <Toaster />
       </body>
