@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     ppr: true,
     dynamicIO: true,
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;
