@@ -1,25 +1,28 @@
-import { pgTable, serial, text, numeric, timestamp, integer, varchar, json, boolean } from 'drizzle-orm/pg-core';
-import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-
+import {
+  boolean,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 const timestamps = {
   created_at: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 };
 
+export const expenseTable = pgTable("expense", {
+  id: text("id").primaryKey(),
+  description: text("description").notNull(),
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  ...timestamps,
+});
 
-export const expenseTable = pgTable('expense', {
-    id: serial('id').primaryKey(),
-    description: text('description').notNull(),
-    amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
-    date: timestamp('date').defaultNow().notNull(),
-    ...timestamps
-  });
-
-
-export const journalingPages = pgTable("journaling_page", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  author_id: integer().notNull(),
+export const journalingTable = pgTable("journaling_page", {
+  id: text("id").primaryKey(),
+  author_id: text("author_id").notNull(),
 
   title: varchar({ length: 256 }).default("Untitled"),
   content: text().default("").notNull(),
@@ -32,18 +35,8 @@ export const journalingPages = pgTable("journaling_page", {
   ...timestamps,
 });
 
-export type SelectJournalType = InferSelectModel<typeof journalingPages>;
-export type InsertJournalType = InferInsertModel<typeof journalingPages>;
-
-
-
-
-
-
-
-
 // For better-auth auto generated
-// table is not postfixed as it won't work then 
+// table is not postfixed as it won't work then
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -65,6 +58,7 @@ updatedAt: timestamp('updated_at').notNull(),
 ipAddress: text('ip_address'),
 userAgent: text('user_agent'),
 userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' })
+
 });
 
 export const account = pgTable("account", {
@@ -90,4 +84,5 @@ value: text('value').notNull(),
 expiresAt: timestamp('expires_at').notNull(),
 createdAt: timestamp('created_at'),
 updatedAt: timestamp('updated_at')
+
 });
