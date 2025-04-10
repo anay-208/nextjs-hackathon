@@ -3,6 +3,8 @@ import { getAllData } from "./data";
 import { Pin, PlusCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SelectJournalType } from "@/app/api/journal/types";
+import { listJournals } from "@/app/api/journal/actions";
+import JournalPinned from "./pin.client";
 
 function getGroupLabel(date: Date) {
   const now = new Date();
@@ -17,10 +19,17 @@ function getGroupLabel(date: Date) {
   return "Older";
 }
 
+type JournalWithoutContent = Omit<SelectJournalType, "content">;
 export async function Sidebar({ activeID }: { activeID: string }) {
-  const allData = await getAllData();
+  //TODO: Get all pinned articles and render them first https://github.com/anay-208/nextjs-hackathon/issues/47
+  const dataRes = await listJournals({
+    page: 0,
+    pageSize: 15,
+  });
+  if (!dataRes.data) return null;
+  const allData = dataRes.data;
 
-  const grouped: Record<string, SelectJournalType[]> = {};
+  const grouped: Record<string, JournalWithoutContent[]> = {};
 
   for (const entry of allData) {
     const label = getGroupLabel(new Date(entry.created_at));
@@ -45,7 +54,7 @@ export async function Sidebar({ activeID }: { activeID: string }) {
                 className="hover:bg-muted group flex h-fit w-full flex-row items-center justify-start gap-2 rounded-sm p-1"
               >
                 <Link
-                  href={`/dashboard/journalling/${entry.id}`}
+                  href={`/dashboard/journal/${entry.id}`}
                   className={`text-sm ${
                     String(entry.id) === activeID
                       ? "text-primary font-bold"
@@ -54,13 +63,10 @@ export async function Sidebar({ activeID }: { activeID: string }) {
                 >
                   {entry.title}
                 </Link>
-                <button className="size-4 shrink-0">
-                  {entry.is_pinned ? (
-                    <Pin className="text-foreground size-4" />
-                  ) : (
-                    <Pin className="group-hover:text-muted-foreground size-4 text-transparent" />
-                  )}
-                </button>
+                <JournalPinned
+                  isPinned={entry.is_pinned}
+                  journalID={entry.id}
+                />
               </div>
             ))}
           </ul>
