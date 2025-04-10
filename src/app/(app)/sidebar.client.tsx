@@ -26,7 +26,7 @@ export function SidebarItems() {
         {
           icon: MaterialSymbolsBook2,
           label: "Journals",
-          href: "/dashboard/journal",
+          href: "/journal",
           active: false,
         },
       ].map((item) => {
