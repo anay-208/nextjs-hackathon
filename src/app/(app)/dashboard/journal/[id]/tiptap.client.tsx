@@ -1,9 +1,12 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useTransition } from "react";
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
 import { SelectJournalType } from "@/app/api/journal/types";
+import { updateJournal } from "@/app/api/journal/actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const createDefaultContent = (): JSONContent => {
   return {
@@ -20,11 +23,13 @@ const createDefaultContent = (): JSONContent => {
 export default function Tiptap({
   initialData,
 }: {
-  initialData?: SelectJournalType;
+  initialData: SelectJournalType;
 }) {
   const [editorContent, setEditorContent] = useState<JSONContent | null>(null);
-  //const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [title, setTitle] = useState(initialData?.title || "");
+  const [isPending, startTransition] = useTransition();
+  const [lastLocalSaved, setLastLocalSaved] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     let content: JSONContent;
@@ -35,10 +40,19 @@ export default function Tiptap({
       const storedContent = initialData.title
         ? localStorage.getItem(initialData.title)
         : null;
-
       if (storedContent) {
         try {
           content = JSON.parse(storedContent);
+
+          toast.success("Loaded unsaved changes from local storage", {
+            action: {
+              label: "Undo",
+              onClick: () => {
+                localStorage.removeItem(initialData.title!);
+                window.location.reload();
+              },
+            },
+          });
         } catch (e) {
           console.error("Failed to parse stored content:", e);
           content = createDefaultContent();
@@ -64,18 +78,37 @@ export default function Tiptap({
 
   const handlePublish = useCallback(() => {
     if (!editorContent) return;
-    localStorage.removeItem(title);
-    //setLastSaved(new Date());
-    alert("Saved!");
-  }, [editorContent, title]);
+
+    startTransition(() => {
+      toast.promise(
+        (async () => {
+          await updateJournal(initialData.id, {
+            content: JSON.stringify(editorContent),
+          });
+          localStorage.removeItem(title);
+          setLastLocalSaved(null);
+          router.refresh();
+        })(),
+        {
+          loading: "Saving journal...",
+          success: "Journal saved!",
+          error: "Failed to save journal",
+        },
+      );
+    });
+  }, [editorContent, title, initialData.id]);
 
   useEffect(() => {
     const saveInterval = setInterval(() => {
       if (title && editorContent) {
+        console.log(initialData.content);
+        if (JSON.stringify(editorContent) === initialData.content) {
+          return;
+        }
         localStorage.setItem(title, JSON.stringify(editorContent));
-        //setLastSaved(new Date());
+        setLastLocalSaved(new Date().toISOString());
       }
-    }, 30000);
+    }, 10000);
     return () => clearInterval(saveInterval);
   }, [editorContent, title]);
 
@@ -98,6 +131,9 @@ export default function Tiptap({
               onUpdate={handleEditorUpdate}
               editorContent={editorContent}
               setEditorContent={setEditorContent}
+              handlePublish={handlePublish}
+              isPublishing={isPending}
+              lastLocalSaved={lastLocalSaved}
             />
           )}
         </div>

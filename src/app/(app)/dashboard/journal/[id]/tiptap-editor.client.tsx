@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -33,6 +33,7 @@ import {
   LinkIcon,
   Undo,
   Redo,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,19 +44,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ImageDialog } from "./image-dialog.client";
 import { ConfirmDialog } from "./confirm-dialog.client";
+import { NodeSelection } from "@tiptap/pm/state";
 
 interface Props {
   onUpdate: (content: JSONContent) => void;
   editorContent: JSONContent;
   setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
+  handlePublish: () => void;
+  isPublishing: boolean;
+  lastLocalSaved: string | null;
 }
 
-const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
+const TiptapEditor = ({
+  onUpdate,
+  editorContent,
+  setEditorContent,
+  handlePublish,
+  isPublishing,
+  lastLocalSaved,
+}: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<string | null>(null);
 
   const editor = useEditor({
+    editable: !isPublishing,
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
@@ -99,25 +112,48 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
         class: "prose dark:prose-invert max-w-none focus:outline-none",
       },
       handleKeyDown: (view, event) => {
-        if (event.key === "Backspace" || event.key === "Delete") {
-          const { state } = view;
-          const { selection } = state;
-          const { empty, anchor } = selection;
+        const { state } = view;
+        const { selection } = state;
 
-          if (!empty) {
-            return false;
-          }
+        console.log("Key:", event.key);
+        console.log("Selection type:", selection.constructor.name);
+        console.log("Selection:", selection);
 
-          const $pos = state.doc.resolve(anchor);
-          const node = $pos.parent.childAfter($pos.parentOffset);
+        if (
+          selection instanceof NodeSelection &&
+          selection.node.type.name === "image"
+        ) {
+          console.log("NodeSelection delete triggered");
+          event.preventDefault();
+          console.log("Image to delete:", selection.node.attrs.src);
+          setImageToDelete(selection.node.attrs.src);
+          setIsConfirmDialogOpen(true);
+          return true;
+        }
 
-          if (node.node && node.node.type.name === "image") {
+        if (
+          selection.empty &&
+          (event.key === "Backspace" || event.key === "Delete")
+        ) {
+          const $pos = state.doc.resolve(selection.anchor);
+          console.log("Caret position:", selection.anchor);
+          console.log("Node before:", $pos.nodeBefore);
+          console.log("Node after:", $pos.nodeAfter);
+
+          const imageNode =
+            event.key === "Backspace" ? $pos.nodeBefore : $pos.nodeAfter;
+
+          if (imageNode && imageNode.type.name === "image") {
+            console.log("Caret-based delete triggered");
             event.preventDefault();
-            setImageToDelete(node.node.attrs.src);
+            console.log("Image to delete:", imageNode.attrs.src);
+            setImageToDelete(imageNode.attrs.src);
             setIsConfirmDialogOpen(true);
             return true;
           }
         }
+
+        console.log("No image delete triggered");
         return false;
       },
     },
@@ -125,38 +161,45 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
 
   const handleImageInsert = useCallback(
     (file: File, alt: string) => {
-      if (editor) {
-        const objectUrl = URL.createObjectURL(file);
-        editor.chain().focus().setImage({ src: objectUrl, alt }).run();
+      if (!editor) return;
 
-        // TODO: Implement bucket upload function
-        // const uploadImage = async (file: File) => {
-        //   // Implement image upload to bucket
-        //   // Return the URL of the uploaded image
-        // };
-        //
-        // uploadImage(file).then((url) => {
-        //   editor.chain().focus().setImage({ src: url, alt }).run();
-        // });
-      }
+      const objectUrl = URL.createObjectURL(file);
+
+      editor.chain().focus().setImage({ src: objectUrl, alt }).run();
+
+      const uploadImage = async (file: File): Promise<string> => {
+        await new Promise((res) => setTimeout(res, 1000));
+        return "https://images2.alphacoders.com/113/1130463.png";
+      };
+
+      uploadImage(file).then((uploadedUrl) => {
+        editor.chain().focus().setImage({ src: uploadedUrl, alt }).run();
+
+        URL.revokeObjectURL(objectUrl);
+      });
     },
     [editor],
   );
 
   const handleImageDelete = useCallback(() => {
-    if (editor && imageToDelete) {
-      editor.chain().focus().deleteSelection().run();
+    if (!editor) return;
 
-      // TODO: Implement bucket delete function
-      // const deleteFromBucket = async (url: string) => {
-      //   // Implement image deletion from bucket
-      // };
-      //
-      // deleteFromBucket(imageToDelete);
+    // Get the current selection
+    const { state } = editor;
+    const { selection } = state;
+    const node = state.doc.nodeAt(selection.from);
 
-      setImageToDelete(null);
-      setIsConfirmDialogOpen(false);
+    if (node?.type.name === "image") {
+      const imageUrl = node.attrs.src;
+      console.log("Deleting image with URL:", imageUrl);
+
+      // TODO: Delete from bucket using this URL
+      // await deleteFromBucket(imageUrl);
     }
+
+    editor.chain().focus().deleteSelection().run();
+    setImageToDelete(null);
+    setIsConfirmDialogOpen(false);
   }, [editor, imageToDelete]);
 
   const insertTable = useCallback(() => {
@@ -222,6 +265,42 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
     return null;
   }
 
+  function LocalSaveStatus({
+    lastLocalSaved,
+  }: {
+    lastLocalSaved: string | null;
+  }) {
+    const [secondsAgo, setSecondsAgo] = useState<number | null>(null);
+
+    useEffect(() => {
+      if (!lastLocalSaved) return;
+
+      const update = () => {
+        const saved = new Date(lastLocalSaved).getTime();
+        const now = Date.now();
+        setSecondsAgo(Math.floor((now - saved) / 1000));
+      };
+
+      update(); // initial update
+      const interval = setInterval(update, 1000);
+
+      return () => clearInterval(interval);
+    }, [lastLocalSaved]);
+
+    return (
+      <Button
+        variant="outline"
+        className="pointer-events-none select-none"
+        asChild
+        title="Changes saved locally"
+      >
+        <div>
+          {secondsAgo !== null ? <p>{secondsAgo}s ago</p> : <p>-</p>}
+          <span className="sr-only">Changes saved locally</span>
+        </div>
+      </Button>
+    );
+  }
   const ToolbarButton = ({
     onMouseDown,
     icon: Icon,
@@ -249,7 +328,7 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
   );
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg">
+    <div className="relative h-full overflow-hidden">
       <EditorContent
         editor={editor}
         className="h-full w-full max-w-none pb-16 focus:outline-none"
@@ -440,6 +519,15 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
           isActive={() => false}
           tooltip="Redo"
         />
+        <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
+        <LocalSaveStatus lastLocalSaved={lastLocalSaved} />
+
+        <ToolbarButton
+          onMouseDown={handlePublish}
+          icon={CheckCircle}
+          isActive={() => isPublishing}
+          tooltip="Save"
+        />
       </div>
       <ImageDialog
         isOpen={isImageDialogOpen}
@@ -448,7 +536,10 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
       />
       <ConfirmDialog
         isOpen={isConfirmDialogOpen}
-        onClose={() => setIsConfirmDialogOpen(false)}
+        onClose={() => {
+          setImageToDelete(null);
+          setIsConfirmDialogOpen(false);
+        }}
         onConfirm={handleImageDelete}
         title="Delete Image"
         message="Are you sure you want to delete this image? This action cannot be undone."
