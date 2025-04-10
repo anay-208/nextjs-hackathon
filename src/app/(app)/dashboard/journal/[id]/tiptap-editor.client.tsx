@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -33,6 +33,7 @@ import {
   LinkIcon,
   Undo,
   Redo,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,14 +50,25 @@ interface Props {
   onUpdate: (content: JSONContent) => void;
   editorContent: JSONContent;
   setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
+  handlePublish: () => void;
+  isPublishing: boolean;
+  lastLocalSaved: string | null;
 }
 
-const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
+const TiptapEditor = ({
+  onUpdate,
+  editorContent,
+  setEditorContent,
+  handlePublish,
+  isPublishing,
+  lastLocalSaved,
+}: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<string | null>(null);
 
   const editor = useEditor({
+    editable: !isPublishing,
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
@@ -253,6 +265,42 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
     return null;
   }
 
+  function LocalSaveStatus({
+    lastLocalSaved,
+  }: {
+    lastLocalSaved: string | null;
+  }) {
+    const [secondsAgo, setSecondsAgo] = useState<number | null>(null);
+
+    useEffect(() => {
+      if (!lastLocalSaved) return;
+
+      const update = () => {
+        const saved = new Date(lastLocalSaved).getTime();
+        const now = Date.now();
+        setSecondsAgo(Math.floor((now - saved) / 1000));
+      };
+
+      update(); // initial update
+      const interval = setInterval(update, 1000);
+
+      return () => clearInterval(interval);
+    }, [lastLocalSaved]);
+
+    return (
+      <Button
+        variant="outline"
+        className="pointer-events-none select-none"
+        asChild
+        title="Changes saved locally"
+      >
+        <div>
+          {secondsAgo !== null ? <p>{secondsAgo}s ago</p> : <p>-</p>}
+          <span className="sr-only">Changes saved locally</span>
+        </div>
+      </Button>
+    );
+  }
   const ToolbarButton = ({
     onMouseDown,
     icon: Icon,
@@ -280,7 +328,7 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
   );
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg">
+    <div className="relative h-full overflow-hidden">
       <EditorContent
         editor={editor}
         className="h-full w-full max-w-none pb-16 focus:outline-none"
@@ -471,6 +519,15 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
           isActive={() => false}
           tooltip="Redo"
         />
+        <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
+        <LocalSaveStatus lastLocalSaved={lastLocalSaved} />
+
+        <ToolbarButton
+          onMouseDown={handlePublish}
+          icon={CheckCircle}
+          isActive={() => isPublishing}
+          tooltip="Save"
+        />
       </div>
       <ImageDialog
         isOpen={isImageDialogOpen}
@@ -479,7 +536,10 @@ const TiptapEditor = ({ onUpdate, editorContent, setEditorContent }: Props) => {
       />
       <ConfirmDialog
         isOpen={isConfirmDialogOpen}
-        onClose={() => setIsConfirmDialogOpen(false)}
+        onClose={() => {
+          setImageToDelete(null);
+          setIsConfirmDialogOpen(false);
+        }}
         onConfirm={handleImageDelete}
         title="Delete Image"
         message="Are you sure you want to delete this image? This action cannot be undone."
