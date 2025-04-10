@@ -1,8 +1,12 @@
 import { db } from "@/db";
 import { journalingTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { count, eq } from "drizzle-orm";
-import { CreateJournalInput } from "./types";
+import { and, count, eq } from "drizzle-orm";
+import {
+  CreateJournalInput,
+  ListJournalFilter,
+  ListJournalSort,
+} from "./types";
 
 export const dbCreateJournal = async (
   data: CreateJournalInput & { author_id: string },
@@ -29,16 +33,40 @@ export const dbListJournals = async ({
   author_id,
   page,
   pageSize,
+  filter,
+  sort,
 }: {
   author_id: string;
   page: number;
   pageSize: number;
+  filter?: ListJournalFilter;
+  sort?: ListJournalSort;
 }) => {
   return db.query.journalingTable.findMany({
     columns: {
       content: false,
     },
-    where: eq(journalingTable.author_id, author_id),
+    where: and(
+      eq(journalingTable.author_id, author_id),
+      filter?.is_pinned
+        ? eq(journalingTable.is_pinned, filter.is_pinned)
+        : undefined,
+    ),
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        sort?.created_at
+          ? sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+        sort?.updated_at
+          ? sort.updated_at === "asc"
+            ? asc(table.updated_at)
+            : desc(table.updated_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
     limit: pageSize,
     offset: page * pageSize,
   });
