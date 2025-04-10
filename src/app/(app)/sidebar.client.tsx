@@ -10,13 +10,12 @@ export function SidebarItems() {
   const path = usePathname()
   const isActive = (href: string) => path.startsWith(href)
 
-
   return (
     <div className="flex flex-col px-3 self-stretch items-center pt-4 pb-4 gap-1 shrink-0">
       <div className="p-1">
         <AppIcon className="size-8" />
       </div>
-      <hr className="my-2 border border-black/10 self-stretch" />
+      <hr className="my-2 border border-border self-stretch" />
       {[
         {
           icon: MaterialSymbolsLightHomeRounded,
@@ -62,8 +61,8 @@ function SidebarButton(props: ComponentProps<"div"> & {
     <Link
       href={props.href}
       className={cn(
-        "size-10 flex items-center justify-center rounded-md text-[#89899788] clickable transition-transform",
-        props.active ? "bg-[#49496018] text-[#494960]" : "hover:bg-[#49496011]"
+        "size-10 flex items-center justify-center rounded-md text-muted clickable transition-transform",
+        props.active ? "bg-selected text-fg" : "hover:bg-hover"
       )}
     >
       {props.icon}

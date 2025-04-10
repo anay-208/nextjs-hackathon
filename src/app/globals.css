@@ -21,17 +21,22 @@
   --color-red:    #d62625;
 
   /* Semantics */
-  --color-bg:            var(--bg, #fff); /* Inherit from parent element */
+  --color-infer-bg:      var(--bg);
+  --color-bg:            #fff; /* Inherit from parent element */
   --color-fg:            var(--color-main-1);
   --color-fg-2:          --alpha(var(--color-main-1) / 80%);
   --color-radio:         --alpha(var(--color-main-2) / 75%);
+  --color-muted:         --alpha(var(--color-main-2) / 75%);
+
+  --color-selected:      --alpha(var(--color-main-3) / 10%);
   --color-focus:         --alpha(var(--color-main-3) / 75%);
   --color-input:         --alpha(var(--color-main-3) / 25%);
   --color-border:        --alpha(var(--color-main-3) / 10%);
   --color-border-strong: --alpha(var(--color-main-3) / 25%);
-  --color-destroy:       var(--color-red);
+  
   --color-hover:         --alpha(var(--color-main-4) / 5%);
-  --color-muted:         --alpha(var(--color-main-2) / 75%);
+
+  --color-destroy:       var(--color-red);
 
   /* Font Size */
   --text-xs:   0.625rem; /* 12px */
