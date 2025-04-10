@@ -12,7 +12,9 @@ export default function AppLayout(props: {
     >
 
       {/* Main Sidebar */}
-      <SidebarItems />
+      <Suspense>
+        <SidebarItems />
+      </Suspense>
 
       {/* Content */}
       <div className="grow p-2 pl-0 flex flex-col min-h-0">
