@@ -1,5 +1,5 @@
+import { SelectJournalType } from "@/app/api/journal/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SelectJournalType } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";

@@ -37,7 +37,9 @@ This project uses PostgreSQL for the database, the easiest way to get it up and 
 docker compose up -d
 ```
 
-And use this for the environment variable:
+Create a `.env.local` file in your project folder (parent of src/).
+
+And add the following environment variable:
 
 ```sh
 DATABASE_URL='postgresql://nextjsuser:nextjspassword@localhost:5432/nextjs-hackathon'
@@ -47,6 +49,15 @@ If for some reason you want to start the database from scratch you can use the f
 
 ```sh
 docker compose down -v
+```
+
+## Migrate DB
+
+To migrate DB, run
+
+```sh
+pnpm migration:generate
+pnpm migration:push
 ```
 
 ## Deploy on Vercel
