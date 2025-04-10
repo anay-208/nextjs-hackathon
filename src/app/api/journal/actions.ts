@@ -23,8 +23,8 @@ export const listJournals = async ({
 }: {
   page?: number;
   pageSize?: number;
-  filter: ListJournalFilter;
-  sort: ListJournalSort;
+  filter?: ListJournalFilter;
+  sort?: ListJournalSort;
 }) =>
   handle(
     () =>
