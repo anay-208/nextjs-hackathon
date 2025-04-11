@@ -51,8 +51,7 @@ If for some reason you want to start the database from scratch you can use the f
 docker compose down -v
 ```
 
-## Useing AI features
-
+## Using AI features
 When you want to use AI features, you need to add the following variable to your `.env.local`
 
 ```sh
