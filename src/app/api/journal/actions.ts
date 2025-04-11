@@ -9,12 +9,20 @@ import {
   dbGetJournalCount,
   dbListJournals,
   dbUpdateJournal,
+  dbUpdateJournalTags,
 } from "./db";
 import {
   CreateJournalInput,
   ListJournalFilter,
   ListJournalSort,
 } from "./types";
+
+export const createJournal = async (data: CreateJournalInput) =>
+  handle(
+    () =>
+      withAuth((user) => dbCreateJournal({ ...data, author_id: user.user.id })),
+    "createJournal",
+  );
 
 export const listJournals = async ({
   filter,
@@ -41,13 +49,6 @@ export const listJournals = async ({
     "listJournals",
   );
 export type GetListJournalResponse = Awaited<ReturnType<typeof listJournals>>;
-
-export const createJournal = async (data: CreateJournalInput) =>
-  handle(
-    () =>
-      withAuth((user) => dbCreateJournal({ ...data, author_id: user.user.id })),
-    "createJournal",
-  );
 
 export const getJournalCount = async () =>
   handle(
@@ -79,4 +80,10 @@ export const updateJournal = async (
   handle(
     () => withAuth((user) => dbUpdateJournal(id, data, user.user.id)),
     "updateJournal",
+  );
+
+export const updateJournalTags = async (id: string, tags: string[]) =>
+  handle(
+    () => withAuth((user) => dbUpdateJournalTags(id, tags, user.user.id)),
+    "updateJournalTags",
   );

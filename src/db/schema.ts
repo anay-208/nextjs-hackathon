@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   doublePrecision,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -25,6 +26,7 @@ export const journalingTable = pgTable("journaling_page", {
   is_public: boolean().default(false).notNull(),
 
   summary: text().default("").notNull(),
+  tags: jsonb("tags").$type<string[]>().default([]).notNull(),
 
   ...timestamps,
 });

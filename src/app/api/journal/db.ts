@@ -107,3 +107,17 @@ export const dbUpdateJournal = async (
     );
   return data;
 };
+
+export const dbUpdateJournalTags = async (
+  id: string,
+  tags: string[],
+  userId: string,
+) => {
+  await db
+    .update(journalingTable)
+    .set({ tags })
+    .where(
+      and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
+    );
+  return tags;
+};
