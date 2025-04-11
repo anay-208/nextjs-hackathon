@@ -1,7 +1,6 @@
 import { getJournalCount } from "@/app/api/journal/actions";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import Total from "./total.client";
 import { JournalDashboardSize } from "./constants";
 import { Button } from "@/components/ui/button";
 
@@ -17,8 +16,6 @@ export async function Pagination(props: { currentPage: Promise<number> }) {
 
   return (
     <div className="flex flex-row items-center gap-2">
-      <Total totalRecords={count} />
-      
       <Button asChild disabled={!hasPrevPage} variant="ghost" size="icon">
         <Link
           href={`/journal?pageNumber=${ currentPage - 1 }`}
@@ -50,29 +47,3 @@ export async function Pagination(props: { currentPage: Promise<number> }) {
     </div>
   );
 }
-
-
-
-
-
-
-
-// export function PaginationLoading() {
-//   return (
-//     <div className="flex flex-row items-center justify-center gap-4">
-//       <div className="border-muted-foreground cursor-not-allowed border-2 p-1 opacity-50">
-//         <ChevronLeft
-//           className="text-accent-foreground size-5"
-//           strokeWidth={2}
-//         />
-//       </div>
-//       <p>{1}</p>
-//       <div className="border-muted-foreground cursor-not-allowed border-2 p-1 opacity-50">
-//         <ChevronRight
-//           className="text-accent-foreground size-5"
-//           strokeWidth={2}
-//         />
-//       </div>
-//     </div>
-//   );
-// }

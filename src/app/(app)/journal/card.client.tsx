@@ -1,8 +1,10 @@
 "use client";
-import { createJournal } from "@/app/api/journal/actions";
+import { createJournal, deleteJournal } from "@/app/api/journal/actions";
 import { SelectJournalType } from "@/app/api/journal/types";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
+import { EllipsisVertical, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition, type ComponentProps } from "react";
@@ -38,19 +40,59 @@ function JournalCardBase(props: ComponentProps<"div"> & {
 
 export function JournalCard({ data }: { data: JournalWithoutContent }) {
   return (
-    <Link
-      href={`/journal/${ data.id }`}
-    >
-      <JournalCardBase className="animate-card-insert gap-0 items-stretch" data-padding="0.75rem">
-        <div className="border-b border-border p-(--p) -m-(--p) mb-0">
+    <JournalCardBase className="animate-card-insert gap-0 items-stretch relative" data-padding="0.75rem">
+      <Link href={`/journal/${ data.id }`} className="absolute inset-0" />
+      <div className="border-b border-border p-(--p) -m-(--p) mb-0 py-2.5 flex gap-1">
+        <div className="grow">
           <h2 className="line-clamp-2 font-semibold text-fg">{data.title}</h2>
           <p className="text-muted">{data.created_at.toDateString()}</p>
         </div>
-        <p className="line-clamp-5 text-base leading-snug text-muted p-(--p) -m-(--p) mt-0 bg-main-4/2 grow">
-          {data.summary || <span className="text-muted/50">Empty Journal</span>}
-        </p>
-      </JournalCardBase>
-    </Link>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 relative z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+            >
+              <EllipsisVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 z-20" align="start">
+            <DropdownMenuItem
+              onClick={() => {
+                toast.promise(
+                  (async () => {
+                    const idRes = await deleteJournal(data.id);
+                    if (!idRes || !idRes.data)
+                      throw new Error("Failed to delete journal");
+                    // router.refresh();
+                    // return idRes.data.id;
+                  })(),
+                  {
+                    loading: "Deleting journal...",
+                    success: () => ({
+                      message: "Journal deleted!",
+                    }),
+                    error: "Failed to delete journal",
+                  },
+                );
+              }}
+              variant="destructive">
+              Delete
+              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+      </div>
+      <p className="line-clamp-5 text-base leading-snug text-muted p-(--p) -m-(--p) mt-0 bg-main-4/2 grow">
+        {data.summary || <span className="text-muted/50">Empty Journal</span>}
+      </p>
+    </JournalCardBase>
   );
 }
 
@@ -81,7 +123,7 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
                 action: {
                   label: "View Journal",
                   onClick: () => {
-                    router.push(`/dashboard/journal/${ id }`);
+                    router.push(`/journal/${ id }`);
                   },
                 },
               }),

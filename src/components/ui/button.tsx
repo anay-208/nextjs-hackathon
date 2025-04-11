@@ -23,8 +23,8 @@ const buttonVariants = cva(
     "[&_svg:not([class*='size-'])]:size-4",
     "[&_svg]:shrink-0",
 
-    "focus-visible:border-ring",
-    "focus-visible:ring-ring/50",
+    "focus-visible:border-focus",
+    "focus-visible:ring-focus/50",
     "focus-visible:ring-[3px]",
 
     "aria-invalid:ring-destructive/20",
@@ -55,8 +55,13 @@ const buttonVariants = cva(
         secondary:
           "bg-main-4/15 text-main-4 shadow-sm hover:bg-main-4/10",
         ghost:
-          "bg-main-4/0 text-secondary-foreground hover:bg-main-4/5",
-          // "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+          cn(
+            "bg-main-4/0 text-secondary-foreground hover:bg-main-4/5",
+            "hover:bg-hover",
+            // "bg-red-500",
+            "aria-disabled:opacity-20",
+          ),
+        // "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
