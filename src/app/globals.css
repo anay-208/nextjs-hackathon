@@ -7,7 +7,7 @@
   }
 }
 
-@theme inline {
+@theme static {
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -21,8 +21,8 @@
   --color-red:    #d62625;
 
   /* Semantics */
-  --color-infer-bg:      var(--bg);
-  --color-bg:            #fff; /* Inherit from parent element */
+  --color-infer-bg:      var(--bg); /* Inherit from parent element */
+  --color-bg:            #ffffff; 
   --color-fg:            var(--color-main-1);
   --color-fg-2:          --alpha(var(--color-main-1) / 80%);
   --color-radio:         --alpha(var(--color-main-2) / 75%);
@@ -34,6 +34,8 @@
   --color-border:        --alpha(var(--color-main-3) / 10%);
   --color-border-strong: --alpha(var(--color-main-3) / 25%);
   --color-placeholder:   --alpha(var(--color-main-3) / 25%);
+  --color-popover:       #ffffff;
+
   
   --color-hover:         --alpha(var(--color-main-4) / 5%);
   --color-primary:       var(--color-main-4);
@@ -68,4 +70,21 @@
 
 @utility clickable {
   @apply cursor-pointer transition-transform active:translate-y-0.5;
+}
+@utility container-app-content {
+  @apply max-w-[480px] md:max-w-[860px] mx-auto
+}
+
+@keyframes card-insert {
+  0% {
+    transform: translateY(20%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@utility animate-card-insert {
+  animation: card-insert 0.2s ease-out forwards;
 }

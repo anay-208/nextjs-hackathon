@@ -1,40 +1,57 @@
-import { getAllData } from "./[id]/data";
 import { JournalCard, JournalCreateCard } from "./card.client";
 import "./[id]/tiptap.css";
 import { JournalDashboardSize } from "./constants";
-import { Pagination, PaginationLoading } from "./pagination";
-import { getJournalCount, listJournals } from "@/app/api/journal/actions";
+import { Pagination } from "./pagination";
+import { listJournals, type GetListJournalResponse } from "@/app/api/journal/actions";
 import { Suspense } from "react";
-export default async function Page({
-  searchParams,
-}: {
+import { AppContent, PageLocation, PageTitle } from "../content-layouts";
+
+export default function Page(props: {
   searchParams: Promise<{
     pageNumber: string;
   }>;
 }) {
-  let page = 0;
-  const { pageNumber } = await searchParams;
-  if (pageNumber) {
-    page = parseInt(pageNumber);
-  }
-  const dataRes = await listJournals({
-    page: page,
-    pageSize: JournalDashboardSize,
-  });
-  const data = dataRes.data ?? [];
-  return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-start gap-5 py-10">
-      <h1 className="text-4xl font-bold">My Journal</h1>
-      <Suspense fallback={<PaginationLoading />}>
-        <Pagination currentPage={page} />
-      </Suspense>
-      <div className="grid h-full w-full flex-1 grid-cols-1 gap-5 px-4 md:grid-cols-2 lg:grid-cols-3">
-        <JournalCreateCard />
 
-        {data.map((d) => (
-          <JournalCard key={d.id} data={d} />
-        ))}
-      </div>
-    </div>
+  const getPageNumber = props.searchParams.then(params => {
+    let page = 0;
+    if (params.pageNumber) {
+      page = parseInt(params.pageNumber);
+    }
+    return page;
+  })
+
+  const getJournalPage = getPageNumber.then(page => {
+    return listJournals({
+      page: page,
+      pageSize: JournalDashboardSize,
+    });
+  })
+
+  return (
+    <AppContent>
+      <PageLocation>Journal</PageLocation>
+      <PageTitle>My Journal</PageTitle>
+      <Suspense>
+        <div className="pt-12 flex flex-col gap-4">
+          <Pagination currentPage={getPageNumber} />
+          <div className="grid h-full w-full flex-1 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <JournalPageList journalList={getJournalPage} />
+          </div>
+        </div>
+      </Suspense>
+    </AppContent>
+  );
+}
+
+async function JournalPageList(props: {
+  journalList: Promise<GetListJournalResponse>;
+}) {
+  const journalList = await props.journalList;
+  const data = journalList.data ?? [];
+  return (
+    <>
+      <JournalCreateCard />
+      {data.map((d) => <JournalCard key={d.id} data={d} />)}
+    </>
   );
 }

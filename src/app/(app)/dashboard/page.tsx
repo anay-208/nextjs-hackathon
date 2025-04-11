@@ -2,83 +2,81 @@ import { Button } from "@/components/ui/button";
 import type { ComponentProps, SVGProps } from "react";
 import Link from "next/link";
 import { MaterialSymbolsBook2 } from "../sidebar";
+import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 
 export default function Page() {
-  return <div className="-m-4">
-    {/* Mini navbar */}
+  return <AppContent>
 
-    <div className="pt-12 flex flex-col max-w-[480px] md:max-w-[860px] mx-auto px-4">
+    <PageLocation>
+      Home
+    </PageLocation>
 
-      <div className="py-2 flex leading-none font-semibold text-muted">
-        Home
-      </div>
+    <PageTitle>Welcome back, Arinji</PageTitle>
 
-      <h1 className="text-5xl font-bold tracking-tight">Welcome back, Arinji</h1>
-
-      <div className="pt-12 grid grid-cols-1 md:grid-cols-2 gap-3">
-        {/* Card 1 */}
-        <Card>
-          <div className="">
-            <CardTitle>
-              <MaterialSymbolsBook2 className="size-5" />
-              <h2>My Journals</h2>
-            </CardTitle>
-          </div>
-          <div className="flex flex-col mt-1 text-[0.9rem] font-medium border border-border rounded-xl p-1 mt-4">
-            {
-              [
-                "Tue 8 April 2023",
-                "Tue 9 April 2023",
-                "Tue 10 April 2023",
-              ].map((date, index) => (
-                <div key={index} className="h-9 flex items-center gap-2 clickable select-none px-2 hover:bg-hover rounded-lg text-fg">
-                  <MaterialSymbolsAsterisk className="size-4.5 text-main-4/90" />
-                  <div>
-                    {date}
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-          <Button className="mt-4" asChild>
-            <Link href={"/dashboard/journal"}>
-              View All Journals
-            </Link>
-          </Button>
-
-        </Card>
-
-        <Card>
-          <div>
-            <CardTitle>
-              <MaterialSymbolsLocalFireDepartmentRounded className="size-5" />
-              <h2>Streaks</h2>
-            </CardTitle>
-          </div>
-
-          <div className="pt-4">
-            <div className="text-5xl font-bold">
-              948
-            </div>
-            <div>day streak!</div>
-          </div>
-
-          <div className="mt-4 bg-main-4/5 flex justify-between gap-1 text-sm p-4 rounded-md items-center">
-            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-              <div key={index} className="mb-1 grow flex flex-col gap-1 items-center font-semibold flex-1">
-                <div className="text-muted">
-                  {day}
-                </div>
-                <div className="w-full flex justify-center py-2 bg-amber-500 rounded-md">
-                  <MaterialSymbolsLocalFireDepartmentRounded className="size-5 text-white" />
+    <div className="pt-12 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <Card>
+        <div className="">
+          <CardTitle>
+            <MaterialSymbolsBook2 className="size-5" />
+            <h2>My Journals</h2>
+          </CardTitle>
+        </div>
+        <div className="flex flex-col mt-1 text-[0.9rem] font-medium border border-border rounded-xl p-1 mt-4">
+          {
+            [
+              "Tue 8 April 2023",
+              "Tue 9 April 2023",
+              "Tue 10 April 2023",
+            ].map((date, index) => (
+              <div key={index} className="h-9 flex items-center gap-2 clickable select-none px-2 hover:bg-hover rounded-lg text-fg">
+                <MaterialSymbolsAsterisk className="size-4.5 text-main-4/90" />
+                <div>
+                  {date}
                 </div>
               </div>
-            ))}
+            ))
+          }
+        </div>
+        <Button className="mt-4" asChild>
+          <Link href={"/dashboard/journal"}>
+            View All Journals
+          </Link>
+        </Button>
+
+      </Card>
+
+      <Card>
+        <div>
+          <CardTitle>
+            <MaterialSymbolsLocalFireDepartmentRounded className="size-5" />
+            <h2>Streaks</h2>
+          </CardTitle>
+        </div>
+
+        <div className="pt-4">
+          <div className="text-5xl font-bold">
+            948
           </div>
-        </Card>
-      </div>
+          <div>day streak!</div>
+        </div>
+
+        <div className="mt-4 bg-main-4/5 flex justify-between gap-1 text-sm p-4 rounded-md items-center">
+          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
+            <div key={index} className="mb-1 grow flex flex-col gap-1 items-center font-semibold flex-1">
+              <div className="text-muted">
+                {day}
+              </div>
+              <div className="w-full flex justify-center py-2 bg-amber-500 rounded-md">
+                <MaterialSymbolsLocalFireDepartmentRounded className="size-5 text-white" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
-  </div>;
+
+  </AppContent>
+
 }
 
 
