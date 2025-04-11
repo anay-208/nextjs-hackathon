@@ -1,6 +1,6 @@
 "use server";
 
-import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { faker } from "@faker-js/faker";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
@@ -18,16 +18,18 @@ import {
   ListJournalSort,
 } from "./types";
 
-export const createJournal = async (data: Omit<CreateJournalInput, 'title'> & { title?: string }) =>
+export const createJournal = async (
+  data: Omit<CreateJournalInput, "title"> & { title?: string },
+) =>
   handle(
     () =>
       withAuth(async (user) => {
-        const generatedTitle = uniqueNamesGenerator({
-          dictionaries: [adjectives, colors, animals],
-          separator: "-",
-          style: "lowerCase",
+        const generatedTitle = faker.word.words(3);
+        return await dbCreateJournal({
+          ...data,
+          author_id: user.user.id,
+          title: data.title ?? generatedTitle,
         });
-        return await dbCreateJournal({ ...data, author_id: user.user.id, title: data.title ?? generatedTitle })
       }),
     "createJournal",
   );
@@ -52,9 +54,8 @@ export const listJournals = async ({
           pageSize,
           filter,
           sort: sort ?? { created_at: "desc" },
-        })
-      },
-      ),
+        });
+      }),
     "listJournals",
   );
 export type GetListJournalResponse = Awaited<ReturnType<typeof listJournals>>;
