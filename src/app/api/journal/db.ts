@@ -112,14 +112,14 @@ export const dbUpdateJournal = async (
 };
 
 export const dbGenerateSummary = async (text: string) => {
-  const { object } = await generateObject({
+  const { object: summary } = await generateObject({
     model: google("gemini-2.0-flash-001"),
     schema: z.string().min(10).max(150),
     system: `You are a helpful assistant. You will be given a long text and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 150 characters.`,
     prompt: `Please summarize the following text: \n\n${text}`,
   });
 
-  return object;
+  return summary;
 };
 
 export const dbUpdateJournalTags = async (
