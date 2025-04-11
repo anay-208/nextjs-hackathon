@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Suspense, type ComponentProps } from "react";
-import { SidebarItemList } from "./sidebar.cached";
+import { SidebarItemList } from "./journal-sidebar.cached";
 
 
 

@@ -1,7 +1,7 @@
 "use cache"
 
 import { listJournals } from "@/app/api/journal/actions";
-import { SidebarJournalItemListClient } from "./sidebar.client";
+import { SidebarJournalItemListClient } from "./journal-sidebar.client";
 import type { SelectJournalType } from "@/app/api/journal/types";
 
 export async function SidebarItemList() {

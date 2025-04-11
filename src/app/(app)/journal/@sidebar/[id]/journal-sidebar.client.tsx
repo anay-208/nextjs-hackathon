@@ -1,9 +1,9 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { SidebarItemBase } from "./sidebar"
+import { SidebarItemBase } from "./journal-sidebar"
 import Link from "next/link"
-import JournalPinned from "./pin.client"
+import JournalPinned from "../../[id]/pin.client"
 
 export function SidebarJournalItemListClient(
   props: {
