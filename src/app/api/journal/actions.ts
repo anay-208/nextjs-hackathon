@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
@@ -43,10 +43,17 @@ export const listJournals = async ({
   );
 export type GetListJournalResponse = Awaited<ReturnType<typeof listJournals>>;
 
-export const createJournal = async (data: CreateJournalInput) =>
+export const createJournal = async (data: Omit<CreateJournalInput, 'title'> & { title?: string }) =>
   handle(
     () =>
-      withAuth((user) => dbCreateJournal({ ...data, author_id: user.user.id })),
+      withAuth(async (user) => {
+        const generatedTitle = uniqueNamesGenerator({
+          dictionaries: [adjectives, colors, animals],
+          separator: "-",
+          style: "lowerCase",
+        });
+        return await dbCreateJournal({ ...data, author_id: user.user.id, title: data.title ?? generatedTitle });
+      }),
     "createJournal",
   );
 

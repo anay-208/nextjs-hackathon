@@ -103,15 +103,9 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
         startTransition(() => {
           toast.promise(
             (async () => {
-              const generatedTitle = uniqueNamesGenerator({
-                dictionaries: [adjectives, colors, animals],
-                separator: "-",
-                style: "lowerCase",
-              });
-              const idRes = await createJournal({ title: generatedTitle });
+              const idRes = await createJournal({});
               if (!idRes || !idRes.data)
                 throw new Error("Failed to create journal");
-              router.refresh();
               return idRes.data.id;
             })(),
             {

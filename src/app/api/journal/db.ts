@@ -8,14 +8,24 @@ import {
   ListJournalSort,
 } from "./types";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const dbCreateJournal = async (
   data: CreateJournalInput & { author_id: string },
 ) => {
   const result = await db
     .insert(journalingTable)
-    .values({ ...data, id: generateId("jorn") })
+    .values({
+      ...data, id: generateId("jorn"), content: JSON.stringify({
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [],
+          },
+        ],
+      })
+    })
     .returning({ id: journalingTable.id });
   revalidateTag('journals');
   return result[0];
@@ -23,7 +33,7 @@ export const dbCreateJournal = async (
 
 export const dbGetJournal = async (journalId: string) => {
   "use cache"
-  cacheTag('journals', `journal-${journalId}`);
+  cacheTag('journals', `journal-${ journalId }`);
   return db.query.journalingTable.findFirst({
     where: eq(journalingTable.id, journalId),
   });
@@ -96,6 +106,6 @@ export const dbUpdateJournal = async (
   data: Partial<CreateJournalInput>,
 ) => {
   await db.update(journalingTable).set(data).where(eq(journalingTable.id, id));
-  revalidateTag('journals');  
+  revalidateTag('journals');
   return data;
 };

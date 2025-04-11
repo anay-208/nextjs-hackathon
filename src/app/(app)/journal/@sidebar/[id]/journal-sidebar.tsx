@@ -1,27 +1,29 @@
 
 
 import Link from "next/link";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Suspense, type ComponentProps } from "react";
 import { SidebarItemList } from "./journal-sidebar.cached";
+import { SidebarNewEntryButton } from "./journal-sidebar.client";
 
 
 
 export function Sidebar() {
   return (
     <div>
-      <div className="mb-4 flex flex-col gap-1 pt-2">
+      <div className="mb-4 flex flex-col gap-px pt-2">
         <Link href="/journal">
           <SidebarItemBase className="clickable">
             <ArrowLeft className="size-4" />
             Back
           </SidebarItemBase>
         </Link>
-        <SidebarItemBase className="bg-primary text-white/90 hover:bg-primary/90 clickable">
+        <SidebarNewEntryButton />
+        {/* <SidebarItemBase className="hover:bg-primary hover:text-white/90 clickable transition-all">
           <Plus className="size-4" />
           New Entry
-        </SidebarItemBase>
+        </SidebarItemBase> */}
       </div>
 
       <div>
@@ -41,10 +43,11 @@ export function SidebarItemBase(props: ComponentProps<"div"> & {
   'data-active'?: boolean
 }) {
   return (<div {...props} className={cn(
+    "h-8",
     "group",
     "-mx-1",
     "relative",
-    'group flex h-fit flex-row items-center justify-start gap-2 rounded-sm p-1.5 px-3',
+    'group flex flex-row items-center justify-start gap-2 rounded-sm p-1.5 px-3',
     'text-sm font-semibold text-main-2/75 text-nowrap text-ellipsis',
     props['data-active'] ? "bg-main-3/18 text-fg" : "hover:bg-hover",
     props.className

@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { updateJournal } from "@/app/api/journal/actions";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const createDefaultContent = (): JSONContent => {
@@ -67,6 +66,7 @@ export default function JournalTipTapPage({
   const leadingFirstThrottleRef = useRef<NodeJS.Timeout>(null);
   const latestTitleRef = useRef<string>(title);
   const latestEditorContentRef = useRef<JSONContent | null>(editorContent);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
     latestTitleRef.current = title;
@@ -74,8 +74,16 @@ export default function JournalTipTapPage({
   }, [title, editorContent]);
 
   useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
     // Debounce save wait for 1 seconds
-    if (title === initialData.title || editorContent === JSON.parse(initialData.content)) return
+    try {
+      if (title === initialData.title && JSON.stringify(editorContent) === initialData.content) return
+    } catch {
+      return
+    }
     if (leadingFirstThrottleRef.current) return
 
     leadingFirstThrottleRef.current = setTimeout(() => {
@@ -87,7 +95,7 @@ export default function JournalTipTapPage({
         leadingFirstThrottleRef.current = null
       });
     }, 800);
-  }, [editorContent, title])
+  }, [editorContent, title, initialData])
 
   return (
     <>
@@ -96,7 +104,7 @@ export default function JournalTipTapPage({
         id="title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter blog post title"
+        placeholder="Untitled Journal Entry"
         className={cn(
           "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2"
         )}
