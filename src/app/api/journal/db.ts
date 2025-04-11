@@ -3,7 +3,7 @@ import { journalingTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, ilike } from "drizzle-orm";
 import { z } from "zod";
 import {
   CreateJournalInput,
@@ -21,14 +21,24 @@ export const dbCreateJournal = async (
   return result[0];
 };
 
-export const dbGetJournal = async (journalId: string) => {
+export const dbGetJournal = async (journalId: string, userId: string) => {
   return db.query.journalingTable.findFirst({
-    where: eq(journalingTable.id, journalId),
+    where: and(
+      eq(journalingTable.id, journalId),
+      eq(journalingTable.author_id, userId),
+    ),
   });
 };
 
-export const dbDeleteJournal = async (journalId: string) => {
-  await db.delete(journalingTable).where(eq(journalingTable.id, journalId));
+export const dbDeleteJournal = async (journalId: string, userId: string) => {
+  await db
+    .delete(journalingTable)
+    .where(
+      and(
+        eq(journalingTable.id, journalId),
+        eq(journalingTable.author_id, userId),
+      ),
+    );
   return true;
 };
 
@@ -53,6 +63,9 @@ export const dbListJournals = async ({
       eq(journalingTable.author_id, author_id),
       filter?.is_pinned
         ? eq(journalingTable.is_pinned, filter.is_pinned)
+        : undefined,
+      filter?.query
+        ? ilike(journalingTable.title, `%${filter.query}%`)
         : undefined,
     ),
 
@@ -87,18 +100,13 @@ export const dbGetJournalCount = async (author_id: string) => {
 export const dbUpdateJournal = async (
   id: string,
   data: Partial<CreateJournalInput>,
+  userId: string,
 ) => {
-  await db.update(journalingTable).set(data).where(eq(journalingTable.id, id));
+  await db
+    .update(journalingTable)
+    .set(data)
+    .where(
+      and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
+    );
   return data;
-};
-
-export const dbGenerateSummary = async (text: string) => {
-  const { object } = await generateObject({
-    model: google("gemini-2.0-flash-001"),
-    schema: z.string().min(10).max(150),
-    system: `You are a helpful assistant. You will be given a long text and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 150 characters.`,
-    prompt: `Please summarize the following text: \n\n${text}`,
-  });
-
-  return object;
 };

@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const generateId = (prefix: "jorn") => {
+export const generateId = (prefix: "jorn" | "txn" | "cat") => {
   return prefix + "_" + ulid();
 };
