@@ -5,6 +5,7 @@ import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
   dbDeleteJournal,
+  dbGenerateSummary,
   dbGetJournal,
   dbGetJournalCount,
   dbListJournals,
@@ -87,3 +88,10 @@ export const updateJournalTags = async (id: string, tags: string[]) =>
     () => withAuth((user) => dbUpdateJournalTags(id, tags, user.user.id)),
     "updateJournalTags",
   );
+
+export const generateSummary = async (text: string) => {
+  return handle(
+    () => withAuth(() => dbGenerateSummary(text)),
+    "generateSummary",
+  );
+};

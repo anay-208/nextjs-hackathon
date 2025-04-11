@@ -1,7 +1,10 @@
 import { db } from "@/db";
 import { journalingTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
+import { google } from "@ai-sdk/google";
+import { generateObject } from "ai";
 import { and, count, eq, ilike } from "drizzle-orm";
+import { z } from "zod";
 import {
   CreateJournalInput,
   ListJournalFilter,
@@ -106,18 +109,4 @@ export const dbUpdateJournal = async (
       and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
     );
   return data;
-};
-
-export const dbUpdateJournalTags = async (
-  id: string,
-  tags: string[],
-  userId: string,
-) => {
-  await db
-    .update(journalingTable)
-    .set({ tags })
-    .where(
-      and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
-    );
-  return tags;
 };
