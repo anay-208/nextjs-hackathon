@@ -14,6 +14,7 @@ export type InsertJournalType = InferInsertModel<typeof journalingTable>;
 
 export type ListJournalFilter = {
   is_pinned?: boolean;
+  query?: string;
 };
 
 export type ListJournalSort = {

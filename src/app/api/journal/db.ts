@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { journalingTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, ilike } from "drizzle-orm";
 import {
   CreateJournalInput,
   ListJournalFilter,
@@ -60,6 +60,9 @@ export const dbListJournals = async ({
       eq(journalingTable.author_id, author_id),
       filter?.is_pinned
         ? eq(journalingTable.is_pinned, filter.is_pinned)
+        : undefined,
+      filter?.query
+        ? ilike(journalingTable.title, `%${filter.query}%`)
         : undefined,
     ),
 
