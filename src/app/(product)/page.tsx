@@ -1,7 +1,6 @@
 import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import ActionButton from "./ActionButtons";
 
 export default async function Home() {
   return (
@@ -12,7 +11,6 @@ export default async function Home() {
         "--px": "1rem",
       }}
     >
-      <ActionButton />
       <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
         <div className="flex max-w-(--max-w) grow items-center justify-between px-(--px)">
           <div className="flex items-center gap-1">
