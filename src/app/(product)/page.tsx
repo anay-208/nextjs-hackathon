@@ -1,6 +1,7 @@
 import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import ActionButton from "./ActionButtons";
 
 export default async function Home() {
   return (
@@ -11,7 +12,8 @@ export default async function Home() {
         "--px": "1rem",
       }}
     >
-      <header className="bg-bg sticky top-0 mx-auto flex h-12 w-full justify-center border-b border-border">
+      <ActionButton />
+      <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
         <div className="flex max-w-(--max-w) grow items-center justify-between px-(--px)">
           <div className="flex items-center gap-1">
             <Image src={Icon} alt={"Lifelog Icon"} width={28} height={28} />
@@ -62,8 +64,8 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      
-      <footer className="mt-24 h-[40svh] border-t border-border">
+
+      <footer className="border-border mt-24 h-[40svh] border-t">
         <div className="text-muted-foreground mx-auto flex w-full max-w-(--max-w) flex-col px-(--px) py-12 text-sm">
           <div className="flex items-center gap-1">
             <Image src={Icon} alt={"Lifelog Icon"} width={28} height={28} />

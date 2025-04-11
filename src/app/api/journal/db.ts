@@ -18,14 +18,24 @@ export const dbCreateJournal = async (
   return result[0];
 };
 
-export const dbGetJournal = async (journalId: string) => {
+export const dbGetJournal = async (journalId: string, userId: string) => {
   return db.query.journalingTable.findFirst({
-    where: eq(journalingTable.id, journalId),
+    where: and(
+      eq(journalingTable.id, journalId),
+      eq(journalingTable.author_id, userId),
+    ),
   });
 };
 
-export const dbDeleteJournal = async (journalId: string) => {
-  await db.delete(journalingTable).where(eq(journalingTable.id, journalId));
+export const dbDeleteJournal = async (journalId: string, userId: string) => {
+  await db
+    .delete(journalingTable)
+    .where(
+      and(
+        eq(journalingTable.id, journalId),
+        eq(journalingTable.author_id, userId),
+      ),
+    );
   return true;
 };
 
@@ -84,7 +94,13 @@ export const dbGetJournalCount = async (author_id: string) => {
 export const dbUpdateJournal = async (
   id: string,
   data: Partial<CreateJournalInput>,
+  userId: string,
 ) => {
-  await db.update(journalingTable).set(data).where(eq(journalingTable.id, id));
+  await db
+    .update(journalingTable)
+    .set(data)
+    .where(
+      and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
+    );
   return data;
 };
