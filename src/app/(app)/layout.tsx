@@ -11,8 +11,6 @@ export default function AppLayout(props: {
       className={cn(
         "bg-(--bg) h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip",
         "data-[setting-open]:pointer-events-none",
-        // "data-[setting-open]:brightness-80",
-        // "data-[setting-open]:brightness-80",
         "group"
       )}
       style={{
@@ -32,7 +30,7 @@ export default function AppLayout(props: {
 
         {/* Content */}
         <div className="grow p-2 pl-0 flex flex-col min-h-0">
-          <div className="grow rounded-lg bg-bg p-(--p) min-h-0 overflow-auto"
+          <div className="grow rounded-lg bg-bg p-(--p) min-h-0 overflow-auto flex flex-col"
             style={{
               "--p": "1rem",
             }}

@@ -319,7 +319,7 @@ const TiptapEditor = ({
         e.preventDefault();
         onMouseDown();
       }}
-      className={`${isActive() ? "bg-primary text-primary-foreground" : ""} hover:bg-primary transition-colors`}
+      className={`${ isActive() ? "bg-primary text-primary-foreground" : "" } hover:bg-primary transition-colors`}
       title={tooltip}
     >
       <Icon className="size-4" />
@@ -328,12 +328,14 @@ const TiptapEditor = ({
   );
 
   return (
-    <div className="relative h-full overflow-hidden">
+    <>
       <EditorContent
         editor={editor}
-        className="h-full w-full max-w-none pb-16 focus:outline-none"
+        className="grow max-w-none focus:outline-none flex flex-col *:grow"
       />
-      <div className="border-accent-foreground absolute right-0 bottom-2 left-0 flex w-full flex-wrap items-center gap-1 rounded-lg border-2 p-2">
+
+      {/* Toolbar */}
+      <div className="border border-border-strong shadow-md bg-popover flex w-full flex-wrap items-center gap-1 rounded-lg p-2 sticky bottom-0">
         <ToolbarButton
           onMouseDown={() => editor.chain().focus().toggleBold().run()}
           icon={Bold}
@@ -544,7 +546,7 @@ const TiptapEditor = ({
         title="Delete Image"
         message="Are you sure you want to delete this image? This action cannot be undone."
       />
-    </div>
+    </>
   );
 };
 

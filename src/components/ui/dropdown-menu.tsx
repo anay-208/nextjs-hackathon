@@ -43,7 +43,7 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
         className={cn(
           "z-50 ",
-        "bg-popover text-foreground",
+          "bg-popover text-foreground",
           "max-h-(--radix-dropdown-menu-content-available-height)",
           "min-w-[8rem]",
           "origin-(--radix-dropdown-menu-content-transform-origin)",

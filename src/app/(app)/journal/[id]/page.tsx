@@ -1,34 +1,30 @@
 import { notFound } from "next/navigation";
-import { getData } from "./data";
-import Tiptap from "./tiptap.client";
+import JournalTipTapPage from "./tiptap.client";
 import "./tiptap.css";
 import { Suspense } from "react";
 import { Sidebar, SidebarSkeleton } from "./sidebar";
 import { getJournal } from "@/app/api/journal/actions";
-export default async function Page({
-  params,
-}: {
+
+export default async function Page(props: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id } = await props.params;
   const journalRes = await getJournal(id);
-  if (!journalRes) {
-    notFound();
-  }
+  if (!journalRes) notFound();
+
   const journalData = journalRes.data;
-  if (!journalData) {
-    notFound();
-  }
+  if (!journalData) notFound();
+
   return (
-    <div className="flex min-h-[90svh] w-full flex-row items-stretch justify-between gap-5 p-5">
-      <div className="border-accent-foreground hidden w-[15%] shrink-0 space-y-4 rounded-lg border-2 p-2 lg:block">
+    <div className="flex grow h-full flex-row items-stretch justify-between -m-(--p) bg-main-4/13">
+      <div className="hidden w-52 shrink-0 rounded-lg p-3 sm:block">
         <Suspense fallback={<SidebarSkeleton />}>
           <Sidebar activeID={id} />
         </Suspense>
       </div>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 bg-white px-5 rounded-lg overflow-auto">
         <Suspense fallback={<div className="p-4">Loading...</div>}>
-          <Tiptap initialData={journalData} />
+          <JournalTipTapPage initialData={journalData} />
         </Suspense>
       </div>
     </div>

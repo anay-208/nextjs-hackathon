@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getAllData } from "./data";
-import { Pin, PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { listJournals } from "@/app/api/journal/actions";
 import JournalPinned from "./pin.client";
+import { cn } from "@/lib/utils";
+import type { ComponentProps } from "react";
 
 function getGroupLabel(date: Date) {
   const now = new Date();
@@ -20,6 +21,7 @@ function getGroupLabel(date: Date) {
 }
 
 type JournalWithoutContent = Omit<SelectJournalType, "content">;
+
 export async function Sidebar({ activeID }: { activeID: string }) {
   //TODO: Get all pinned articles and render them first https://github.com/anay-208/nextjs-hackathon/issues/47
   const dataRes = await listJournals({
@@ -38,43 +40,58 @@ export async function Sidebar({ activeID }: { activeID: string }) {
   }
 
   return (
-    <div className="h-full w-full">
-      <div className="flex h-fit w-full flex-row items-start justify-start gap-2">
-        <PlusCircle className="text-muted-foreground size-6" /> New Entry
+    <div className="">
+      <div className="mb-4">
+        <SidebarItemBase className="bg-primary text-white/90 hover:bg-primary/90 clickable">
+          <Plus className="size-4" />
+          New Entry
+        </SidebarItemBase>
       </div>
-      {Object.entries(grouped).map(([label, entries]) => (
-        <div key={label}>
-          <h2 className="text-muted-foreground mb-1 text-sm font-semibold">
-            {label}
-          </h2>
-          <ul className="flex flex-col items-start justify-start space-y-1">
-            {entries.map((entry) => (
-              <div
-                key={entry.id}
-                className="hover:bg-muted group flex h-fit w-full flex-row items-center justify-start gap-2 rounded-sm p-1"
-              >
-                <Link
-                  href={`/dashboard/journal/${entry.id}`}
-                  className={`text-sm ${
-                    String(entry.id) === activeID
-                      ? "text-primary font-bold"
-                      : ""
-                  } line-clamp-2 w-full`}
-                >
-                  {entry.title}
-                </Link>
-                <JournalPinned
-                  isPinned={entry.is_pinned}
-                  journalID={entry.id}
-                />
-              </div>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
+      <div>
+        {Object.entries(grouped).map(([label, entries]) => (
+          <div key={label} className="">
+            <h2 className="text-muted/75 mb-1 text-sm font-medium ml-2">
+              {label}
+            </h2>
+            <ul className="flex flex-col items-stretch justify-start gap-0.5">
+              {entries.map((entry) => {
+                const isActive = String(entry.id) === activeID;
+                return <SidebarItemBase key={entry.id} data-active={isActive}>
+                  <Link href={`/journal/${ entry.id }`}>
+                    {entry.title}
+                  </Link>
+                  <JournalPinned
+                    isPinned={entry.is_pinned}
+                    journalID={entry.id}
+                  />
+                </SidebarItemBase>
+              }
+              )}
+            </ul>
+          </div >
+        ))
+        }
+      </div>
+
+    </div >
   );
 }
+
+function SidebarItemBase(props: ComponentProps<"div"> & {
+  'data-active'?: boolean
+}) {
+  return (<div {...props} className={cn(
+    "-mx-1",
+    'group flex h-fit flex-row items-center justify-start gap-2 rounded-sm p-1.5 px-3',
+    'text-sm font-semibold text-main-2/75 text-nowrap text-ellipsis',
+    props['data-active'] ? "bg-main-3/18 text-fg" : "hover:bg-hover",
+    props.className
+  )} />)
+}
+
+
+
+
 
 export function SidebarSkeleton() {
   return (

@@ -7,6 +7,7 @@ import { SelectJournalType } from "@/app/api/journal/types";
 import { updateJournal } from "@/app/api/journal/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const createDefaultContent = (): JSONContent => {
   return {
@@ -20,7 +21,7 @@ const createDefaultContent = (): JSONContent => {
   };
 };
 
-export default function Tiptap({
+export default function JournalTipTapPage({
   initialData,
 }: {
   initialData: SelectJournalType;
@@ -113,30 +114,28 @@ export default function Tiptap({
   }, [editorContent, title]);
 
   return (
-    <div className="h-full w-full">
-      <div className="mx-auto h-full w-full pt-10 pb-7">
-        <Label htmlFor="title" className="sr-only">
-          Title
-        </Label>
-        <input
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter blog post title"
-          className="w-full border-none bg-transparent text-3xl font-bold"
-        />
-        <div className="tiptap-editor h-full pt-5">
-          {editorContent !== null && (
-            <TiptapEditor
-              onUpdate={handleEditorUpdate}
-              editorContent={editorContent}
-              setEditorContent={setEditorContent}
-              handlePublish={handlePublish}
-              isPublishing={isPending}
-              lastLocalSaved={lastLocalSaved}
-            />
-          )}
-        </div>
+    <div className="h-full max-w-xl mx-auto pt-10 pb-7 flex flex-col relative">
+      <Label htmlFor="title" className="sr-only">Title</Label>
+      <input
+        id="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter blog post title"
+        className={cn(
+          "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2"
+        )}
+      />
+      <div className="tiptap-editor pt-5 grow flex flex-col">
+        {editorContent !== null && (
+          <TiptapEditor
+            onUpdate={handleEditorUpdate}
+            editorContent={editorContent}
+            setEditorContent={setEditorContent}
+            handlePublish={handlePublish}
+            isPublishing={isPending}
+            lastLocalSaved={lastLocalSaved}
+          />
+        )}
       </div>
     </div>
   );
