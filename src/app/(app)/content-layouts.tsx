@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 export function AppContent(props: ComponentProps<"div">) {
   return (
     <div {...props} className={cn(
-      "pt-12 px-4 flex flex-col container-app-content pb-20",
+      "pt-12 px-4 flex flex-col container-app-content w-full pb-20",
       props.className,
     )} />
   )

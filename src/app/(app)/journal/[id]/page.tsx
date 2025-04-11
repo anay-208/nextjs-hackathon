@@ -1,36 +1,30 @@
 import { notFound } from "next/navigation";
-import { getData } from "./data";
-import Tiptap from "./tiptap.client";
+import JournalTipTapPage from "./tiptap.client";
 import "./tiptap.css";
 import { Suspense } from "react";
-import { Sidebar, SidebarSkeleton } from "./sidebar";
 import { getJournal } from "@/app/api/journal/actions";
-export default async function Page({
-  params,
-}: {
+
+export default async function Page(props: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const journalRes = await getJournal(id);
-  if (!journalRes) {
-    notFound();
-  }
-  const journalData = journalRes.data;
-  if (!journalData) {
-    notFound();
-  }
   return (
-    <div className="flex min-h-[90svh] w-full flex-row items-stretch justify-between gap-5 p-5">
-      <div className="border-accent-foreground hidden w-[15%] shrink-0 space-y-4 rounded-lg border-2 p-2 lg:block">
-        <Suspense fallback={<SidebarSkeleton />}>
-          <Sidebar activeID={id} />
-        </Suspense>
-      </div>
-      <div className="min-w-0 flex-1">
+    <div className="min-w-0 flex-1 bg-white px-5 rounded-lg h-full">
+      <div className="h-full max-w-xl mx-auto pt-10 pb-7 flex flex-col relative">
         <Suspense fallback={<div className="p-4">Loading...</div>}>
-          <Tiptap initialData={journalData} />
+          <JournalTipTapPageServer id={props.params.then(p => p.id)} />
         </Suspense>
       </div>
     </div>
   );
+}
+
+async function JournalTipTapPageServer(props: { id: Promise<string> }) {
+  const id = await props.id;
+  const journalRes = await getJournal(id);
+  if (!journalRes) notFound();
+
+  const journalData = journalRes.data;
+  if (!journalData) notFound();
+
+  return <JournalTipTapPage initialData={journalData} />;
 }

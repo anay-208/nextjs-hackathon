@@ -69,8 +69,6 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
                     const idRes = await deleteJournal(data.id);
                     if (!idRes || !idRes.data)
                       throw new Error("Failed to delete journal");
-                    // router.refresh();
-                    // return idRes.data.id;
                   })(),
                   {
                     loading: "Deleting journal...",
@@ -105,15 +103,9 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
         startTransition(() => {
           toast.promise(
             (async () => {
-              const generatedTitle = uniqueNamesGenerator({
-                dictionaries: [adjectives, colors, animals],
-                separator: "-",
-                style: "lowerCase",
-              });
-              const idRes = await createJournal({ title: generatedTitle });
+              const idRes = await createJournal({});
               if (!idRes || !idRes.data)
                 throw new Error("Failed to create journal");
-              router.refresh();
               return idRes.data.id;
             })(),
             {
