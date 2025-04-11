@@ -2,49 +2,56 @@
 import { createJournal, deleteJournal } from "@/app/api/journal/actions";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { EllipsisVertical, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition, type ComponentProps } from "react";
 import { toast } from "sonner";
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-  animals,
-} from "unique-names-generator";
 
 type JournalWithoutContent = Omit<SelectJournalType, "content">;
 
-
-function JournalCardBase(props: ComponentProps<"div"> & {
-  "data-padding"?: string
-}) {
-  return (<div {...props}
-    style={{
-      ...props.style,
-      "--p": props['data-padding'] ?? "1rem",
-    }}
-    className={cn(
-      'border border-border shadow-md relative h-[200px] w-full flex flex-col items-start justify-start gap-2 overflow-hidden rounded-md p-(--p)',
-      'hover:shadow-lg',
-      'hover:border-border-strong',
-      'clickable',
-      'transition-all',
-      props.className)} />)
+function JournalCardBase(
+  props: ComponentProps<"div"> & {
+    "data-padding"?: string;
+  },
+) {
+  return (
+    <div
+      {...props}
+      style={{
+        ...props.style,
+        "--p": props["data-padding"] ?? "1rem",
+      }}
+      className={cn(
+        "border-border relative flex h-[200px] w-full flex-col items-start justify-start gap-2 overflow-hidden rounded-md border p-(--p) shadow-md",
+        "hover:shadow-lg",
+        "hover:border-border-strong",
+        "clickable",
+        "transition-all",
+        props.className,
+      )}
+    />
+  );
 }
-
-
 
 export function JournalCard({ data }: { data: JournalWithoutContent }) {
   return (
-    <JournalCardBase className="animate-card-insert gap-0 items-stretch relative" data-padding="0.75rem">
-      <Link href={`/journal/${ data.id }`} className="absolute inset-0" />
-      <div className="border-b border-border p-(--p) -m-(--p) mb-0 py-2.5 flex gap-1">
+    <JournalCardBase
+      className="animate-card-insert relative items-stretch gap-0"
+      data-padding="0.75rem"
+    >
+      <Link href={`/journal/${data.id}`} className="absolute inset-0" />
+      <div className="border-border -m-(--p) mb-0 flex gap-1 border-b p-(--p) py-2.5">
         <div className="grow">
-          <h2 className="line-clamp-2 font-semibold text-fg">{data.title}</h2>
+          <h2 className="text-fg line-clamp-2 font-semibold">{data.title}</h2>
           <p className="text-muted">{data.created_at.toDateString()}</p>
         </div>
         <DropdownMenu>
@@ -52,7 +59,7 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
             <Button
               variant="ghost"
               size="icon"
-              className="size-8 relative z-10"
+              className="relative z-10 size-8"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -61,7 +68,7 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
               <EllipsisVertical />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 z-20" align="start">
+          <DropdownMenuContent className="z-20 w-56" align="start">
             <DropdownMenuItem
               onClick={() => {
                 toast.promise(
@@ -79,15 +86,15 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
                   },
                 );
               }}
-              variant="destructive">
+              variant="destructive"
+            >
               Delete
               <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
       </div>
-      <p className="line-clamp-5 text-base leading-snug text-muted p-(--p) -m-(--p) mt-0 bg-main-4/2 grow">
+      <p className="text-muted bg-main-4/2 -m-(--p) mt-0 line-clamp-5 grow p-(--p) text-base leading-snug">
         {data.summary || <span className="text-muted/50">Empty Journal</span>}
       </p>
     </JournalCardBase>
@@ -115,7 +122,7 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
                 action: {
                   label: "View Journal",
                   onClick: () => {
-                    router.push(`/journal/${ id }`);
+                    router.push(`/journal/${id}`);
                   },
                 },
               }),
@@ -126,7 +133,7 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
       }}
       disabled={inactive || isPending}
     >
-      <JournalCardBase className="shadow-none gap-1 justify-center items-center border-dashed">
+      <JournalCardBase className="items-center justify-center gap-1 border-dashed shadow-none">
         <Plus className="text-main-4/40 size-6" />
         <p className="text-lg font-semibold">Create New</p>
       </JournalCardBase>
