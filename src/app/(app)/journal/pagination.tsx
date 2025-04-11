@@ -8,7 +8,7 @@ export async function Pagination(props: { currentPage: Promise<number> }) {
 
   const currentPage = await props.currentPage;
   const countRes = await getJournalCount();
-  let count = countRes.data ?? 0;
+  const count = countRes.data ?? 0;
   const totalPages = Math.ceil(count / JournalDashboardSize);
 
   const hasPrevPage = currentPage > 0;
