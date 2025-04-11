@@ -39,6 +39,7 @@ export const listJournals = async ({
       ),
     "listJournals",
   );
+export type GetListJournalResponse = Awaited<ReturnType<typeof listJournals>>;
 
 export const createJournal = async (data: CreateJournalInput) =>
   handle(

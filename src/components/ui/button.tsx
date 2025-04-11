@@ -15,7 +15,9 @@ const buttonVariants = cva(
     "outline-none",
 
     "disabled:pointer-events-none",
-    "disabled:opacity-0",
+    "disabled:opacity-50",
+    "aria-disabled:pointer-events-none",
+    "aria-disabled:opacity-50",
 
     "[&_svg]:pointer-events-none",
     "[&_svg:not([class*='size-'])]:size-4",
@@ -88,6 +90,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
+      aria-disabled={props.disabled}
       className={cn('clickable', buttonVariants({ variant, size, className }))}
       {...props}
     />

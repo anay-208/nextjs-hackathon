@@ -69,3 +69,20 @@
 @utility clickable {
   @apply cursor-pointer transition-transform active:translate-y-0.5;
 }
+@utility container-app-content {
+  @apply max-w-[480px] md:max-w-[860px] mx-auto
+}
+
+@keyframes card-insert {
+  0% {
+    transform: translateY(20%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@utility animate-card-insert {
+  animation: card-insert 0.2s ease-out forwards;
+}

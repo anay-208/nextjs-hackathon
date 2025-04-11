@@ -1,12 +1,13 @@
 "use client";
 import { createJournal } from "@/app/api/journal/actions";
 import { SelectJournalType } from "@/app/api/journal/types";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useTransition, type ComponentProps } from "react";
 import { toast } from "sonner";
 import {
   uniqueNamesGenerator,
@@ -16,32 +17,35 @@ import {
 } from "unique-names-generator";
 
 type JournalWithoutContent = Omit<SelectJournalType, "content">;
+
+
+function JournalCardBase(props: ComponentProps<"div">) {
+  return (<div {...props} className={cn(
+    'border border-border shadow-md relative h-[200px] w-full flex flex-col items-start justify-start gap-2 overflow-hidden rounded-md p-4',
+    'hover:shadow-lg',
+    'hover:border-border-strong',
+    'clickable',
+    'transition-all',
+    props.className)} />)
+}
+
+
+
 export function JournalCard({ data }: { data: JournalWithoutContent }) {
   return (
     <Link
-      href={`/dashboard/journal/${data.id}`}
-      className="border-accent-foreground relative flex h-[200px] w-full flex-col items-start justify-start gap-2 overflow-hidden rounded-md border-2 p-2 px-2"
+      href={`/journal/${ data.id }`}
     >
-      <div className="h-[60px] w-full">
-        <h2 className="line-clamp-2 text-xl font-semibold">{data.title}</h2>
-      </div>
-      <p className="mt-auto line-clamp-5 text-base leading-snug">
-        {data.summary}
-      </p>
+      <JournalCardBase className="animate-card-insert">
+        <div className="w-full">
+          <h2 className="line-clamp-2 text-lg font-semibold">{data.title}</h2>
+          <p className="text-muted">{data.created_at.toDateString()}</p>
+        </div>
+        <p className="line-clamp-5 text-base leading-snug text-muted">
+          {data.summary}
+        </p>
+      </JournalCardBase>
     </Link>
-  );
-}
-
-export function JournalLoadingCard() {
-  return (
-    <div className="border-accent-foreground relative flex h-[200px] w-full flex-col items-start justify-start gap-2 overflow-hidden rounded-md border-2 p-2 px-2">
-      <div className="h-[60px] w-full">
-        <Skeleton className="h-6 w-full" />
-      </div>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Skeleton key={i} className="h-4 w-full" />
-      ))}
-    </div>
   );
 }
 
@@ -72,7 +76,7 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
                 action: {
                   label: "View Journal",
                   onClick: () => {
-                    router.push(`/dashboard/journal/${id}`);
+                    router.push(`/dashboard/journal/${ id }`);
                   },
                 },
               }),
@@ -82,10 +86,12 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
         });
       }}
       disabled={inactive || isPending}
-      className="border-accent-foreground bg-accent relative flex h-[200px] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-md border-2 p-2 px-2 disabled:cursor-not-allowed disabled:opacity-50"
+      // className="border-accent-foreground bg-accent relative flex h-[200px] w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-md border-2 p-2 px-2 disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <PlusCircle className="text-muted-foreground size-6" />
-      <p className="text-xl font-bold">Create New</p>
+      <JournalCardBase className="shadow-none gap-1 justify-center items-center border-dashed">
+        <Plus className="text-main-4/40 size-6" />
+        <p className="text-lg font-semibold">Create New</p>
+      </JournalCardBase>
     </button>
   );
 }
