@@ -34,7 +34,7 @@ export const listJournals = async ({
           page,
           pageSize,
           filter,
-          sort,
+          sort: sort ?? { created_at: "desc" },
         }),
       ),
     "listJournals",
