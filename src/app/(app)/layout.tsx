@@ -9,7 +9,7 @@ export default function AppLayout(props: {
     <div
       id="app-layout"
       className={cn(
-        "bg-infer-bg h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip",
+        "bg-(--bg) h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip",
         "data-[setting-open]:pointer-events-none",
         // "data-[setting-open]:brightness-80",
         // "data-[setting-open]:brightness-80",

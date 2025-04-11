@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
@@ -34,11 +35,12 @@ export const listJournals = async ({
           page,
           pageSize,
           filter,
-          sort,
+          sort: sort ?? { created_at: "desc" },
         }),
       ),
     "listJournals",
   );
+export type GetListJournalResponse = Awaited<ReturnType<typeof listJournals>>;
 
 export const createJournal = async (data: CreateJournalInput) =>
   handle(
@@ -57,7 +59,11 @@ export const getJournal = async (id: string) =>
   handle(() => withAuth(() => dbGetJournal(id)), "getJournal");
 
 export const deleteJournal = async (id: string) =>
-  handle(() => withAuth(() => dbDeleteJournal(id)), "deleteJournal");
+  handle(() => withAuth(async () => {
+    const res = await dbDeleteJournal(id)
+    revalidatePath("/journal");
+    return res
+  }), "deleteJournal");
 
 export const updateJournal = async (
   id: string,
