@@ -69,8 +69,6 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
                     const idRes = await deleteJournal(data.id);
                     if (!idRes || !idRes.data)
                       throw new Error("Failed to delete journal");
-                    // router.refresh();
-                    // return idRes.data.id;
                   })(),
                   {
                     loading: "Deleting journal...",

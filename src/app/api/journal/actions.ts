@@ -29,14 +29,15 @@ export const listJournals = async ({
 }) =>
   handle(
     () =>
-      withAuth((user) =>
-        dbListJournals({
+      withAuth(async (user) => {
+        return dbListJournals({
           author_id: user.user.id,
           page,
           pageSize,
           filter,
           sort: sort ?? { created_at: "desc" },
-        }),
+        })
+      },
       ),
     "listJournals",
   );
@@ -61,7 +62,6 @@ export const getJournal = async (id: string) =>
 export const deleteJournal = async (id: string) =>
   handle(() => withAuth(async () => {
     const res = await dbDeleteJournal(id)
-    revalidatePath("/journal");
     return res
   }), "deleteJournal");
 

@@ -45,6 +45,7 @@ import {
 import { ImageDialog } from "./image-dialog.client";
 import { ConfirmDialog } from "./confirm-dialog.client";
 import { NodeSelection } from "@tiptap/pm/state";
+import { cn } from "@/lib/utils";
 
 interface Props {
   onUpdate: (content: JSONContent) => void;
@@ -52,7 +53,6 @@ interface Props {
   setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
   handlePublish: () => void;
   isPublishing: boolean;
-  lastLocalSaved: string | null;
 }
 
 const TiptapEditor = ({
@@ -61,7 +61,6 @@ const TiptapEditor = ({
   setEditorContent,
   handlePublish,
   isPublishing,
-  lastLocalSaved,
 }: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -311,21 +310,27 @@ const TiptapEditor = ({
     icon: React.ElementType;
     isActive: () => boolean;
     tooltip: string;
-  }) => (
-    <Button
-      variant="ghost"
-      size="icon"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        onMouseDown();
-      }}
-      className={`${ isActive() ? "bg-primary text-primary-foreground" : "" } hover:bg-primary transition-colors`}
-      title={tooltip}
-    >
-      <Icon className="size-4" />
-      <span className="sr-only">{tooltip}</span>
-    </Button>
-  );
+  }) => {
+    const active = isActive();
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onMouseDown();
+        }}
+        className={cn(
+          "transition-colors",
+          active ? "bg-item-active text-primary-foreground" : "hover:bg-hover",
+        )}
+        title={tooltip}
+      >
+        <Icon className="size-4" />
+        <span className="sr-only">{tooltip}</span>
+      </Button>
+    )
+  };
 
   return (
     <>
@@ -522,14 +527,9 @@ const TiptapEditor = ({
           tooltip="Redo"
         />
         <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
-        <LocalSaveStatus lastLocalSaved={lastLocalSaved} />
-
-        <ToolbarButton
-          onMouseDown={handlePublish}
-          icon={CheckCircle}
-          isActive={() => isPublishing}
-          tooltip="Save"
-        />
+        {isPublishing && <div className="flex gap-2 animate-pulse">
+          Saving...
+        </div>}
       </div>
       <ImageDialog
         isOpen={isImageDialogOpen}

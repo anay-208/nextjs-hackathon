@@ -7,6 +7,8 @@ import {
   ListJournalFilter,
   ListJournalSort,
 } from "./types";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const dbCreateJournal = async (
   data: CreateJournalInput & { author_id: string },
@@ -15,10 +17,13 @@ export const dbCreateJournal = async (
     .insert(journalingTable)
     .values({ ...data, id: generateId("jorn") })
     .returning({ id: journalingTable.id });
+  revalidateTag('journals');
   return result[0];
 };
 
 export const dbGetJournal = async (journalId: string) => {
+  "use cache"
+  cacheTag('journals', `journal-${journalId}`);
   return db.query.journalingTable.findFirst({
     where: eq(journalingTable.id, journalId),
   });
@@ -26,6 +31,7 @@ export const dbGetJournal = async (journalId: string) => {
 
 export const dbDeleteJournal = async (journalId: string) => {
   await db.delete(journalingTable).where(eq(journalingTable.id, journalId));
+  revalidateTag('journals');
   return true;
 };
 
@@ -42,6 +48,8 @@ export const dbListJournals = async ({
   filter?: ListJournalFilter;
   sort?: ListJournalSort;
 }) => {
+  "use cache"
+  cacheTag('journals');
   return db.query.journalingTable.findMany({
     columns: {
       content: false,
@@ -73,6 +81,8 @@ export const dbListJournals = async ({
 };
 
 export const dbGetJournalCount = async (author_id: string) => {
+  "use cache"
+  cacheTag("journals")
   const result = await db
     .select({ count: count() })
     .from(journalingTable)
@@ -86,5 +96,6 @@ export const dbUpdateJournal = async (
   data: Partial<CreateJournalInput>,
 ) => {
   await db.update(journalingTable).set(data).where(eq(journalingTable.id, id));
+  revalidateTag('journals');  
   return data;
 };

@@ -1,12 +1,11 @@
 "use client";
-import { useState, useEffect, useCallback, useTransition } from "react";
+import { useState, useEffect, useCallback, useTransition, useRef } from "react";
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { updateJournal } from "@/app/api/journal/actions";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const createDefaultContent = (): JSONContent => {
@@ -29,8 +28,6 @@ export default function JournalTipTapPage({
   const [editorContent, setEditorContent] = useState<JSONContent | null>(null);
   const [title, setTitle] = useState(initialData?.title || "");
   const [isPending, startTransition] = useTransition();
-  const [lastLocalSaved, setLastLocalSaved] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     let content: JSONContent;
@@ -38,27 +35,7 @@ export default function JournalTipTapPage({
     if (!initialData) {
       content = createDefaultContent();
     } else {
-      const storedContent = initialData.title
-        ? localStorage.getItem(initialData.title)
-        : null;
-      if (storedContent) {
-        try {
-          content = JSON.parse(storedContent);
-
-          toast.success("Loaded unsaved changes from local storage", {
-            action: {
-              label: "Undo",
-              onClick: () => {
-                localStorage.removeItem(initialData.title!);
-                window.location.reload();
-              },
-            },
-          });
-        } catch (e) {
-          console.error("Failed to parse stored content:", e);
-          content = createDefaultContent();
-        }
-      } else if (initialData.content) {
+      if (initialData.content) {
         try {
           content = JSON.parse(initialData.content);
         } catch (e) {
@@ -79,42 +56,41 @@ export default function JournalTipTapPage({
 
   const handlePublish = useCallback(() => {
     if (!editorContent) return;
-
-    startTransition(() => {
-      toast.promise(
-        (async () => {
-          await updateJournal(initialData.id, {
-            content: JSON.stringify(editorContent),
-          });
-          localStorage.removeItem(title);
-          setLastLocalSaved(null);
-          router.refresh();
-        })(),
-        {
-          loading: "Saving journal...",
-          success: "Journal saved!",
-          error: "Failed to save journal",
-        },
-      );
+    startTransition(async () => {
+      await updateJournal(initialData.id, {
+        title: title,
+        content: JSON.stringify(editorContent),
+      });
     });
   }, [editorContent, title, initialData.id]);
 
+  const leadingFirstThrottleRef = useRef<NodeJS.Timeout>(null);
+  const latestTitleRef = useRef<string>(title);
+  const latestEditorContentRef = useRef<JSONContent | null>(editorContent);
+
   useEffect(() => {
-    const saveInterval = setInterval(() => {
-      if (title && editorContent) {
-        console.log(initialData.content);
-        if (JSON.stringify(editorContent) === initialData.content) {
-          return;
-        }
-        localStorage.setItem(title, JSON.stringify(editorContent));
-        setLastLocalSaved(new Date().toISOString());
-      }
-    }, 10000);
-    return () => clearInterval(saveInterval);
-  }, [editorContent, title]);
+    latestTitleRef.current = title;
+    latestEditorContentRef.current = editorContent;
+  }, [title, editorContent]);
+
+  useEffect(() => {
+    // Debounce save wait for 1 seconds
+    if (title === initialData.title || editorContent === JSON.parse(initialData.content)) return
+    if (leadingFirstThrottleRef.current) return
+
+    leadingFirstThrottleRef.current = setTimeout(() => {
+      startTransition(async () => {
+        await updateJournal(initialData.id, {
+          title: latestTitleRef.current,
+          content: JSON.stringify(latestEditorContentRef.current),
+        });
+        leadingFirstThrottleRef.current = null
+      });
+    }, 800);
+  }, [editorContent, title])
 
   return (
-    <div className="h-full max-w-xl mx-auto pt-10 pb-7 flex flex-col relative">
+    <>
       <Label htmlFor="title" className="sr-only">Title</Label>
       <input
         id="title"
@@ -133,10 +109,9 @@ export default function JournalTipTapPage({
             setEditorContent={setEditorContent}
             handlePublish={handlePublish}
             isPublishing={isPending}
-            lastLocalSaved={lastLocalSaved}
           />
         )}
       </div>
-    </div>
+    </>
   );
 }

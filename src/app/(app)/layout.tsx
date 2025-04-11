@@ -11,7 +11,7 @@ export default function AppLayout(props: {
       className={cn(
         "bg-(--bg) h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip",
         "data-[setting-open]:pointer-events-none",
-        "group"
+        "group/root"
       )}
       style={{
         "--bg": "color-mix(in oklab, var(--color-main-4) 5%, transparent)",
@@ -20,7 +20,7 @@ export default function AppLayout(props: {
       <div
         id="app-layout-content"
         className={cn(
-          "flex *:min-w-0 grow group-data-[setting-open]:scale-90 transition-[scale]"
+          "flex *:min-w-0 grow group-data-[setting-open]/root:scale-90 transition-[scale]"
         )}
       >
         {/* Main Sidebar */}
