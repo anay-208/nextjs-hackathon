@@ -51,6 +51,16 @@ If for some reason you want to start the database from scratch you can use the f
 docker compose down -v
 ```
 
+## Useing AI features
+
+When you want to use AI features, you need to add the following variable to your `.env.local`
+
+```sh
+GOOGLE_GENERATIVE_AI_API_KEY='YOURKEYHERE'
+```
+
+To receive a key for local developement, generate one here: [Google AI Studio](https://aistudio.google.com/apikey)
+
 ## Migrate DB
 
 To migrate DB, run
