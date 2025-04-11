@@ -4,6 +4,7 @@ import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
   dbDeleteJournal,
+  dbGenerateSummary,
   dbGetJournal,
   dbGetJournalCount,
   dbListJournals,
@@ -63,3 +64,10 @@ export const updateJournal = async (
   id: string,
   data: Partial<CreateJournalInput>,
 ) => handle(() => withAuth(() => dbUpdateJournal(id, data)), "updateJournal");
+
+export const generateSummary = async (text: string) => {
+  return handle(
+    () => withAuth(() => dbGenerateSummary(text)),
+    "generateSummary",
+  );
+};

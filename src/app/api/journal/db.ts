@@ -1,7 +1,10 @@
 import { db } from "@/db";
 import { journalingTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
+import { google } from "@ai-sdk/google";
+import { generateObject } from "ai";
 import { and, count, eq } from "drizzle-orm";
+import { z } from "zod";
 import {
   CreateJournalInput,
   ListJournalFilter,
@@ -87,4 +90,14 @@ export const dbUpdateJournal = async (
 ) => {
   await db.update(journalingTable).set(data).where(eq(journalingTable.id, id));
   return data;
+};
+
+export const dbGenerateSummary = async (text: string) => {
+  const { object } = await generateObject({
+    model: google("gemini-1.5-flash-002"),
+    schema: z.string().min(10).max(150),
+    prompt: `Imagine we are in a journal app. Now you read through one entry and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 150 characters. This is the long text: \n\n${text}`,
+  });
+
+  return object;
 };
