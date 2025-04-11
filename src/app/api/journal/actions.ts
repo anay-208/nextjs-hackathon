@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
@@ -18,10 +18,17 @@ import {
   ListJournalSort,
 } from "./types";
 
-export const createJournal = async (data: CreateJournalInput) =>
+export const createJournal = async (data: Omit<CreateJournalInput, 'title'> & { title?: string }) =>
   handle(
     () =>
-      withAuth((user) => dbCreateJournal({ ...data, author_id: user.user.id })),
+      withAuth(async (user) => {
+        const generatedTitle = uniqueNamesGenerator({
+          dictionaries: [adjectives, colors, animals],
+          separator: "-",
+          style: "lowerCase",
+        });
+        return await dbCreateJournal({ ...data, author_id: user.user.id, title: data.title ?? generatedTitle })
+      }),
     "createJournal",
   );
 
@@ -38,14 +45,15 @@ export const listJournals = async ({
 }) =>
   handle(
     () =>
-      withAuth((user) =>
-        dbListJournals({
+      withAuth(async (user) => {
+        return dbListJournals({
           author_id: user.user.id,
           page,
           pageSize,
           filter,
           sort: sort ?? { created_at: "desc" },
-        }),
+        })
+      },
       ),
     "listJournals",
   );
@@ -68,7 +76,6 @@ export const deleteJournal = async (id: string) =>
     () =>
       withAuth(async (user) => {
         const res = await dbDeleteJournal(id, user.user.id);
-        revalidatePath("/journal");
         return res;
       }),
     "deleteJournal",

@@ -10,18 +10,33 @@ import {
   ListJournalFilter,
   ListJournalSort,
 } from "./types";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { revalidateTag } from "next/cache";
 
 export const dbCreateJournal = async (
   data: CreateJournalInput & { author_id: string },
 ) => {
   const result = await db
     .insert(journalingTable)
-    .values({ ...data, id: generateId("jorn") })
+    .values({
+      ...data, id: generateId("jorn"), content: JSON.stringify({
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [],
+          },
+        ],
+      })
+    })
     .returning({ id: journalingTable.id });
+  revalidateTag('journals');
   return result[0];
 };
 
 export const dbGetJournal = async (journalId: string, userId: string) => {
+  "use cache"
+  cacheTag('journals', `journal-${ journalId }`);
   return db.query.journalingTable.findFirst({
     where: and(
       eq(journalingTable.id, journalId),
@@ -39,6 +54,7 @@ export const dbDeleteJournal = async (journalId: string, userId: string) => {
         eq(journalingTable.author_id, userId),
       ),
     );
+  revalidateTag('journals');
   return true;
 };
 
@@ -55,6 +71,8 @@ export const dbListJournals = async ({
   filter?: ListJournalFilter;
   sort?: ListJournalSort;
 }) => {
+  "use cache"
+  cacheTag('journals');
   return db.query.journalingTable.findMany({
     columns: {
       content: false,
@@ -65,7 +83,7 @@ export const dbListJournals = async ({
         ? eq(journalingTable.is_pinned, filter.is_pinned)
         : undefined,
       filter?.query
-        ? ilike(journalingTable.title, `%${filter.query}%`)
+        ? ilike(journalingTable.title, `%${ filter.query }%`)
         : undefined,
     ),
 
@@ -89,6 +107,8 @@ export const dbListJournals = async ({
 };
 
 export const dbGetJournalCount = async (author_id: string) => {
+  "use cache"
+  cacheTag("journals")
   const result = await db
     .select({ count: count() })
     .from(journalingTable)
@@ -108,6 +128,7 @@ export const dbUpdateJournal = async (
     .where(
       and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
     );
+  revalidateTag('journals');
   return data;
 };
 
@@ -116,7 +137,7 @@ export const dbGenerateSummary = async (text: string) => {
     model: google("gemini-2.0-flash-001"),
     schema: z.string().min(10).max(150),
     system: `You are a helpful assistant. You will be given a long text and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 150 characters.`,
-    prompt: `Please summarize the following text: \n\n${text}`,
+    prompt: `Please summarize the following text: \n\n${ text }`,
   });
 
   return summary;

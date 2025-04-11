@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { faker } from "@faker-js/faker";
 import { EllipsisVertical, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -77,8 +76,6 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
                     const idRes = await deleteJournal(data.id);
                     if (!idRes || !idRes.data)
                       throw new Error("Failed to delete journal");
-                    // router.refresh();
-                    // return idRes.data.id;
                   })(),
                   {
                     loading: "Deleting journal...",
@@ -113,11 +110,9 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
         startTransition(() => {
           toast.promise(
             (async () => {
-              const title = faker.lorem.words(3);
-              const idRes = await createJournal({ title: title });
+              const idRes = await createJournal({});
               if (!idRes || !idRes.data)
                 throw new Error("Failed to create journal");
-              router.refresh();
               return idRes.data.id;
             })(),
             {

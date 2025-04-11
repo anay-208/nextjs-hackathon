@@ -45,6 +45,7 @@ import {
 import { ImageDialog } from "./image-dialog.client";
 import { ConfirmDialog } from "./confirm-dialog.client";
 import { NodeSelection } from "@tiptap/pm/state";
+import { cn } from "@/lib/utils";
 
 interface Props {
   onUpdate: (content: JSONContent) => void;
@@ -52,7 +53,6 @@ interface Props {
   setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
   handlePublish: () => void;
   isPublishing: boolean;
-  lastLocalSaved: string | null;
 }
 
 const TiptapEditor = ({
@@ -61,7 +61,6 @@ const TiptapEditor = ({
   setEditorContent,
   handlePublish,
   isPublishing,
-  lastLocalSaved,
 }: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -311,29 +310,37 @@ const TiptapEditor = ({
     icon: React.ElementType;
     isActive: () => boolean;
     tooltip: string;
-  }) => (
-    <Button
-      variant="ghost"
-      size="icon"
-      onMouseDown={(e) => {
-        e.preventDefault();
-        onMouseDown();
-      }}
-      className={`${isActive() ? "bg-primary text-primary-foreground" : ""} hover:bg-primary transition-colors`}
-      title={tooltip}
-    >
-      <Icon className="size-4" />
-      <span className="sr-only">{tooltip}</span>
-    </Button>
-  );
+  }) => {
+    const active = isActive();
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        onMouseDown={(e) => {
+          e.preventDefault();
+          onMouseDown();
+        }}
+        className={cn(
+          "transition-colors",
+          active ? "bg-item-active text-primary-foreground" : "hover:bg-hover",
+        )}
+        title={tooltip}
+      >
+        <Icon className="size-4" />
+        <span className="sr-only">{tooltip}</span>
+      </Button>
+    )
+  };
 
   return (
-    <div className="relative h-full overflow-hidden">
+    <>
       <EditorContent
         editor={editor}
-        className="h-full w-full max-w-none pb-16 focus:outline-none"
+        className="grow max-w-none focus:outline-none flex flex-col *:grow"
       />
-      <div className="border-accent-foreground absolute right-0 bottom-2 left-0 flex w-full flex-wrap items-center gap-1 rounded-lg border-2 p-2">
+
+      {/* Toolbar */}
+      <div className="border border-border-strong shadow-md bg-popover flex w-full flex-wrap items-center gap-1 rounded-lg p-2 sticky bottom-0">
         <ToolbarButton
           onMouseDown={() => editor.chain().focus().toggleBold().run()}
           icon={Bold}
@@ -520,14 +527,9 @@ const TiptapEditor = ({
           tooltip="Redo"
         />
         <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
-        <LocalSaveStatus lastLocalSaved={lastLocalSaved} />
-
-        <ToolbarButton
-          onMouseDown={handlePublish}
-          icon={CheckCircle}
-          isActive={() => isPublishing}
-          tooltip="Save"
-        />
+        {isPublishing && <div className="flex gap-2 animate-pulse">
+          Saving...
+        </div>}
       </div>
       <ImageDialog
         isOpen={isImageDialogOpen}
@@ -544,7 +546,7 @@ const TiptapEditor = ({
         title="Delete Image"
         message="Are you sure you want to delete this image? This action cannot be undone."
       />
-    </div>
+    </>
   );
 };
 

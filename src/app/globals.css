@@ -35,6 +35,7 @@
   --color-border-strong: --alpha(var(--color-main-3) / 25%);
   --color-placeholder:   --alpha(var(--color-main-3) / 25%);
   --color-popover:       #ffffff;
+  --color-item-active:   --alpha(var(--color-main-3) / 18%);
 
   
   --color-hover:         --alpha(var(--color-main-4) / 5%);
