@@ -86,7 +86,7 @@ const cleanUpTables = async () => {
   );
 };
 
-const seedDatabase = async () => {
+export const seedDatabase = async () => {
   try {
     console.log("Starting database seeding...");
     await cleanUpTables();
@@ -100,4 +100,4 @@ const seedDatabase = async () => {
   }
 };
 
-seedDatabase();
+// seedDatabase();
