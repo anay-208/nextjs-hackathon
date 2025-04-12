@@ -8,6 +8,7 @@ import {
   dbGetCategories,
   dbGetCategory,
   dbGetRecentSimilarTransactions,
+  dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
 } from "./db";
@@ -80,4 +81,10 @@ export const getCategory = async (categoryId: string) =>
   handle(
     () => withAuth((user) => dbGetCategory(categoryId, user.user.id)),
     "getCategory",
+  );
+
+export const getTransactionPresets = async (sort?: TransactionsSorting) =>
+  handle(
+    () => withAuth((user) => dbGetTransactionPresets(user.user.id, sort)),
+    "getTransactionPresets",
   );

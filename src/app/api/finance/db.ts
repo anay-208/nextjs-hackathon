@@ -128,3 +128,39 @@ export const dbGetCategory = async (categoryId: string, userId: string) => {
     where: and(eq(categories.id, categoryId), eq(categories.user_id, userId)),
   });
 };
+
+export const dbGetTransactionPresets = async (
+  userId: string,
+  sort?: TransactionsSorting,
+) => {
+  return db.query.transactions.findMany({
+    columns: {
+      category_id: false,
+      user_id: false,
+      updated_at: false,
+      is_preset: false,
+    },
+    where: and(
+      eq(transactions.user_id, userId),
+      eq(transactions.is_preset, true),
+    ),
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        sort?.created_at
+          ? sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
+    with: {
+      category: {
+        columns: {
+          label: true,
+          budget: true,
+        },
+      },
+    },
+  });
+};
