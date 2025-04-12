@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { isValidTime, Time } from "./time";
 import Amount from "./amount";
+import Presets from "./presets";
 export default async function Page({
   searchParams,
 }: {
@@ -37,6 +38,7 @@ export default async function Page({
       <div className="flex h-full w-full flex-col items-center justify-start">
         <h1 className="text-3xl font-bold text-black">Summary</h1>
         <Amount amountTime={parsedAmountTime} />
+        <Presets />
       </div>
     </div>
   );
