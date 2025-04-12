@@ -9,6 +9,7 @@ import {
   SetBudgetInput,
   SimilarTransactionsFilter,
   TransactionsFilter,
+  TransactionsSorting,
 } from "./types";
 
 export const dbCreateTransaction = async (data: AddTransactionInput) => {
@@ -23,6 +24,7 @@ export const dbGetTransactionsByTimeRange = async (
   user_id: string,
   range: TimeRange,
   filter?: TransactionsFilter,
+  sort?: TransactionsSorting,
 ) => {
   return db.query.transactions.findMany({
     columns: {
@@ -36,6 +38,17 @@ export const dbGetTransactionsByTimeRange = async (
       lte(transactions.created_at, new Date(range.endDate)),
       filter?.type ? eq(transactions.type, filter.type) : undefined,
     ),
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        sort?.created_at
+          ? sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
+    limit: filter?.limit,
     with: {
       category: {
         columns: {

@@ -19,6 +19,11 @@ export type SimilarTransactionsFilter = {
 
 export type TransactionsFilter = {
   type?: "income" | "expense";
+  limit?: number;
+};
+
+export type TransactionsSorting = {
+  created_at?: "asc" | "desc";
 };
 
 export type SetBudgetInput = {
