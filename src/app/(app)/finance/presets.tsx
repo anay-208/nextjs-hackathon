@@ -1,13 +1,8 @@
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
+import { getTransactionPresets } from "@/app/api/finance/actions";
 import { PresetsClient } from "./presets.client";
-import { getTimeRange } from "./time";
 
 export default async function Presets() {
-  //  const presets = getAllPresets(); // TODO: Add this once backend is ready
-  const timeRange = getTimeRange("today");
-  const rawPresets = await getTransactionsByTimeRange(timeRange, {
-    type: "expense",
-  }); //TODO: Remove this once backend is ready
-  const presets = rawPresets.data ?? [];
-  return <PresetsClient presets={presets} />;
+  const presets = await getTransactionPresets();
+  if (!presets.data) return null;
+  return <PresetsClient presets={presets.data} />;
 }

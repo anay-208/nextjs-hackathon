@@ -18,9 +18,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Transaction } from "@/app/api/finance/types";
-type Preset = Pick<Transaction, "id" | "label" | "amount">;
-export function PresetsClient({ presets }: { presets: Preset[] }) {
+import { getTransactionPresets } from "@/app/api/finance/actions";
+export function PresetsClient({
+  presets,
+}: {
+  presets: NonNullable<
+    Awaited<ReturnType<typeof getTransactionPresets>>["data"]
+  >;
+}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
