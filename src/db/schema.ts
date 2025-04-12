@@ -107,14 +107,15 @@ export const transactionType = pgEnum(
 export const transactions = pgTable("transactions", {
   id: text("id").primaryKey(),
   user_id: text("user_id").notNull(),
-  category_id: text("category_id")
-    .notNull()
-    .references(() => categories.id, { onDelete: "cascade" }),
+  category_id: text("category_id").references(() => categories.id, {
+    onDelete: "cascade",
+  }),
 
   label: varchar({ length: 256 }).notNull(),
   amount: doublePrecision().notNull(),
   type: transactionType("transaction_type").notNull(),
   notes: text("notes"),
+  is_preset: boolean("is_preset").default(false).notNull(),
 
   ...timestamps,
 });
