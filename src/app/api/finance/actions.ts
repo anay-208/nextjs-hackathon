@@ -8,6 +8,7 @@ import {
   dbGetCategories,
   dbGetCategory,
   dbGetRecentSimilarTransactions,
+  dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
 } from "./db";
@@ -24,8 +25,8 @@ export const createTransaction = async (
 ) =>
   handle(
     () =>
-      withAuth((user) =>
-        dbCreateTransaction({ ...data, user_id: user.user.id }),
+      withAuth(({ user }) =>
+        dbCreateTransaction({ ...data, user_id: user.id }),
       ),
     "createTransaction",
   );
@@ -33,13 +34,13 @@ export const createTransaction = async (
 export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
   handle(
     () =>
-      withAuth((user) => dbCreateCategory({ ...data, user_id: user.user.id })),
+      withAuth(({ user }) => dbCreateCategory({ ...data, user_id: user.id })),
     "createCategory",
   );
 
 export const setBudget = async (data: SetBudgetInput) => {
   return handle(
-    () => withAuth((user) => dbSetBudget(data, user.user.id)),
+    () => withAuth(({ user }) => dbSetBudget(data, user.id)),
     "setBudget",
   );
 };
@@ -51,15 +52,15 @@ export const getTransactionsByTimeRange = async (
 ) =>
   handle(
     () =>
-      withAuth((user) =>
-        dbGetTransactionsByTimeRange(user.user.id, range, filter, sort),
+      withAuth(({ user }) =>
+        dbGetTransactionsByTimeRange(user.id, range, filter, sort),
       ),
     "getTransactionsByTimeRange",
   );
 
 export const getCategories = async () =>
   handle(
-    () => withAuth((user) => dbGetCategories(user.user.id)),
+    () => withAuth(({ user }) => dbGetCategories(user.id)),
     "getCategories",
   );
 
@@ -69,15 +70,21 @@ export const getRecentSimilarTransactions = async (filter: {
 }) =>
   handle(
     () =>
-      withAuth((user) => {
+      withAuth(({ user }) => {
         const { amount, days = 30 } = filter;
-        return dbGetRecentSimilarTransactions({ amount, days }, user.user.id);
+        return dbGetRecentSimilarTransactions({ amount, days }, user.id);
       }),
     "getRecentSimilarTransactions",
   );
 
 export const getCategory = async (categoryId: string) =>
   handle(
-    () => withAuth((user) => dbGetCategory(categoryId, user.user.id)),
+    () => withAuth(({ user }) => dbGetCategory(categoryId, user.id)),
     "getCategory",
+  );
+
+export const getTransactionPresets = async (sort?: TransactionsSorting) =>
+  handle(
+    () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
+    "getTransactionPresets",
   );
