@@ -8,7 +8,7 @@ import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 
 export default function Page(props: {
   searchParams: Promise<{
-    pageNumber: string;
+    pageNumber: string ;
   }>;
 }) {
 
@@ -17,7 +17,7 @@ export default function Page(props: {
     if (params.pageNumber) {
       page = parseInt(params.pageNumber);
     }
-    return page;
+    return page; 
   })
 
   const getJournalPage = getPageNumber.then(page => {

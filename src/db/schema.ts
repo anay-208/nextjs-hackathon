@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   doublePrecision,
@@ -30,6 +30,20 @@ export const journalingTable = pgTable("journaling_page", {
 
   ...timestamps,
 });
+
+
+export const goalsTable = pgTable("goal_page", {
+  id: text("id").primaryKey().default(sql`gen_random_uuid()`),
+  author_id: text("author_id").notNull(),
+  title: varchar({ length: 256 }).default("Untitled"),
+  completed: boolean().default(false).notNull(),
+  deadline: timestamp("deadline", { mode: "date" }).notNull(),
+  ...timestamps,
+})
+
+
+
+
 
 // For better-auth auto generated
 // table is not postfixed as it won't work then
