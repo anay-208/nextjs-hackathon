@@ -105,3 +105,13 @@ export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
     .returning({ id: categories.id, budget: categories.budget });
   return result[0];
 };
+
+export const dbGetCategory = async (categoryId: string, userId: string) => {
+  return db.query.categories.findFirst({
+    columns: {
+      id: false,
+      user_id: false,
+    },
+    where: and(eq(categories.id, categoryId), eq(categories.user_id, userId)),
+  });
+};
