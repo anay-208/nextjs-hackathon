@@ -16,6 +16,7 @@ import {
   AddTransactionInput,
   SetBudgetInput,
   TransactionsFilter,
+  TransactionsSorting,
 } from "./types";
 
 export const createTransaction = async (
@@ -46,11 +47,12 @@ export const setBudget = async (data: SetBudgetInput) => {
 export const getTransactionsByTimeRange = async (
   range: TimeRange,
   filter: TransactionsFilter,
+  sort?: TransactionsSorting,
 ) =>
   handle(
     () =>
       withAuth((user) =>
-        dbGetTransactionsByTimeRange(user.user.id, range, filter),
+        dbGetTransactionsByTimeRange(user.user.id, range, filter, sort),
       ),
     "getTransactionsByTimeRange",
   );
