@@ -2,6 +2,7 @@ import Link from "next/link";
 import { isValidTime, Time } from "./time";
 import Amount from "./amount";
 import Presets from "./presets";
+import TransactionList from "./transaction";
 export default async function Page({
   searchParams,
 }: {
@@ -39,6 +40,7 @@ export default async function Page({
         <h1 className="text-3xl font-bold text-black">Summary</h1>
         <Amount amountTime={parsedAmountTime} />
         <Presets />
+        <TransactionList />
       </div>
     </div>
   );
