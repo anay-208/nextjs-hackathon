@@ -30,7 +30,7 @@ export default function Page(props: {
       page: params.pageNumber ? parseInt(params.pageNumber) : 0,
       pageSize: JournalDashboardSize,
       filter: {
-        query: params.search ?? "",
+        query: params.search ?? undefined,
       }
     });
   })
