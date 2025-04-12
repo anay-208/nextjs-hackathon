@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { EllipsisVertical, Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, type ComponentProps } from "react";
 import { toast } from "sonner";
 
@@ -104,6 +104,11 @@ export function JournalCard({ data }: { data: JournalWithoutContent }) {
 export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const sp = useSearchParams()
+  // Get search query params and return null if search is not ""
+  const search = sp.get("search");
+  if (search && search !== "") return null;
+
   return (
     <button
       onClick={() => {
