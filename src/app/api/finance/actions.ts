@@ -6,6 +6,7 @@ import {
   dbCreateCategory,
   dbCreateTransaction,
   dbGetCategories,
+  dbGetCategory,
   dbGetRecentSimilarTransactions,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
@@ -71,4 +72,10 @@ export const getRecentSimilarTransactions = async (filter: {
         return dbGetRecentSimilarTransactions({ amount, days }, user.user.id);
       }),
     "getRecentSimilarTransactions",
+  );
+
+export const getCategory = async (categoryId: string) =>
+  handle(
+    () => withAuth((user) => dbGetCategory(categoryId, user.user.id)),
+    "getCategory",
   );
