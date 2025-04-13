@@ -3,14 +3,15 @@
 import { faker } from "@faker-js/faker";
 import { handle, withAuth } from "../utils";
 import {
+  dbAttachTagToJournal,
   dbCreateJournal,
   dbCreateJournalTag,
   dbDeleteJournal,
   dbDeleteJournalTag,
+  dbDetachTagFromJournal,
   dbGenerateSummary,
   dbGetJournal,
   dbGetJournalCount,
-  dbGetJournalTags,
   dbListJournals,
   dbUpdateJournal,
   dbUpdateJournalTag,
@@ -132,12 +133,25 @@ export const updateJournalTag = async (
   );
 };
 
-export const getJournalTags = async () => {
+export const attachTagToJournal = async (journalId: string, tagId: string) => {
   return handle(
     () =>
       withAuth(async ({ user }) => {
-        return await dbGetJournalTags(user.id);
+        return await dbAttachTagToJournal(user.id, journalId, tagId);
       }),
-    "getJournalTags",
+    "attachTagToJournal",
+  );
+};
+
+export const detachTagFromJournal = async (
+  journalId: string,
+  tagId: string,
+) => {
+  return handle(
+    () =>
+      withAuth(async ({ user }) => {
+        return await dbDetachTagFromJournal(user.id, journalId, tagId);
+      }),
+    "detachTagFromJournal",
   );
 };

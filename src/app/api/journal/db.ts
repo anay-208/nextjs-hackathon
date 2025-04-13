@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { journalingTable, journalingTagsTable } from "@/db/schema";
+import { journalingTable, journalsToTags, tagsTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
@@ -45,6 +45,22 @@ export const dbGetJournal = async (journalId: string, userId: string) => {
       eq(journalingTable.id, journalId),
       eq(journalingTable.user_id, userId),
     ),
+
+    with: {
+      journalsToTags: {
+        limit: 10,
+        columns: {
+          journal_id: false,
+          tag_id: false,
+          user_id: false,
+        },
+        with: {
+          tag: {
+            columns: { label: true },
+          },
+        },
+      },
+    },
   });
 };
 
@@ -106,6 +122,22 @@ export const dbListJournals = async ({
 
     limit: pageSize,
     offset: page * pageSize,
+
+    with: {
+      journalsToTags: {
+        limit: 10,
+        columns: {
+          journal_id: false,
+          tag_id: false,
+          user_id: false,
+        },
+        with: {
+          tag: {
+            columns: { label: true },
+          },
+        },
+      },
+    },
   });
 };
 
@@ -151,25 +183,20 @@ export const dbCreateJournalTag = async (
   data: CreateJournalTagInput,
 ) => {
   const result = await db
-    .insert(journalingTagsTable)
+    .insert(tagsTable)
     .values({
       id: generateId("jorn_tag"),
       user_id: user_id,
       ...data,
     })
-    .returning({ id: journalingTagsTable.id });
+    .returning({ id: tagsTable.id });
   return result[0];
 };
 
 export const dbDeleteJournalTag = async (user_id: string, tagId: string) => {
   await db
-    .delete(journalingTagsTable)
-    .where(
-      and(
-        eq(journalingTagsTable.id, tagId),
-        eq(journalingTagsTable.user_id, user_id),
-      ),
-    );
+    .delete(tagsTable)
+    .where(and(eq(tagsTable.id, tagId), eq(tagsTable.user_id, user_id)));
   return true;
 };
 
@@ -179,22 +206,36 @@ export const dbUpdateJournalTag = async (
   data: Partial<CreateJournalTagInput>,
 ) => {
   await db
-    .update(journalingTagsTable)
+    .update(tagsTable)
     .set({ ...data, updated_at: new Date() })
-    .where(
-      and(
-        eq(journalingTagsTable.id, tagId),
-        eq(journalingTagsTable.user_id, user_id),
-      ),
-    );
+    .where(and(eq(tagsTable.id, tagId), eq(tagsTable.user_id, user_id)));
   return data;
 };
 
-export const dbGetJournalTags = async (user_id: string) => {
-  return db.query.journalingTagsTable.findMany({
-    columns: {
-      user_id: false,
-    },
-    where: eq(journalingTagsTable.user_id, user_id),
-  });
+export const dbAttachTagToJournal = async (
+  userId: string,
+  journalId: string,
+  tagId: string,
+) => {
+  await db
+    .insert(journalsToTags)
+    .values({ journal_id: journalId, tag_id: tagId, user_id: userId });
+  return true;
+};
+
+export const dbDetachTagFromJournal = async (
+  userId: string,
+  journalId: string,
+  tagId: string,
+) => {
+  await db
+    .delete(journalsToTags)
+    .where(
+      and(
+        eq(journalsToTags.user_id, userId),
+        eq(journalsToTags.journal_id, journalId),
+        eq(journalsToTags.tag_id, tagId),
+      ),
+    );
+  return true;
 };
