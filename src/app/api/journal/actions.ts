@@ -110,7 +110,7 @@ export const createJournalTag = async (data: CreateJournalTagInput) => {
 };
 
 export const deleteJournalTag = async (id: string) => {
-  handle(
+  return handle(
     () =>
       withAuth(async ({ user }) => {
         return await dbDeleteJournalTag(user.id, id);
