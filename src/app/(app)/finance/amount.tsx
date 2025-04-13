@@ -1,12 +1,11 @@
 import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import { getTimeRange, Time } from "./time";
-import AmountClient from "./amount.client";
 
-export default async function Amount({ amountTime }: { amountTime: Time }) {
+export default async function Amount({ timeFrame }: { timeFrame: Time }) {
   let totalExpenses = 0;
   let totalIncome = 0;
 
-  const timeRange = getTimeRange(amountTime);
+  const timeRange = getTimeRange(timeFrame);
   const expenses = await getTransactionsByTimeRange(timeRange, {
     type: "expense",
   });
@@ -34,7 +33,6 @@ export default async function Amount({ amountTime }: { amountTime: Time }) {
         <p className="text-lg">Total Income</p>
         <p className="text-lg">${totalIncome}</p>
       </div>
-      <AmountClient time={amountTime} />
     </div>
   );
 }
