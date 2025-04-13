@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   doublePrecision,
+  integer,
   pgEnum,
   pgTable,
   primaryKey,
@@ -73,8 +74,11 @@ export const journalingTable = pgTable("journaling_page", {
   id: text().primaryKey(),
   user_id: text().notNull(),
 
-  title: varchar({ length: 256 }).default("Untitled"),
+  title: varchar({ length: 256 }).notNull().default("Untitled"),
   content: text().default("").notNull(),
+  mood: integer(),
+  energy: integer(),
+  productivity: integer(),
 
   is_pinned: boolean().default(false).notNull(),
   is_public: boolean().default(false).notNull(),
