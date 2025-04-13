@@ -27,6 +27,9 @@ const seedJournalingTable = async () => {
       summary: faker.lorem.sentence(),
       created_at: createdAt,
       updated_at: updatedAt,
+      mood: faker.number.int({ min: 1, max: 10 }),
+      energy: faker.number.int({ min: 1, max: 10 }),
+      productivity: faker.number.int({ min: 1, max: 10 }),
     } satisfies InferInsertModel<typeof journalingTable>;
   });
 

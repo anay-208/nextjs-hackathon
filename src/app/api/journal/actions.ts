@@ -23,7 +23,7 @@ import {
 } from "./types";
 
 export const createJournal = async (
-  data: Omit<CreateJournalInput, "title"> & { title?: string },
+  data: CreateJournalInput,
 ) =>
   handle(
     () =>
