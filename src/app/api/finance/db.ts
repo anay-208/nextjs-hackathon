@@ -9,6 +9,7 @@ import {
   SetBudgetInput,
   SimilarTransactionsFilter,
   TransactionsFilter,
+  TransactionsSorting,
 } from "./types";
 
 export const dbCreateTransaction = async (data: AddTransactionInput) => {
@@ -23,6 +24,7 @@ export const dbGetTransactionsByTimeRange = async (
   user_id: string,
   range: TimeRange,
   filter?: TransactionsFilter,
+  sort?: TransactionsSorting,
 ) => {
   return db.query.transactions.findMany({
     columns: {
@@ -36,6 +38,17 @@ export const dbGetTransactionsByTimeRange = async (
       lte(transactions.created_at, new Date(range.endDate)),
       filter?.type ? eq(transactions.type, filter.type) : undefined,
     ),
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        sort?.created_at
+          ? sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
+    limit: filter?.limit,
     with: {
       category: {
         columns: {
@@ -104,4 +117,50 @@ export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
     .where(and(eq(categories.id, categoryId), eq(categories.user_id, userId)))
     .returning({ id: categories.id, budget: categories.budget });
   return result[0];
+};
+
+export const dbGetCategory = async (categoryId: string, userId: string) => {
+  return db.query.categories.findFirst({
+    columns: {
+      id: false,
+      user_id: false,
+    },
+    where: and(eq(categories.id, categoryId), eq(categories.user_id, userId)),
+  });
+};
+
+export const dbGetTransactionPresets = async (
+  userId: string,
+  sort?: TransactionsSorting,
+) => {
+  return db.query.transactions.findMany({
+    columns: {
+      category_id: false,
+      user_id: false,
+      updated_at: false,
+      is_preset: false,
+    },
+    where: and(
+      eq(transactions.user_id, userId),
+      eq(transactions.is_preset, true),
+    ),
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        sort?.created_at
+          ? sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
+    with: {
+      category: {
+        columns: {
+          label: true,
+          budget: true,
+        },
+      },
+    },
+  });
 };
