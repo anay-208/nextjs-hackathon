@@ -100,7 +100,7 @@ export const generateSummary = async (text: string) => {
 };
 
 export const createJournalTag = async (data: CreateJournalTagInput) => {
-  handle(
+  return handle(
     () =>
       withAuth(async ({ user }) => {
         return await dbCreateJournalTag(user.id, data);
