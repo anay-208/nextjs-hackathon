@@ -1,22 +1,12 @@
-import { authClient } from "@/auth/client";
-import { z } from "zod";
+import { auth } from "@/auth";
+import { headers } from "next/headers";
 import { APIResponse } from "./types";
 
 export const getValidUser = async () => {
-  const session = await authClient.getSession();
-  console.log("session", session);
-  if (!session || !session.data?.user) throw new Error("Unauthorized");
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session || !session.user) throw new Error("Unauthorized");
 
-  const parseResult = z.number().safeParse(session.data.user.id);
-  if (!parseResult.success) throw new Error("Invalid author ID");
-
-  return {
-    ...session.data,
-    user: {
-      ...session.data.user,
-      id: session.data.user.id,
-    },
-  };
+  return session;
 };
 
 export const withAuth = async <T>(
