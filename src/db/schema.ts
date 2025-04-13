@@ -2,7 +2,6 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   doublePrecision,
-  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -14,22 +13,6 @@ const timestamps = {
   created_at: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 };
-
-export const journalingTable = pgTable("journaling_page", {
-  id: text("id").primaryKey(),
-  author_id: text("author_id").notNull(),
-
-  title: varchar({ length: 256 }).default("Untitled"),
-  content: text().default("").notNull(),
-
-  is_pinned: boolean().default(false).notNull(),
-  is_public: boolean().default(false).notNull(),
-
-  summary: text().default("").notNull(),
-  tags: jsonb("tags").$type<string[]>().default([]).notNull(),
-
-  ...timestamps,
-});
 
 // For better-auth auto generated
 // table is not postfixed as it won't work then
@@ -85,36 +68,73 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
+export const journalingTable = pgTable("journaling_page", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+
+  title: varchar({ length: 256 }).default("Untitled"),
+  content: text().default("").notNull(),
+
+  is_pinned: boolean().default(false).notNull(),
+  is_public: boolean().default(false).notNull(),
+
+  summary: text().default("").notNull(),
+
+  ...timestamps,
+});
+export const journalingPageRelations = relations(
+  journalingTable,
+  ({ one }) => ({
+    tags: one(journalingTagsTable, {
+      fields: [journalingTable.id],
+      references: [journalingTagsTable.journal_id],
+    }),
+  }),
+);
+
+export const journalingTagsTable = pgTable("journaling_tag", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+  journal_id: text().notNull(),
+
+  label: varchar({ length: 256 }).notNull(),
+
+  ...timestamps,
+});
+
 export const allowedTransactionTypes = ["income", "expense"] as const;
 export const transactionType = pgEnum(
   "transaction_type",
   allowedTransactionTypes,
 );
-export const transactions = pgTable("transactions", {
-  id: text("id").primaryKey(),
-  user_id: text("user_id").notNull(),
-  category_id: text("category_id").references(() => categories.id, {
+export const transactionsTable = pgTable("transactions", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+  category_id: text().references(() => categoriesTable.id, {
     onDelete: "cascade",
   }),
 
   label: varchar({ length: 256 }).notNull(),
   amount: doublePrecision().notNull(),
   type: transactionType("transaction_type").notNull(),
-  notes: text("notes"),
-  is_preset: boolean("is_preset").default(false).notNull(),
+  notes: text(),
+  is_preset: boolean().default(false).notNull(),
 
   ...timestamps,
 });
-export const transactionsRelations = relations(transactions, ({ one }) => ({
-  category: one(categories, {
-    fields: [transactions.category_id],
-    references: [categories.id],
+export const transactionsRelations = relations(
+  transactionsTable,
+  ({ one }) => ({
+    category: one(categoriesTable, {
+      fields: [transactionsTable.category_id],
+      references: [categoriesTable.id],
+    }),
   }),
-}));
+);
 
-export const categories = pgTable("categories", {
-  id: text("id").primaryKey(),
-  user_id: text("user_id").notNull(),
+export const categoriesTable = pgTable("categories", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
 
   label: varchar({ length: 256 }).notNull(),
   budget: doublePrecision(),

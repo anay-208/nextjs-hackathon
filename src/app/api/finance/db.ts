@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { categories, transactions } from "@/db/schema";
+import { categoriesTable, transactionsTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { and, eq, gte, lte } from "drizzle-orm";
 import { TimeRange } from "../types";
@@ -14,9 +14,9 @@ import {
 
 export const dbCreateTransaction = async (data: AddTransactionInput) => {
   const result = await db
-    .insert(transactions)
+    .insert(transactionsTable)
     .values({ ...data, id: generateId("txn") })
-    .returning({ id: transactions.id });
+    .returning({ id: transactionsTable.id });
   return result[0];
 };
 
@@ -26,17 +26,17 @@ export const dbGetTransactionsByTimeRange = async (
   filter?: TransactionsFilter,
   sort?: TransactionsSorting,
 ) => {
-  return db.query.transactions.findMany({
+  return db.query.transactionsTable.findMany({
     columns: {
       category_id: false,
       updated_at: false,
       user_id: false,
     },
     where: and(
-      eq(transactions.user_id, user_id),
-      gte(transactions.created_at, new Date(range.startDate)),
-      lte(transactions.created_at, new Date(range.endDate)),
-      filter?.type ? eq(transactions.type, filter.type) : undefined,
+      eq(transactionsTable.user_id, user_id),
+      gte(transactionsTable.created_at, new Date(range.startDate)),
+      lte(transactionsTable.created_at, new Date(range.endDate)),
+      filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
     ),
 
     orderBy: (table, { asc, desc }) =>
@@ -62,18 +62,18 @@ export const dbGetTransactionsByTimeRange = async (
 
 export const dbCreateCategory = async (data: AddCategoryInput) => {
   const result = await db
-    .insert(categories)
+    .insert(categoriesTable)
     .values({ ...data, id: generateId("cat") })
-    .returning({ id: categories.id });
+    .returning({ id: categoriesTable.id });
   return result[0];
 };
 
 export const dbGetCategories = async (user_id: string) => {
-  return db.query.categories.findMany({
+  return db.query.categoriesTable.findMany({
     columns: {
       user_id: false,
     },
-    where: eq(categories.user_id, user_id),
+    where: eq(categoriesTable.user_id, user_id),
   });
 };
 
@@ -86,17 +86,17 @@ export const dbGetRecentSimilarTransactions = async (
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
 
-  return db.query.transactions.findMany({
+  return db.query.transactionsTable.findMany({
     columns: {
       category_id: false,
       notes: false,
       user_id: false,
     },
     where: and(
-      eq(transactions.user_id, user_id),
-      gte(transactions.created_at, startDate),
-      lte(transactions.amount, amount + threshold),
-      gte(transactions.amount, amount - threshold),
+      eq(transactionsTable.user_id, user_id),
+      gte(transactionsTable.created_at, startDate),
+      lte(transactionsTable.amount, amount + threshold),
+      gte(transactionsTable.amount, amount - threshold),
     ),
     with: {
       category: {
@@ -112,20 +112,28 @@ export const dbGetRecentSimilarTransactions = async (
 export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
   const { categoryId, budget } = input;
   const result = await db
-    .update(categories)
+    .update(categoriesTable)
     .set({ budget, updated_at: new Date() })
-    .where(and(eq(categories.id, categoryId), eq(categories.user_id, userId)))
-    .returning({ id: categories.id, budget: categories.budget });
+    .where(
+      and(
+        eq(categoriesTable.id, categoryId),
+        eq(categoriesTable.user_id, userId),
+      ),
+    )
+    .returning({ id: categoriesTable.id, budget: categoriesTable.budget });
   return result[0];
 };
 
 export const dbGetCategory = async (categoryId: string, userId: string) => {
-  return db.query.categories.findFirst({
+  return db.query.categoriesTable.findFirst({
     columns: {
       id: false,
       user_id: false,
     },
-    where: and(eq(categories.id, categoryId), eq(categories.user_id, userId)),
+    where: and(
+      eq(categoriesTable.id, categoryId),
+      eq(categoriesTable.user_id, userId),
+    ),
   });
 };
 
@@ -133,7 +141,7 @@ export const dbGetTransactionPresets = async (
   userId: string,
   sort?: TransactionsSorting,
 ) => {
-  return db.query.transactions.findMany({
+  return db.query.transactionsTable.findMany({
     columns: {
       category_id: false,
       user_id: false,
@@ -141,8 +149,8 @@ export const dbGetTransactionPresets = async (
       is_preset: false,
     },
     where: and(
-      eq(transactions.user_id, userId),
-      eq(transactions.is_preset, true),
+      eq(transactionsTable.user_id, userId),
+      eq(transactionsTable.is_preset, true),
     ),
 
     orderBy: (table, { asc, desc }) =>
