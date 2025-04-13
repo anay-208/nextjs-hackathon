@@ -23,11 +23,11 @@ export const createJournal = async (
 ) =>
   handle(
     () =>
-      withAuth(async ({ user }) => {
-        const generatedTitle = data.title ?? faker.word.words(3);
+      withAuth(async (user) => {
+        const generatedTitle = faker.word.words(3);
         return await dbCreateJournal({
           ...data,
-          author_id: user.id,
+          author_id: user.user.id,
           title: data.title ?? generatedTitle,
         });
       }),
