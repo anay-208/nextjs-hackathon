@@ -7,7 +7,7 @@ export function parseInput(
   const rawAmount = parts.pop()!;
   const label = parts.join(" ");
 
-  const match = rawAmount.match(/^([+-])(\d+)([a-z]*)/i);
+  const match = rawAmount.match(/^([+-]?)(\d+)([a-z]*)/i);
   if (!match) return null;
 
   const [, sign, numStr, suffix] = match;
@@ -29,6 +29,6 @@ export function parseInput(
   return {
     label,
     amount: number * mul,
-    type: sign === "+" ? "income" : "expense",
+    type: sign === "+" ? "income" : "expense", //default to expense
   };
 }
