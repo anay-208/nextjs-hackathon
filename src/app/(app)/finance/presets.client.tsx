@@ -1,24 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 import {
   Command,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  CommandItem,
+  CommandEmpty,
+} from "cmdk";
 import { getTransactionPresets } from "@/app/api/finance/actions";
+import { cn } from "@/lib/utils";
+
 export function PresetsClient({
   presets,
 }: {
@@ -26,52 +19,35 @@ export function PresetsClient({
     Awaited<ReturnType<typeof getTransactionPresets>>["data"]
   >;
 }) {
-  const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value
-            ? presets.find((p) => p.label === value)?.label
-            : "Select preset..."}
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
-          <CommandList>
-            <CommandEmpty>No preset found.</CommandEmpty>
-            <CommandGroup>
-              {presets.map((p) => (
-                <CommandItem
-                  key={p.id}
-                  value={p.label}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {p.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === p.label ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <Command className="flex h-[30svh] w-full flex-col rounded-md border p-2 shadow-sm">
+      <CommandInput
+        placeholder="Search preset..."
+        className="mb-2 h-9 rounded-md border px-2"
+      />
+      <CommandList className="overflow-y-auto">
+        <CommandEmpty>No preset found.</CommandEmpty>
+        {presets.map((p) => (
+          <CommandItem
+            key={p.id}
+            value={p.label}
+            onSelect={(currentValue) => {
+              setValue(currentValue === value ? "" : currentValue);
+            }}
+            className="hover:bg-muted flex cursor-pointer items-center justify-between rounded px-2 py-1"
+          >
+            {p.label}
+            <Check
+              className={cn(
+                "text-muted-foreground ml-2 h-4 w-4 transition-opacity",
+                value === p.label ? "opacity-100" : "opacity-0",
+              )}
+            />
+          </CommandItem>
+        ))}
+      </CommandList>
+    </Command>
   );
 }

@@ -2,10 +2,11 @@ import { Suspense } from "react";
 import { getTimeRange } from "./time";
 import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function TransactionList() {
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
+    <div className="flex h-fit w-full flex-col items-start justify-start gap-10">
       <Suspense fallback={<div>Loading...</div>}>
         <IncomeList />
       </Suspense>
@@ -25,8 +26,8 @@ async function IncomeList() {
   const incomes = rawIncomes.data ?? [];
 
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
-      <p className="text-lg">Income</p>
+    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 bg-slate-200 p-2">
+      <p className="text-lg font-bold">Income</p>
       {incomes.length === 0 && <p>No incomes found</p>}
       {incomes.length > 0 && (
         <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
@@ -35,7 +36,9 @@ async function IncomeList() {
           ))}
         </div>
       )}
-      <Link href="/finance/incomes"> View More </Link>
+      <Button asChild variant="outline">
+        <Link href="/finance/incomes"> View More </Link>
+      </Button>
     </div>
   );
 }
@@ -48,8 +51,8 @@ async function ExpenseList() {
   const expenses = rawExpenses.data ?? [];
 
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
-      <p className="text-lg">Expense</p>
+    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 bg-slate-200 p-2">
+      <p className="text-lg font-bold">Expense</p>
       {expenses.length === 0 && <p>No expenses found</p>}
       {expenses.length > 0 && (
         <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
@@ -58,7 +61,9 @@ async function ExpenseList() {
           ))}
         </div>
       )}
-      <Link href="/finance/expenses"> View More </Link>
+      <Button asChild variant="outline">
+        <Link href="/finance/expenses"> View More </Link>
+      </Button>
     </div>
   );
 }
@@ -72,7 +77,7 @@ function ListItem({
 }) {
   return (
     <div className="flex h-fit w-full flex-row items-center justify-start gap-2">
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
+      <div className="flex h-full w-[30%] flex-col items-start justify-start gap-1">
         <p>Label:</p>
         {transaction.label}
       </div>
@@ -80,7 +85,7 @@ function ListItem({
         <p>Amount:</p>
         {transaction.amount}
       </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
+      <div className="flex h-full w-[30%] flex-col items-start justify-start gap-1">
         <p>Category:</p>
         {transaction.category?.label ?? "Uncategorized"}
       </div>

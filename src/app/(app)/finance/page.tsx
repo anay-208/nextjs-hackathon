@@ -36,7 +36,7 @@ export default async function Page({
         </Link>
       </div>
 
-      <div className="flex h-full w-full flex-col items-center justify-start">
+      <div className="flex h-full w-full flex-col items-center justify-start gap-10">
         <h1 className="text-3xl font-bold text-black">Summary</h1>
         <Amount amountTime={parsedAmountTime} />
         <Presets />
