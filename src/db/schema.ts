@@ -166,3 +166,4 @@ export const categoriesTable = pgTable("categories", {
   budget: doublePrecision(),
 
   ...timestamps,
+})
