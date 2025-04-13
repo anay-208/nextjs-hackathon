@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { parseInput } from "./parse";
+import { useRouter } from "next/navigation";
 
 export function PresetsClient({
   presets,
@@ -26,7 +27,7 @@ export function PresetsClient({
 }) {
   const [value, setValue] = React.useState("");
   const [searchValue, setSearchValue] = React.useState("");
-
+  const router = useRouter();
   const handleSubmit = async () => {
     if (searchValue.length === 0) {
       toast.error("Please enter a value to create a transaction");
@@ -45,6 +46,7 @@ export function PresetsClient({
         const idRes = await createTransaction({ label, amount, type });
         if (!idRes || !idRes.data)
           throw new Error("Failed to create transaction");
+        router.refresh();
       })(),
       {
         loading: "Creating transaction...",
@@ -87,8 +89,23 @@ export function PresetsClient({
           <CommandItem
             key={p.id}
             value={p.label}
-            onSelect={(currentValue) => {
+            onSelect={async (currentValue) => {
               setValue(currentValue === value ? "" : currentValue);
+              const presetData = presets.find((t) => t.label === currentValue)!;
+
+              toast.promise(
+                (async () => {
+                  const idRes = await createTransaction(presetData);
+                  if (!idRes || !idRes.data)
+                    throw new Error("Failed to create transaction");
+                  router.refresh();
+                })(),
+                {
+                  loading: "Creating transaction...",
+                  success: () => ({ message: "Transaction created!" }),
+                  error: "Failed to create transaction",
+                },
+              );
             }}
             className="hover:bg-muted flex cursor-pointer items-center justify-between rounded px-2 py-1"
           >
