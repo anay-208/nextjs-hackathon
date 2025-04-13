@@ -132,7 +132,7 @@ export const updateJournalTag = async (
   );
 };
 
-export const getJournalTags = () => {
+export const getJournalTags = async () => {
   return handle(
     () =>
       withAuth(async ({ user }) => {
