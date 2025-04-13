@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
@@ -59,7 +60,6 @@ const TiptapEditor = ({
   onUpdate,
   editorContent,
   setEditorContent,
-  handlePublish,
   isPublishing,
 }: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
@@ -98,6 +98,10 @@ const TiptapEditor = ({
         HTMLAttributes: {
           class: "text-blue-500 underline",
         },
+      }),
+      Placeholder.configure({
+        placeholder: 'Type something...',
+        // showOnlyWhenEditable: true,
       }),
     ],
     content: editorContent,

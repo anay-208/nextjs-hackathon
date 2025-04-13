@@ -153,6 +153,7 @@ export const dbUpdateJournalTags = async (
     .set({ tags })
     .where(
       and(eq(journalingTable.id, id), eq(journalingTable.author_id, userId)),
-    );
+  );
+  revalidateTag('journals')
   return tags;
 };
