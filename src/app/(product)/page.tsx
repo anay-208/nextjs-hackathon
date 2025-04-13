@@ -1,39 +1,8 @@
 import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import {
-  attachTagToJournal,
-  createJournalTag,
-  deleteJournalTag,
-  detachTagFromJournal,
-  updateJournalTag,
-} from "../api/journal/actions";
 
 export default async function Home() {
-  const journalId = "jorn_01JRQHRV2TGX29T1EQVHNN0RKN";
-  if (1 < 0) {
-    const c = await createJournalTag({
-      label: "test",
-    });
-
-    if (!c.data) throw new Error("Failed to create journal tag");
-
-    const tagId = c.data.id;
-
-    const u = await updateJournalTag(tagId, {
-      label: "test2",
-    });
-
-    const a = await attachTagToJournal(journalId, tagId);
-    console.log("a: ", a);
-
-    const detach = await detachTagFromJournal(journalId, tagId);
-    console.log("detach: ", detach);
-
-    const d = await deleteJournalTag(tagId);
-    console.log("d: ", d);
-  }
-
   return (
     <div
       className="min-h-[100svh] w-full"
