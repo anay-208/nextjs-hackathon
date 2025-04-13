@@ -14,10 +14,14 @@ export default async function Amount({ amountTime }: { amountTime: Time }) {
     type: "income",
   });
   if (expenses && expenses.data) {
-    totalExpenses = expenses.data.reduce((acc, cur) => acc + cur.amount, 0);
+    totalExpenses = Math.ceil(
+      expenses.data.reduce((acc, cur) => acc + cur.amount, 0),
+    );
   }
   if (incomes && incomes.data) {
-    totalIncome = incomes.data.reduce((acc, cur) => acc + cur.amount, 0);
+    totalIncome = Math.ceil(
+      incomes.data.reduce((acc, cur) => acc + cur.amount, 0),
+    );
   }
 
   return (
