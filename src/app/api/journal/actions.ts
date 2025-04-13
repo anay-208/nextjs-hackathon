@@ -4,16 +4,20 @@ import { faker } from "@faker-js/faker";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateJournal,
+  dbCreateJournalTag,
   dbDeleteJournal,
+  dbDeleteJournalTag,
   dbGenerateSummary,
   dbGetJournal,
   dbGetJournalCount,
+  dbGetJournalTags,
   dbListJournals,
   dbUpdateJournal,
-  dbUpdateJournalTags,
+  dbUpdateJournalTag,
 } from "./db";
 import {
   CreateJournalInput,
+  CreateJournalTagInput,
   ListJournalFilter,
   ListJournalSort,
 } from "./types";
@@ -23,11 +27,11 @@ export const createJournal = async (
 ) =>
   handle(
     () =>
-      withAuth(async (user) => {
+      withAuth(async ({ user }) => {
         const generatedTitle = faker.word.words(3);
         return await dbCreateJournal({
           ...data,
-          author_id: user.user.id,
+          user_id: user.id,
           title: data.title ?? generatedTitle,
         });
       }),
@@ -36,7 +40,7 @@ export const createJournal = async (
 
 export const listJournals = async ({
   filter,
-  sort,
+  sort = { created_at: "desc" },
   page = 0,
   pageSize = 10,
 }: {
@@ -49,11 +53,11 @@ export const listJournals = async ({
     () =>
       withAuth(async ({ user }) => {
         return dbListJournals({
-          author_id: user.id,
+          user_id: user.id,
           page,
           pageSize,
           filter,
-          sort: sort ?? { created_at: "desc" },
+          sort,
         });
       }),
     "listJournals",
@@ -88,15 +92,52 @@ export const updateJournal = async (
     "updateJournal",
   );
 
-export const updateJournalTags = async (id: string, tags: string[]) =>
-  handle(
-    () => withAuth(({ user }) => dbUpdateJournalTags(id, tags, user.id)),
-    "updateJournalTags",
-  );
-
 export const generateSummary = async (text: string) => {
   return handle(
     () => withAuth(() => dbGenerateSummary(text)),
     "generateSummary",
+  );
+};
+
+export const createJournalTag = async (data: CreateJournalTagInput) => {
+  handle(
+    () =>
+      withAuth(async ({ user }) => {
+        return await dbCreateJournalTag(user.id, data);
+      }),
+    "createJournalTag",
+  );
+};
+
+export const deleteJournalTag = async (id: string) => {
+  handle(
+    () =>
+      withAuth(async ({ user }) => {
+        return await dbDeleteJournalTag(user.id, id);
+      }),
+    "deleteJournalTag",
+  );
+};
+
+export const updateJournalTag = async (
+  id: string,
+  data: Partial<CreateJournalTagInput>,
+) => {
+  handle(
+    () =>
+      withAuth(async ({ user }) => {
+        return await dbUpdateJournalTag(user.id, id, data);
+      }),
+    "updateJournalTag",
+  );
+};
+
+export const getJournalTags = () => {
+  return handle(
+    () =>
+      withAuth(async ({ user }) => {
+        return await dbGetJournalTags(user.id);
+      }),
+    "getJournalTags",
   );
 };

@@ -1,9 +1,12 @@
-import { journalingTable } from "@/db/schema";
+import { journalingTable, journalingTagsTable } from "@/db/schema";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { NoIdAndTimestamp } from "../types";
 
 export type CreateJournalInput = NoIdAndTimestamp<
-  Omit<InferInsertModel<typeof journalingTable>, "author_id">
+  Omit<InferInsertModel<typeof journalingTable>, "user_id">
+>;
+export type CreateJournalTagInput = NoIdAndTimestamp<
+  Omit<InferInsertModel<typeof journalingTagsTable>, "user_id">
 >;
 
 export type DB<T extends (...args: any) => any = (...args: any) => any> =
