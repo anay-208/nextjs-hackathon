@@ -8,8 +8,7 @@ const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
   return {
     id: `${i + 1}`,
     title: `Sample Entry ${i + 1}`,
-    author_id: "17",
-    tags: [],
+    user_id: "17",
     content: JSON.stringify({
       type: "doc",
       content: [
@@ -32,6 +31,9 @@ const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
     updated_at: date,
     is_pinned: i === 5,
     is_public: i % 3 === 0,
+    mood: i % 5,
+    energy: i % 4,
+    productivity: i % 3,
   };
 });
 
