@@ -75,9 +75,9 @@ export const journalingTable = pgTable("journaling_page", {
 
   title: varchar({ length: 256 }).notNull().default("Untitled"),
   content: text().default("").notNull(),
-  mood: integer().notNull(),
-  energy: integer().notNull(),
-  productivity: integer().notNull(),
+  mood: integer(),
+  energy: integer(),
+  productivity: integer(),
 
   is_pinned: boolean().default(false).notNull(),
   is_public: boolean().default(false).notNull(),
