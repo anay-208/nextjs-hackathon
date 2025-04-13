@@ -1,14 +1,15 @@
 "use client"
 
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { SidebarItemBase } from "./journal-sidebar"
 import Link from "next/link"
 import JournalPinned from "../../[id]/pin.client"
-import { Plus } from "lucide-react"
-import { useTransition } from "react"
+import { Ellipsis, EllipsisVertical, Plus } from "lucide-react"
+import { startTransition, useTransition } from "react"
 import { cn } from "@/lib/utils"
-import { createJournal } from "@/app/api/journal/actions"
+import { createJournal, deleteJournal, updateJournal } from "@/app/api/journal/actions"
 import { toast } from "sonner"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 export function SidebarJournalItemListClient(
   props: {
@@ -19,7 +20,9 @@ export function SidebarJournalItemListClient(
   }
 ) {
 
-  const isActive = useParams().id === props.id
+  const currentJournalID = useParams().id
+  const isActive = currentJournalID === props.id
+  const router = useRouter()
 
   return (
     <SidebarItemBase key={props.id} data-active={isActive}>
@@ -27,10 +30,53 @@ export function SidebarJournalItemListClient(
       <div className="grow min-w-0 overflow-hidden text-ellipsis relative">
         {props.title || <span className="text-muted">Untitled Entry</span>}
       </div>
-      <JournalPinned
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="opacity-0 group-hover:opacity-100 p-0.5 -mr-2 rounded-sm hover:bg-hover z-20 clickable">
+            <Ellipsis className="size-4" />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="z-20 w-56" align="start">
+          <DropdownMenuItem
+            onClick={() => {
+              startTransition(async () => {
+                await updateJournal(props.id, { is_pinned: !props.is_pinned }).then(() => { })
+              })
+            }}
+          >
+            Pin
+            <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toast.promise(
+                (async () => {
+                  const idRes = await deleteJournal(props.id);
+                  if (props.id === currentJournalID) {
+                    toast.dismiss();
+                    router.push("/journal");
+                  }
+                  if (!idRes || !idRes.data)
+                    throw new Error("Failed to delete journal");
+                })(),
+                {
+                  loading: "Deleting journal...",
+                  error: "Failed to delete journal",
+                },
+              );
+            }}
+            variant="destructive"
+          >
+            Delete
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* <JournalPinned
         isPinned={props.is_pinned}
         journalID={props.id}
-      />
+      /> */}
     </SidebarItemBase>
   )
 }

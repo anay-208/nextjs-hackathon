@@ -1,4 +1,5 @@
 "use client";
+
 import { createJournal, deleteJournal } from "@/app/api/journal/actions";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { Button } from "@/components/ui/button";
@@ -10,11 +11,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { EllipsisVertical, Plus } from "lucide-react";
+import { EllipsisVertical, Pin, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, type ComponentProps } from "react";
 import { toast } from "sonner";
+import { MoodSummary } from "./mood-summary";
 
 type JournalWithoutContent = Omit<SelectJournalType, "content">;
 
@@ -43,16 +45,35 @@ function JournalCardBase(
 }
 
 export function JournalCard({ data }: { data: JournalWithoutContent }) {
+
+  const mood = parseInt(data.tags.find((t) => t.startsWith("__internal_mood-"))?.split('__internal_mood-')[1] ?? '0') || undefined
+  const energy = parseInt(data.tags.find((t) => t.startsWith("__internal_energy-"))?.split('__internal_energy-')[1] ?? '0') || undefined
+  const productivity = parseInt(data.tags.find((t) => t.startsWith("__internal_productivity-"))?.split('__internal_productivity-')[1] ?? '0') || undefined
+
   return (
     <JournalCardBase
       className="animate-card-insert relative items-stretch gap-0"
       data-padding="0.75rem"
     >
-      <Link href={`/journal/${data.id}`} className="absolute inset-0" />
+      <Link href={`/journal/${ data.id }`} className="absolute inset-0" />
       <div className="border-border -m-(--p) mb-0 flex gap-1 border-b p-(--p) py-2.5">
         <div className="grow">
-          <h2 className="text-fg line-clamp-2 font-semibold">{data.title}</h2>
-          <p className="text-muted">{data.created_at.toDateString()}</p>
+          <h2 className="text-fg font-semibold flex items-baseline gap-1">
+            {data.is_pinned && (
+              <Pin className="text-fg size-3 -rotate-45 fill-current shrink-0" />
+            )}
+            <div className="line-clamp-2 min-w-0 wrap-anywhere">
+              {data.title}
+            </div>
+          </h2>
+          <p className="text-muted font-medium text-sm">{data.created_at.toDateString()}</p>
+          <div className="flex gap-1 pt-1 text-lg">
+            <MoodSummary
+              mood={mood}
+              energy={energy}
+              productivity={productivity}
+            />
+          </div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -127,7 +148,7 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
                 action: {
                   label: "View Journal",
                   onClick: () => {
-                    router.push(`/journal/${id}`);
+                    router.push(`/journal/${ id }`);
                   },
                 },
               }),
@@ -145,3 +166,4 @@ export function JournalCreateCard({ inactive }: { inactive?: boolean }) {
     </button>
   );
 }
+

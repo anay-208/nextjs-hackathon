@@ -1,10 +1,39 @@
 "use client";
 
 import { updateJournal } from "@/app/api/journal/actions";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Pin } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 import { toast } from "sonner";
+
+
+export function JournalPinnedTopBar(props: {
+  isPinned: boolean,
+  onClick: (state: boolean) => void | Promise<void>,
+}) {
+  const [optstate, addoptimistic] = useOptimistic(props.isPinned, (prev: boolean, value: boolean) => {
+    return value
+  })
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <Button className="top-bar-pin-button h-8" size="sm" variant="ghost"
+      onClick={() => {
+        startTransition(async () => {
+          addoptimistic(!optstate)
+          await props.onClick(!optstate)
+        })
+      }}
+    >
+      <Pin className={cn(
+        "h-4 w-4 -rotate-45 transition-all",
+        optstate && "rotate-0 fill-current",
+      )} />
+    </Button>
+  )
+}
+
 
 export default function JournalPinned({
   isPinned,
@@ -13,7 +42,6 @@ export default function JournalPinned({
   isPinned: boolean;
   journalID: string;
 }) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleTogglePin = () => {
