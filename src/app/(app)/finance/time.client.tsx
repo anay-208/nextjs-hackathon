@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTransition } from "react";
 
-export default function AmountClient({ time }: { time: Time }) {
+export default function TimeSelector({ time }: { time: Time }) {
   const otherTimes = validTimes.filter((t) => t !== time);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,7 +30,7 @@ export default function AmountClient({ time }: { time: Time }) {
             key={t}
             onSelect={() => {
               const params = new URLSearchParams(searchParams);
-              params.set("amountTime", t);
+              params.set("timeFrame", t);
 
               startTransition(() => {
                 router.replace(`${pathname}?${params.toString()}`);
