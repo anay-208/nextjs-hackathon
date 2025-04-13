@@ -1,24 +1,24 @@
 import { Suspense } from "react";
-import { getTimeRange } from "./time";
+import { getTimeRange, Time } from "./time";
 import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function TransactionList() {
+export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
   return (
     <div className="flex h-fit w-full flex-col items-start justify-start gap-10">
       <Suspense fallback={<div>Loading...</div>}>
-        <IncomeList />
+        <IncomeList timeFrame={timeFrame} />
       </Suspense>
       <Suspense fallback={<div>Loading...</div>}>
-        <ExpenseList />
+        <ExpenseList timeFrame={timeFrame} />
       </Suspense>
     </div>
   );
 }
 
-async function IncomeList() {
-  const timeRange = getTimeRange("today");
+async function IncomeList({ timeFrame }: { timeFrame: Time }) {
+  const timeRange = getTimeRange(timeFrame);
   const rawIncomes = await getTransactionsByTimeRange(timeRange, {
     limit: 4,
     type: "income",
@@ -42,8 +42,8 @@ async function IncomeList() {
     </div>
   );
 }
-async function ExpenseList() {
-  const timeRange = getTimeRange("today");
+async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
+  const timeRange = getTimeRange(timeFrame);
   const rawExpenses = await getTransactionsByTimeRange(timeRange, {
     limit: 4,
     type: "expense",
