@@ -4,6 +4,7 @@ import type { SVGProps } from "react"
 export function StarRating(props: {
   value?: number
   onClick?: (rating: number) => void | Promise<void>
+  onHover?: (rating: number | null) => void
 }) {
   // generate 5 stars
   return (
@@ -13,6 +14,12 @@ export function StarRating(props: {
           key={i}
           onClick={() => {
             props.onClick?.(5 - i)
+          }}
+          onMouseEnter={() => {
+            props.onHover?.(5 - i)
+          }}
+          onMouseLeave={() => {
+            props.onHover?.(null)
           }}
           data-active={(5 - i) === props.value ? "" : undefined}
           className={cn(

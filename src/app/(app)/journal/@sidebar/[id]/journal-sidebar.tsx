@@ -20,10 +20,6 @@ export function Sidebar() {
           </SidebarItemBase>
         </Link>
         <SidebarNewEntryButton />
-        {/* <SidebarItemBase className="hover:bg-primary hover:text-white/90 clickable transition-all">
-          <Plus className="size-4" />
-          New Entry
-        </SidebarItemBase> */}
       </div>
 
       <div>

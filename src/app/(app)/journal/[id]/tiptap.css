@@ -90,3 +90,15 @@
   height: 0;
   pointer-events: none;
 }
+
+.tiptap p {
+  margin-bottom: 0.5rem;
+}
+
+.tiptap code {
+  background-color: color-mix(in hsl, var(--color-muted) 20%, transparent);
+  font-size: var(--text-sm);
+  padding: 2px 4px;
+  margin: -2px -4px;
+  border-radius: 2px;
+}

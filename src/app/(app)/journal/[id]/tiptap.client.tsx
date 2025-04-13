@@ -7,6 +7,7 @@ import { SelectJournalType } from "@/app/api/journal/types";
 import { updateJournal, updateJournalTags } from "@/app/api/journal/actions";
 import { cn } from "@/lib/utils";
 import { StarRating } from "@/components/ui/stars-rating";
+import { energyElementMap, moodElementMap, productivityElementMap } from "../mood-summary";
 
 const createDefaultContent = (): JSONContent => {
   return {
@@ -107,12 +108,12 @@ export default function JournalTipTapPage({
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Untitled Journal Entry"
         className={cn(
-          "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2"
+          "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2 shrink-0"
         )}
       />
-      <div className="flex flex-col min-h-20 grid grid-cols-[6rem_1fr] py-4 gap-y-2 items-center place-items-start">
+      <div className="flex flex-col min-h-20 grid grid-cols-[6rem_1fr] py-4 gap-y-2 items-center place-items-start shrink-0">
         {
-          ['mood', 'energy', 'productivity'].map((key, i) => {
+          (['mood', 'energy', 'productivity'] as const).map((key, i) => {
             return (
               <JournalRating
                 key={key}
@@ -136,17 +137,15 @@ export default function JournalTipTapPage({
         }
       </div>
       <hr className="border-border-strong" />
-      <div className="tiptap-editor pt-5 grow flex flex-col">
-        {editorContent !== null && (
-          <TiptapEditor
-            onUpdate={handleEditorUpdate}
-            editorContent={editorContent}
-            setEditorContent={setEditorContent}
-            handlePublish={handlePublish}
-            isPublishing={isPending}
-          />
-        )}
-      </div>
+      {editorContent !== null && (
+        <TiptapEditor
+          onUpdate={handleEditorUpdate}
+          editorContent={editorContent}
+          setEditorContent={setEditorContent}
+          handlePublish={handlePublish}
+          isPublishing={isPending}
+        />
+      )}
     </>
   );
 }
@@ -154,7 +153,7 @@ export default function JournalTipTapPage({
 
 
 function JournalRating(props: {
-  label: string,
+  label: 'mood' | 'energy' | 'productivity',
   initialValue: number,
   onClick: (r: number) => Promise<void>
 }) {
@@ -163,17 +162,29 @@ function JournalRating(props: {
     return (newR)
   })
 
+  const [currentIndex, setCurrentIndex] = useState(state)
+
   return (
     <Fragment>
       <div className="tag-name text-muted font-medium text-sm">{props.label}</div>
-      <StarRating
-        value={state}
-        onClick={(r) => {
-          startTransition(async () => {
-            addOptimistic(r)
-            await props.onClick(r)
-          })
-        }} />
+      <div className="flex gap-2">
+        <StarRating
+          value={state}
+          onHover={(r) => {
+            setCurrentIndex(r ?? state)
+          }}
+          onClick={(r) => {
+            startTransition(async () => {
+              addOptimistic(r)
+              await props.onClick(r)
+            })
+          }} />
+        <div key={currentIndex} className="animate-place-in">
+          {props.label === 'mood' && moodElementMap[currentIndex - 1]}
+          {props.label === 'energy' && energyElementMap[currentIndex - 1]}
+          {props.label === 'productivity' && productivityElementMap[currentIndex - 1]}
+        </div>
+      </div>
     </Fragment>
   )
 
