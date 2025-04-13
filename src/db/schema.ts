@@ -2,12 +2,15 @@ import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   doublePrecision,
-  jsonb,
+  integer,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
+  jsonb,
   timestamp,
   varchar,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 const timestamps = {
@@ -15,25 +18,10 @@ const timestamps = {
   updated_at: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 };
 
-export const journalingTable = pgTable("journaling_page", {
-  id: text("id").primaryKey(),
-  author_id: text("author_id").notNull(),
-
-  title: varchar({ length: 256 }).default("Untitled"),
-  content: text().default("").notNull(),
-
-  is_pinned: boolean().default(false).notNull(),
-  is_public: boolean().default(false).notNull(),
-
-  summary: text().default("").notNull(),
-  tags: jsonb("tags").$type<string[]>().default([]).notNull(),
-
-  ...timestamps,
-});
 
 
 export const goalsTable = pgTable("goal_page", {
-  id: text("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: uuid("id").primaryKey(),
   author_id: text("author_id").notNull(),
   title: varchar({ length: 256 }).default("Untitled"),
   completed: boolean().default(false).notNull(),
@@ -99,36 +87,98 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at"),
 });
 
+export const journalingTable = pgTable("journaling_page", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+
+  title: varchar({ length: 256 }).notNull().default("Untitled"),
+  content: text().default("").notNull(),
+  mood: integer(),
+  energy: integer(),
+  productivity: integer(),
+
+  is_pinned: boolean().default(false).notNull(),
+  is_public: boolean().default(false).notNull(),
+
+  summary: text().default("").notNull(),
+
+  ...timestamps,
+});
+
+export const journalingRelations = relations(journalingTable, ({ many }) => ({
+  journalsToTags: many(journalsToTags),
+}));
+
+export const tagsTable = pgTable("tag", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+
+  label: varchar({ length: 256 }).notNull(),
+
+  ...timestamps,
+});
+
+export const tagsRelations = relations(tagsTable, ({ many }) => ({
+  journalsToTags: many(journalsToTags),
+}));
+
+export const journalsToTags = pgTable(
+  "journals_to_tags",
+  {
+    user_id: text().notNull(),
+    journal_id: text()
+      .notNull()
+      .references(() => journalingTable.id),
+    tag_id: text()
+      .notNull()
+      .references(() => tagsTable.id),
+  },
+  (t) => [primaryKey({ columns: [t.journal_id, t.tag_id] })],
+);
+export const journalsToTagsRelations = relations(journalsToTags, ({ one }) => ({
+  tag: one(tagsTable, {
+    fields: [journalsToTags.tag_id],
+    references: [tagsTable.id],
+  }),
+  journal: one(journalingTable, {
+    fields: [journalsToTags.journal_id],
+    references: [journalingTable.id],
+  }),
+}));
+
 export const allowedTransactionTypes = ["income", "expense"] as const;
 export const transactionType = pgEnum(
   "transaction_type",
   allowedTransactionTypes,
 );
-export const transactions = pgTable("transactions", {
-  id: text("id").primaryKey(),
-  user_id: text("user_id").notNull(),
-  category_id: text("category_id").references(() => categories.id, {
+export const transactionsTable = pgTable("transactions", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
+  category_id: text().references(() => categoriesTable.id, {
     onDelete: "cascade",
   }),
 
   label: varchar({ length: 256 }).notNull(),
   amount: doublePrecision().notNull(),
   type: transactionType("transaction_type").notNull(),
-  notes: text("notes"),
-  is_preset: boolean("is_preset").default(false).notNull(),
+  notes: text(),
+  is_preset: boolean().default(false).notNull(),
 
   ...timestamps,
 });
-export const transactionsRelations = relations(transactions, ({ one }) => ({
-  category: one(categories, {
-    fields: [transactions.category_id],
-    references: [categories.id],
+export const transactionsRelations = relations(
+  transactionsTable,
+  ({ one }) => ({
+    category: one(categoriesTable, {
+      fields: [transactionsTable.category_id],
+      references: [categoriesTable.id],
+    }),
   }),
-}));
+);
 
-export const categories = pgTable("categories", {
-  id: text("id").primaryKey(),
-  user_id: text("user_id").notNull(),
+export const categoriesTable = pgTable("categories", {
+  id: text().primaryKey(),
+  user_id: text().notNull(),
 
   label: varchar({ length: 256 }).notNull(),
   budget: doublePrecision(),
