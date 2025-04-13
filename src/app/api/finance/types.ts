@@ -15,6 +15,7 @@ export type Category = InferSelectModel<typeof categoriesTable>;
 export type SimilarTransactionsFilter = {
   amount: number;
   days: number;
+  categoryId?: string;
 };
 
 export type TransactionsFilter = {

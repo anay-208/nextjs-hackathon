@@ -81,7 +81,7 @@ export const dbGetRecentSimilarTransactions = async (
   filter: SimilarTransactionsFilter,
   user_id: string,
 ) => {
-  const { amount, days } = filter;
+  const { amount, days, categoryId } = filter;
   const threshold = 0.1 * amount; // 10% threshold for similarity
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
@@ -97,6 +97,7 @@ export const dbGetRecentSimilarTransactions = async (
       gte(transactionsTable.created_at, startDate),
       lte(transactionsTable.amount, amount + threshold),
       gte(transactionsTable.amount, amount - threshold),
+      categoryId ? eq(transactionsTable.category_id, categoryId) : undefined,
     ),
     with: {
       category: {

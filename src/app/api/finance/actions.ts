@@ -67,12 +67,16 @@ export const getCategories = async () =>
 export const getRecentSimilarTransactions = async (filter: {
   amount: number;
   days?: number;
+  categoryId?: string;
 }) =>
   handle(
     () =>
       withAuth(({ user }) => {
-        const { amount, days = 30 } = filter;
-        return dbGetRecentSimilarTransactions({ amount, days }, user.id);
+        const { amount, days = 30, categoryId } = filter;
+        return dbGetRecentSimilarTransactions(
+          { amount, days, categoryId },
+          user.id,
+        );
       }),
     "getRecentSimilarTransactions",
   );
