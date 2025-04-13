@@ -4,6 +4,7 @@ import {
   doublePrecision,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   varchar,
@@ -82,25 +83,47 @@ export const journalingTable = pgTable("journaling_page", {
 
   ...timestamps,
 });
-export const journalingPageRelations = relations(
-  journalingTable,
-  ({ one }) => ({
-    tags: one(journalingTagsTable, {
-      fields: [journalingTable.id],
-      references: [journalingTagsTable.journal_id],
-    }),
-  }),
-);
 
-export const journalingTagsTable = pgTable("journaling_tag", {
+export const journalingRelations = relations(journalingTable, ({ many }) => ({
+  journalsToTags: many(journalsToTags),
+}));
+
+export const tagsTable = pgTable("tag", {
   id: text().primaryKey(),
   user_id: text().notNull(),
-  journal_id: text().notNull(),
 
   label: varchar({ length: 256 }).notNull(),
 
   ...timestamps,
 });
+
+export const tagsRelations = relations(tagsTable, ({ many }) => ({
+  journalsToTags: many(journalsToTags),
+}));
+
+export const journalsToTags = pgTable(
+  "journals_to_tags",
+  {
+    user_id: text().notNull(),
+    journal_id: text()
+      .notNull()
+      .references(() => journalingTable.id),
+    tag_id: text()
+      .notNull()
+      .references(() => tagsTable.id),
+  },
+  (t) => [primaryKey({ columns: [t.journal_id, t.tag_id] })],
+);
+export const journalsToTagsRelations = relations(journalsToTags, ({ one }) => ({
+  tag: one(tagsTable, {
+    fields: [journalsToTags.tag_id],
+    references: [tagsTable.id],
+  }),
+  journal: one(journalingTable, {
+    fields: [journalsToTags.journal_id],
+    references: [journalingTable.id],
+  }),
+}));
 
 export const allowedTransactionTypes = ["income", "expense"] as const;
 export const transactionType = pgEnum(
