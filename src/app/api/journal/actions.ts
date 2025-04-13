@@ -123,7 +123,7 @@ export const updateJournalTag = async (
   id: string,
   data: Partial<CreateJournalTagInput>,
 ) => {
-  handle(
+  return handle(
     () =>
       withAuth(async ({ user }) => {
         return await dbUpdateJournalTag(user.id, id, data);
