@@ -31,6 +31,9 @@ const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
     updated_at: date,
     is_pinned: i === 5,
     is_public: i % 3 === 0,
+    mood: i % 5,
+    energy: i % 4,
+    productivity: i % 3,
   };
 });
 
