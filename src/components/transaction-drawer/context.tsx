@@ -1,6 +1,6 @@
 "use client";
 
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
+import { TransactionItem } from "@/app/api/finance/types";
 import {
   createContext,
   useContext,
@@ -10,9 +10,7 @@ import {
 } from "react";
 
 type TransactionDrawerData = {
-  originalTransaction?: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >[number];
+  originalTransaction?: TransactionItem;
 };
 
 type TransactionDrawerContextType = {

@@ -22,7 +22,7 @@ import {
   createTransaction,
   getCategories,
   getTransactionPresets,
-  getTransactionsByTimeRange,
+  listTransactions,
   updateTransaction,
 } from "@/app/api/finance/actions";
 import { useEffect, useState, useTransition } from "react";
@@ -36,40 +36,36 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "../category/context";
+import {
+  CategoryData,
+  TransactionItemWithOptionalDate,
+  TransactionPresetsData,
+  TransactionsData,
+} from "@/app/api/finance/types";
 
 export default function GlobalDrawerClient({
   categories,
   transactions,
   presets,
 }: {
-  categories: NonNullable<Awaited<ReturnType<typeof getCategories>>["data"]>;
-  transactions: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >;
-  presets: NonNullable<
-    Awaited<ReturnType<typeof getTransactionPresets>>["data"]
-  >;
+  categories: CategoryData;
+  transactions: TransactionsData;
+  presets: TransactionPresetsData;
 }) {
   const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
   const { openDialog } = useCategoryDialog();
-  const [transaction, setTransaction] = useState<
-    Omit<
-      NonNullable<
-        Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-      >[number],
-      "created_at"
-    > & { created_at?: Date }
-  >({
-    id: "",
-    label: "",
-    amount: 0,
-    type: "expense",
-    notes: "",
-    category_id: "",
-    is_preset: false,
-    category: { label: "", budget: 0 },
-  });
+  const [transaction, setTransaction] =
+    useState<TransactionItemWithOptionalDate>({
+      id: "",
+      label: "",
+      amount: 0,
+      type: "expense",
+      notes: "",
+      category_id: "",
+      is_preset: false,
+      category: { label: "", budget: 0 },
+    });
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   useEffect(() => {

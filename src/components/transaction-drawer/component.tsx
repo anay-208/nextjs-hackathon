@@ -1,35 +1,32 @@
 import {
   getCategories,
   getTransactionPresets,
-  getTransactionsByTimeRange,
+  listTransactions,
 } from "@/app/api/finance/actions";
 import GlobalDrawerClient from "./component.client";
 import { getTimeRange } from "@/app/(app)/finance/time";
+import {
+  CategoryData,
+  TransactionPresetsData,
+  TransactionsData,
+} from "@/app/api/finance/types";
 
 export async function GlobalTransactionDrawer() {
-  let categories: NonNullable<
-    Awaited<ReturnType<typeof getCategories>>["data"]
-  > = [];
-  let transactions: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  > = [];
-  let presets: NonNullable<
-    Awaited<ReturnType<typeof getTransactionPresets>>["data"]
-  > = [];
+  let categories: CategoryData = [];
+  let transactions: TransactionsData = [];
+  let presets: TransactionPresetsData = [];
   const rawCategories = await getCategories();
   if (rawCategories && rawCategories.data) {
     categories = rawCategories.data;
   }
   const timeRange = getTimeRange("this-week");
-  const rawTransactions = await getTransactionsByTimeRange(
-    timeRange,
-    {
-      limit: 10,
-    },
-    {
+  const rawTransactions = await listTransactions({
+    timeRange: timeRange,
+    pageSize: 10,
+    sort: {
       created_at: "desc",
     },
-  );
+  });
   if (rawTransactions && rawTransactions.data) {
     transactions = rawTransactions.data;
   }
