@@ -10,7 +10,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-import { createCategory } from "@/app/api/finance/actions";
+import { createCategory, updateCategory } from "@/app/api/finance/actions";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "./context";
@@ -91,40 +91,39 @@ export default function GlobalCategoryDialog() {
                 toast.error("Please enter a label");
                 return;
               }
-              // TODO: Implement this after https://github.com/anay-208/nextjs-hackathon/issues/129 is merged
-              //if (category.id) {
-              //  startTransition(async () => {
-              //    toast.promise(
-              //      updateCategory(category.id, {
-              //        label: category.label,
-              //        budget: category.amount,
-              //      }),
-              //      {
-              //        loading: "Updating category...",
-              //        success: "Category updated!",
-              //        error: "Failed to update categiry",
-              //      },
-              //    );
-              //    router.refresh();
-              //    closeDialog();
-              //  });
-              //} else {
-              startTransition(async () => {
-                toast.promise(
-                  createCategory({
-                    label: category.label,
-                    budget: category.budget,
-                  }),
-                  {
-                    loading: "Saving category...",
-                    success: "Category saved!",
-                    error: "Failed to save category",
-                  },
-                );
-                router.refresh();
-                closeDialog();
-              });
-              //}
+              if (category.id) {
+                startTransition(async () => {
+                  toast.promise(
+                    updateCategory(category.id, {
+                      label: category.label,
+                      budget: category.budget,
+                    }),
+                    {
+                      loading: "Updating category...",
+                      success: "Category updated!",
+                      error: "Failed to update categiry",
+                    },
+                  );
+                  router.refresh();
+                  closeDialog();
+                });
+              } else {
+                startTransition(async () => {
+                  toast.promise(
+                    createCategory({
+                      label: category.label,
+                      budget: category.budget,
+                    }),
+                    {
+                      loading: "Saving category...",
+                      success: "Category saved!",
+                      error: "Failed to save category",
+                    },
+                  );
+                  router.refresh();
+                  closeDialog();
+                });
+              }
             }}
           >
             Submit
