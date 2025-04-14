@@ -37,10 +37,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "../category/context";
 
-type EditableTransaction = NonNullable<
-  Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
->[number];
-
 export default function GlobalDrawerClient({
   categories,
   transactions,
@@ -57,14 +53,20 @@ export default function GlobalDrawerClient({
   const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
   const { openDialog } = useCategoryDialog();
-  const [transaction, setTransaction] = useState<EditableTransaction>({
+  const [transaction, setTransaction] = useState<
+    Omit<
+      NonNullable<
+        Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
+      >[number],
+      "created_at"
+    > & { created_at?: Date }
+  >({
     id: "",
     label: "",
     amount: 0,
     type: "expense",
     notes: "",
     category_id: "",
-    created_at: new Date(),
     is_preset: false,
     category: { label: "", budget: 0 },
   });

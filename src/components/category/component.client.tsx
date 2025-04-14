@@ -20,11 +20,15 @@ export default function GlobalCategoryDialog() {
   const { isOpen, data, closeDialog } = useCategoryDialog();
   const { originalCategory } = data;
   const [category, setCategory] = useState<
-    NonNullable<Awaited<ReturnType<typeof getCategory>>["data"]>
+    Omit<
+      NonNullable<Awaited<ReturnType<typeof getCategory>>["data"]>,
+      "created_at" | "updated_at"
+    > & {
+      created_at?: Date;
+      updated_at?: Date;
+    }
   >({
     label: "",
-    updated_at: new Date(),
-    created_at: new Date(),
     budget: 0,
   });
 
