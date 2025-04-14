@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { TransactionDrawerProvider } from "@/components/transaction-drawer/context";
+import { GlobalTransactionDrawer } from "@/components/transaction-drawer/component";
+import { Suspense } from "react";
+import { CategoryDialogProvider } from "@/components/category/context";
+import GlobalCategoryDialog from "@/components/category/component.client";
+import Providers from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,7 +16,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lifelog",
-  description: "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
+  description:
+    "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
 };
 
 export default function RootLayout({
@@ -19,11 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${ inter.className } subpixel-antialiased`}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <Providers>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${inter.className} subpixel-antialiased`}>
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    </Providers>
   );
 }
