@@ -1,6 +1,6 @@
 "use client";
 
-import { getCategories } from "@/app/api/finance/actions";
+import { CategoryItem } from "@/app/api/finance/types";
 import {
   createContext,
   useContext,
@@ -10,9 +10,7 @@ import {
 } from "react";
 
 type CategoryDialogData = {
-  originalCategory?: NonNullable<
-    Awaited<ReturnType<typeof getCategories>>["data"]
-  >[number];
+  originalCategory?: CategoryItem;
 };
 
 type CategoryDialogContextType = {

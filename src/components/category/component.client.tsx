@@ -10,24 +10,18 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-import { createCategory, getCategory } from "@/app/api/finance/actions";
+import { createCategory } from "@/app/api/finance/actions";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "./context";
 import { toast } from "sonner";
+import { CategoryItemWithOptionalDates } from "@/app/api/finance/types";
 
 export default function GlobalCategoryDialog() {
   const { isOpen, data, closeDialog } = useCategoryDialog();
   const { originalCategory } = data;
-  const [category, setCategory] = useState<
-    Omit<
-      NonNullable<Awaited<ReturnType<typeof getCategory>>["data"]>,
-      "created_at" | "updated_at"
-    > & {
-      created_at?: Date;
-      updated_at?: Date;
-    }
-  >({
+  const [category, setCategory] = useState<CategoryItemWithOptionalDates>({
+    id: "",
     label: "",
     budget: 0,
   });
