@@ -21,7 +21,15 @@ export async function GlobalDrawer() {
     categories = rawCategories.data;
   }
   const timeRange = getTimeRange("this-week");
-  const rawTransactions = await getTransactionsByTimeRange(timeRange, {}); //TODO: Remove {} when filter becomes optional https://github.com/anay-208/nextjs-hackathon/issues/124
+  const rawTransactions = await getTransactionsByTimeRange(
+    timeRange,
+    {
+      limit: 10,
+    },
+    {
+      created_at: "desc",
+    },
+  );
   if (rawTransactions && rawTransactions.data) {
     transactions = rawTransactions.data;
   }
