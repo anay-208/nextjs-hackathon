@@ -5,7 +5,7 @@ import "server-only"
 
 export const dbGetGoals = (userId: string) => {
     return db.query.goalsTable.findMany({
-        where: eq(goalsTable.author_id, userId),
+        where: eq(goalsTable.user_id, userId),
     })
 }
 
@@ -13,14 +13,14 @@ export const dbGetGoal = (userId: string, goalId: string) => {
     return db.query.goalsTable.findFirst({
         where: and(
             eq(goalsTable.id, goalId),
-            eq(goalsTable.author_id, userId),
+            eq(goalsTable.user_id, userId),
         ),
     })  
 }
 
 export const dbCreateGoal = (userId: string, title: string, deadline: Date) => {
     return db.insert(goalsTable).values({
-        author_id: userId,
+        user_id: userId,
         title,
         completed: false,
         deadline
@@ -33,7 +33,7 @@ export const dbMarkGoalAsComplete = (userId: string, goalId: string) => {
     }).where(
         and(
             eq(goalsTable.id, goalId),
-            eq(goalsTable.author_id, userId),
+            eq(goalsTable.user_id, userId),
         )
     ).returning()
 }

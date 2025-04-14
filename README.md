@@ -46,7 +46,7 @@ Add the following Env Variables
 | ---------------------- | -------------------------------------------------------------------------------------------------------- | --------- |
 | `DATABASE_URL`         | The read-only connection string to connect to the DB, used to query the posts and messages               | ✔️        |
 | `BETTER_AUTH_SECRET`    | Any random text or secret, required by better-auth. You can generate one from https://www.better-auth.com/docs/installation#set-environment-variables | ✔️        |
-
+| `GOOGLE_GENERATIVE_AI_API_KEY`    | Google Ai studio Api key to use Ai features powered by Gemini | ✔️        |
 
 
 ## Using AI features
