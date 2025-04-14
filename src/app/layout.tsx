@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { TransactionDrawerProvider } from "@/components/transaction-drawer/context";
 import { GlobalTransactionDrawer } from "@/components/transaction-drawer/component";
 import { Suspense } from "react";
+import { CategoryDialogProvider } from "@/components/category/context";
+import GlobalCategoryDialog from "@/components/category/component.client";
+import Providers from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,16 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <TransactionDrawerProvider>
-      <Suspense fallback={null}>
-        <GlobalTransactionDrawer />
-      </Suspense>
+    <Providers>
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} subpixel-antialiased`}>
           {children}
           <Toaster />
         </body>
       </html>
-    </TransactionDrawerProvider>
+    </Providers>
   );
 }
