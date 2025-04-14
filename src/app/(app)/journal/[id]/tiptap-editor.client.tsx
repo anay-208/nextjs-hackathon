@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
@@ -59,7 +60,6 @@ const TiptapEditor = ({
   onUpdate,
   editorContent,
   setEditorContent,
-  handlePublish,
   isPublishing,
 }: Props) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
@@ -98,6 +98,10 @@ const TiptapEditor = ({
         HTMLAttributes: {
           class: "text-blue-500 underline",
         },
+      }),
+      Placeholder.configure({
+        placeholder: 'Type something...',
+        // showOnlyWhenEditable: true,
       }),
     ],
     content: editorContent,
@@ -334,13 +338,16 @@ const TiptapEditor = ({
 
   return (
     <>
-      <EditorContent
-        editor={editor}
-        className="grow max-w-none focus:outline-none flex flex-col *:grow"
-      />
+      <div className="tiptap-editor pt-5 grow flex flex-col pb-8">
+        <EditorContent
+          editor={editor}
+          className="grow max-w-none focus:outline-none flex flex-col *:grow"
+        />
+      </div>
+
 
       {/* Toolbar */}
-      <div className="border border-border-strong shadow-md bg-popover flex w-full flex-wrap items-center gap-1 rounded-lg p-2 sticky bottom-0">
+      <div className="border border-border-strong shadow-md bg-popover flex w-full flex-wrap items-center gap-1 rounded-lg p-2 sticky bottom-8">
         <ToolbarButton
           onMouseDown={() => editor.chain().focus().toggleBold().run()}
           icon={Bold}

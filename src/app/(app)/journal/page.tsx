@@ -22,7 +22,7 @@ export default function Page(props: {
     if (params.pageNumber) {
       page = parseInt(params.pageNumber);
     }
-    return page;
+    return page; 
   })
 
   const getJournalPage = getSp.then(async params => {

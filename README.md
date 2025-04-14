@@ -38,6 +38,17 @@ If for some reason you want to start the database from scratch you can use the f
 docker compose down -v
 ```
 
+## Env Variables
+Add the following Env Variables
+
+
+| Name                   | Description                                                                                              | Required? |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- | --------- |
+| `DATABASE_URL`         | The read-only connection string to connect to the DB, used to query the posts and messages               | ✔️        |
+| `BETTER_AUTH_SECRET`    | Any random text or secret, required by better-auth. You can generate one from https://www.better-auth.com/docs/installation#set-environment-variables | ✔️        |
+
+
+
 ## Using AI features
 
 When you want to use AI features, you need to add the following variable to your `.env.local`

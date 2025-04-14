@@ -1,11 +1,13 @@
 "use client";
-import { useState, useEffect, useCallback, useTransition, useRef } from "react";
+import { useState, useEffect, useCallback, useTransition, useRef, Fragment, useOptimistic } from "react";
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
 import { SelectJournalType } from "@/app/api/journal/types";
 import { updateJournal } from "@/app/api/journal/actions";
 import { cn } from "@/lib/utils";
+import { StarRating } from "@/components/ui/stars-rating";
+import { energyElementMap, moodElementMap, productivityElementMap } from "../mood-summary";
 
 const createDefaultContent = (): JSONContent => {
   return {
@@ -106,20 +108,85 @@ export default function JournalTipTapPage({
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Untitled Journal Entry"
         className={cn(
-          "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2"
+          "w-full bg-transparent text-3xl font-bold border-b outline-none border-transparent focus:border-border-strong py-2 shrink-0"
         )}
       />
-      <div className="tiptap-editor pt-5 grow flex flex-col">
-        {editorContent !== null && (
-          <TiptapEditor
-            onUpdate={handleEditorUpdate}
-            editorContent={editorContent}
-            setEditorContent={setEditorContent}
-            handlePublish={handlePublish}
-            isPublishing={isPending}
-          />
-        )}
+      <div className="flex flex-col min-h-20 grid grid-cols-[6rem_1fr] py-4 gap-y-2 items-center place-items-start shrink-0">
+        {
+          (['mood', 'energy', 'productivity'] as const).map((key, i) => {
+            return (
+              <JournalRating
+                key={key}
+                label={key}
+                initialValue={initialData[key] ?? 0}
+                onClick={async (r) => {
+                  startTransition(async () => {
+                    // const newTags = [...initialData.tags]
+                    // const index = newTags.findIndex(t => t.startsWith(`__internal_${ key }-`))
+                    // if (index !== -1) {
+                    //   newTags[index] = `__internal_${ key }-${ r }`;
+                    // } else {
+                    //   newTags.push(`__internal_${ key }-${ r }`);
+                    // }
+                    await updateJournal(initialData.id, { [key]: r })
+                    // await updateJournalTags(initialData.id)
+                  })
+                }}
+              />
+            )
+          })
+        }
       </div>
+      <hr className="border-border-strong" />
+      {editorContent !== null && (
+        <TiptapEditor
+          onUpdate={handleEditorUpdate}
+          editorContent={editorContent}
+          setEditorContent={setEditorContent}
+          handlePublish={handlePublish}
+          isPublishing={isPending}
+        />
+      )}
     </>
   );
+}
+
+
+
+function JournalRating(props: {
+  label: 'mood' | 'energy' | 'productivity',
+  initialValue: number,
+  onClick: (r: number) => Promise<void>
+}) {
+  const [pending, startTransition] = useTransition()
+  const [state, addOptimistic] = useOptimistic(props.initialValue, (r: number, newR: number) => {
+    return (newR)
+  })
+
+  const [currentIndex, setCurrentIndex] = useState(state)
+
+  return (
+    <Fragment>
+      <div className="tag-name text-muted font-medium text-sm">{props.label}</div>
+      <div className="flex gap-2">
+        <StarRating
+          value={state}
+          onHover={(r) => {
+            setCurrentIndex(r ?? state)
+          }}
+          onClick={(r) => {
+            startTransition(async () => {
+              addOptimistic(r)
+              await props.onClick(r)
+            })
+          }} />
+        <div key={currentIndex} className="animate-place-in">
+          {props.label === 'mood' && moodElementMap[currentIndex - 1]}
+          {props.label === 'energy' && energyElementMap[currentIndex - 1]}
+          {props.label === 'productivity' && productivityElementMap[currentIndex - 1]}
+        </div>
+      </div>
+    </Fragment>
+  )
+
 }

@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { categoriesTable, transactionsTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { and, eq, gte, lte } from "drizzle-orm";
-import { TimeRange } from "../types";
+import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
   AddTransactionInput,
@@ -20,6 +20,38 @@ export const dbCreateTransaction = async (data: AddTransactionInput) => {
   return result[0];
 };
 
+export const dbUpdateTransaction = async (
+  user_id: string,
+  transactionId: string,
+  data: Partial<NoUser<AddTransactionInput>>,
+) => {
+  await db
+    .update(transactionsTable)
+    .set({ ...data, updated_at: new Date() })
+    .where(
+      and(
+        eq(transactionsTable.id, transactionId),
+        eq(transactionsTable.user_id, user_id),
+      ),
+    );
+  return data;
+};
+
+export const dbDeleteTransaction = async (
+  user_id: string,
+  transactionId: string,
+) => {
+  await db
+    .delete(transactionsTable)
+    .where(
+      and(
+        eq(transactionsTable.id, transactionId),
+        eq(transactionsTable.user_id, user_id),
+      ),
+    );
+  return true;
+};
+
 export const dbGetTransactionsByTimeRange = async (
   user_id: string,
   range: TimeRange,
@@ -28,7 +60,6 @@ export const dbGetTransactionsByTimeRange = async (
 ) => {
   return db.query.transactionsTable.findMany({
     columns: {
-      category_id: false,
       updated_at: false,
       user_id: false,
     },
@@ -144,7 +175,6 @@ export const dbGetTransactionPresets = async (
 ) => {
   return db.query.transactionsTable.findMany({
     columns: {
-      category_id: false,
       user_id: false,
       updated_at: false,
       is_preset: false,

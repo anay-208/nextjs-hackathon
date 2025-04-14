@@ -39,7 +39,7 @@ export const dbCreateJournal = async (
 
 export const dbGetJournal = async (journalId: string, userId: string) => {
   "use cache";
-  cacheTag("journals", `journal-${journalId}`);
+  cacheTag("journals", `journal-${ journalId }`);
   return db.query.journalingTable.findFirst({
     where: and(
       eq(journalingTable.id, journalId),

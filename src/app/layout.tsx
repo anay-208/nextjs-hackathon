@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lifelog",
-  description: "Notion on Steroids", //TODO: Finalize the metadata situation (https://github.com/anay-208/nextjs-hackathon/issues/8)
+  description: "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
 };
 
 export default function RootLayout({
