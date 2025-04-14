@@ -1,8 +1,8 @@
 // "use cache"
 
-import { listJournals } from "@/app/api/journal/actions";
+import { listJournals } from "@/actions/journal/actions";
 import { SidebarJournalItemListClient } from "./journal-sidebar.client";
-import type { SelectJournalType } from "@/app/api/journal/types";
+import type { SelectJournalType } from "@/actions/journal/types";
 import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
 

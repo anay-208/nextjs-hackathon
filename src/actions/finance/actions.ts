@@ -12,6 +12,7 @@ import {
   dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
+  dbUpdateCurrency,
   dbUpdateTransaction,
 } from "./db";
 import {
@@ -112,3 +113,13 @@ export const getTransactionPresets = async (sort?: TransactionsSorting) =>
     () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
     "getTransactionPresets",
   );
+
+export const updateCurrency = async (currency: string) => {
+  return handle(
+    () =>
+      withAuth(({ user }) =>
+        dbUpdateCurrency(user.id, currency ),
+      ),
+    "updateCurrency",
+  );
+}

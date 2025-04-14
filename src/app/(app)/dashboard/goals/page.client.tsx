@@ -15,10 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Calendar, Plus } from "lucide-react";
 import { useState } from "react";
 import type { Goal, GoalInsert } from "./types";
-import { createGoal } from "@/actions/goals/new";
-import { toggleGoalCompletion as toggleGoalCompletionAction } from "@/actions/goals/complete"
+import { createGoal, toggleGoalCompletion as toggleGoalCompletionAction  } from "@/actions/goals/actions";
 
-export default function GoalsPage({ goalsList, author }: { goalsList: Goal[]; author: string }) {
+export default function GoalsPage({ goalsList }: { goalsList: Goal[]; author: string }) {
   const [goals, setGoals] = useState<Goal[]>(goalsList);
   const [newGoal, setNewGoal] = useState<{
     title: string;
@@ -29,26 +28,21 @@ export default function GoalsPage({ goalsList, author }: { goalsList: Goal[]; au
   const handleAddGoal = async ()  => {
     if (!newGoal.title || !newGoal.deadline) return;
 
-    const goal = await createGoal({
-      title: newGoal.title,
-      deadline: newGoal.deadline
-    })
-    if(!goal || !goal.data || !goal.data.success || !goal.data.data) {
+    const goal = await createGoal(newGoal.title, newGoal.deadline)
+    if(!goal || !goal.data) {
       console.log(goal)
       return alert("an unknown error occured")
     }
 
-    setGoals([...goals, goal.data.data[0]]);
+    setGoals([...goals, goal.data[0]]);
     setNewGoal({ title: "", deadline: null });
     setIsAddingGoal(false);
   };
 
   const toggleGoalCompletion = (goalId: string): void => {
+    toggleGoalCompletionAction(goalId).then(console.log)
     const updatedGoals = goals.map((goal) => {
       if (goal.id === goalId) {
-        toggleGoalCompletionAction({
-          id: goalId
-        }).then(console.log)
         return {
           ...goal,
           completed: !goal.completed,

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import JournalTipTapPage from "./tiptap.client";
 import "./tiptap.css";
 import { Suspense } from "react";
-import { getJournal, updateJournal } from "@/app/api/journal/actions";
+import { getJournal, updateJournal } from "@/actions/journal/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { JournalPinnedTopBar } from "./pin.client";

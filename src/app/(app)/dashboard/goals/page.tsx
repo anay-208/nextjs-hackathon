@@ -5,6 +5,7 @@ import { unauthorized } from "next/navigation";
 import { db } from "@/db";
 import { goalsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getGoals } from "@/actions/goals/actions";
 
 export default async function Goals(){
     const session = await auth.api.getSession({
@@ -13,11 +14,12 @@ export default async function Goals(){
     if(!session){
         return unauthorized();
     }
-    const goals = await db.select().from(goalsTable).where(eq(goalsTable.author_id, session.user.id));
-    console.log(goals)
+    const goals = await getGoals()
+    if(goals.error || !goals.data)
+        return <div className="text-red-500">Error fetching goals</div>
     return (
         <>
-        <GoalsPage goalsList={goals} author={session.session.userId} />
+        <GoalsPage goalsList={goals.data} author={session.session.userId} />
         </>
     )
 }

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { categoriesTable, transactionsTable } from "@/db/schema";
+import { categoriesTable, transactionsTable, user as userTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { and, eq, gte, lte } from "drizzle-orm";
 import { NoUser, TimeRange } from "../types";
@@ -203,3 +203,14 @@ export const dbGetTransactionPresets = async (
     },
   });
 };
+
+
+export const dbUpdateCurrency = async ( user_id: string, currency: string) => {
+  await db
+    .update(userTable)
+    .set({ currency })
+    .where(
+      eq(userTable.id, user_id),
+    );
+  return currency;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { createJournal, deleteJournal, type GetListJournalResponse } from "@/app/api/journal/actions";
+import { createJournal, deleteJournal, type GetListJournalResponse } from "@/actions/journal/actions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
