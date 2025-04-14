@@ -25,7 +25,7 @@ export const toggleGoalCompletion = authActionClient
         }
         const completed = goal[0].completed;
         // update
-        const res = await db
+        await db
         .update(goalsTable)
         .set({ completed: !completed })
         .where(and(eq(goalsTable.id, id), eq(goalsTable.author_id, userId)))
