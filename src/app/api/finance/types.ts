@@ -1,6 +1,6 @@
 import { categoriesTable, transactionsTable } from "@/db/schema";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { ExtractData, ExtractDataItem, NoIdAndTimestamp } from "../types";
+import { APIResponse, ExtractData, ExtractDataItem, NoIdAndTimestamp } from "../types";
 import {
   getCategories,
   getTransactionPresets,
@@ -49,3 +49,4 @@ export type TransactionPresetsData = ExtractData<typeof getTransactionPresets>;
 export type TransactionPresetItem = ExtractDataItem<
   typeof getTransactionPresets
 >;
+type GetTransactionListResponse = APIResponse<ExtractData<typeof listTransactions>>;

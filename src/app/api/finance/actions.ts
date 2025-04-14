@@ -10,6 +10,7 @@ import {
   dbGetCategories,
   dbGetCategory,
   dbGetTransactionPresets,
+  dbGetTransactionsCount,
   dbListTransactions,
   dbUpdateCategory,
   dbUpdateTransaction,
@@ -75,6 +76,13 @@ export const getTransactionPresets = async (sort?: TransactionsSorting) =>
     () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
     "getTransactionPresets",
   );
+
+export const getTransactionsCount = async (filter: TransactionsFilter) => {
+  return handle(
+    () => withAuth(({ user }) => dbGetTransactionsCount(user.id, filter)),
+    "getTransactionsCount",
+  );
+};
 
 export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
   handle(
