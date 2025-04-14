@@ -1,16 +1,18 @@
 "use server";
 
-import { TimeRange } from "../types";
+import { NoUser, TimeRange } from "../types";
 import { handle, withAuth } from "../utils";
 import {
   dbCreateCategory,
   dbCreateTransaction,
+  dbDeleteTransaction,
   dbGetCategories,
   dbGetCategory,
   dbGetRecentSimilarTransactions,
   dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
+  dbUpdateTransaction,
 } from "./db";
 import {
   AddCategoryInput,
@@ -31,6 +33,24 @@ export const createTransaction = async (
     "createTransaction",
   );
 
+export const updateTransaction = async (
+  transactionId: string,
+  data: Partial<NoUser<AddTransactionInput>>,
+) => {
+  return handle(
+    () =>
+      withAuth(({ user }) => dbUpdateTransaction(user.id, transactionId, data)),
+    "updateTransaction",
+  );
+};
+
+export const deleteTransaction = async (transactionId: string) => {
+  return handle(
+    () => withAuth(({ user }) => dbDeleteTransaction(user.id, transactionId)),
+    "deleteTransaction",
+  );
+};
+
 export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
   handle(
     () =>
@@ -47,7 +67,7 @@ export const setBudget = async (data: SetBudgetInput) => {
 
 export const getTransactionsByTimeRange = async (
   range: TimeRange,
-  filter: TransactionsFilter,
+  filter?: TransactionsFilter,
   sort?: TransactionsSorting,
 ) =>
   handle(
