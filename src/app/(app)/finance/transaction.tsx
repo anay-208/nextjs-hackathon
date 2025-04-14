@@ -3,6 +3,7 @@ import { getTimeRange, Time } from "./time";
 import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ListItem } from "./transcation.client";
 
 export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
   return (
@@ -64,35 +65,6 @@ async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
       <Button asChild variant="outline">
         <Link href="/finance/expenses"> View More </Link>
       </Button>
-    </div>
-  );
-}
-
-function ListItem({
-  transaction,
-}: {
-  transaction: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >[number];
-}) {
-  return (
-    <div className="flex h-fit w-full flex-row items-center justify-start gap-2">
-      <div className="flex h-full w-[30%] flex-col items-start justify-start gap-1">
-        <p>Label:</p>
-        {transaction.label}
-      </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
-        <p>Amount:</p>
-        {transaction.amount}
-      </div>
-      <div className="flex h-full w-[30%] flex-col items-start justify-start gap-1">
-        <p>Category:</p>
-        {transaction.category?.label ?? "Uncategorized"}
-      </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
-        <p>Created At:</p>
-        {transaction.created_at.toLocaleDateString()}
-      </div>
     </div>
   );
 }
