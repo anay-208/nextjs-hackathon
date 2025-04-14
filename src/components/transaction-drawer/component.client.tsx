@@ -23,9 +23,9 @@ import {
   getCategories,
   getTransactionPresets,
   getTransactionsByTimeRange,
+  updateTransaction,
 } from "@/app/api/finance/actions";
 import { useEffect, useState, useTransition } from "react";
-import { Check } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -36,10 +36,9 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-type Transaction = NonNullable<
+type EditableTransaction = NonNullable<
   Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
 >[number];
-type EditableTransaction = Partial<Transaction>;
 
 export default function GlobalDrawerClient({
   categories,
@@ -56,7 +55,17 @@ export default function GlobalDrawerClient({
 }) {
   const { isOpen, data, closeDrawer } = useDrawer();
   const { originalTransaction } = data;
-  const [transaction, setTransaction] = useState<EditableTransaction>({});
+  const [transaction, setTransaction] = useState<EditableTransaction>({
+    id: "",
+    label: "",
+    amount: 0,
+    type: "expense",
+    notes: "",
+    category_id: "",
+    created_at: new Date(),
+    is_preset: false,
+    category: { label: "", budget: 0 },
+  });
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   useEffect(() => {
@@ -64,6 +73,9 @@ export default function GlobalDrawerClient({
       setTransaction(originalTransaction);
     }
   }, [originalTransaction]);
+  useEffect(() => {
+    console.log(transaction);
+  }, [transaction]);
   return (
     <Drawer open={isOpen} onOpenChange={closeDrawer}>
       <DrawerContent className="flex h-[70svh] w-full flex-col items-center justify-center">
@@ -181,7 +193,17 @@ export default function GlobalDrawerClient({
                       const presetData = presets.find(
                         (t) => t.label === currentValue,
                       )!;
-                      setTransaction(presetData);
+                      setTransaction({
+                        id: "",
+                        label: presetData.label,
+                        amount: presetData.amount,
+                        type: presetData.type,
+                        notes: presetData.notes,
+                        category: presetData.category,
+                        category_id: presetData.category_id,
+                        created_at: presetData.created_at,
+                        is_preset: true,
+                      });
                     }}
                     className="hover:bg-muted flex cursor-pointer items-center justify-between rounded px-2 py-1"
                   >
@@ -234,25 +256,46 @@ export default function GlobalDrawerClient({
                 toast.error("Please select a transaction type");
                 return;
               }
-              //TODO: Implement a way to update existing transactions
-              startTransition(async () => {
-                toast.promise(
-                  createTransaction({
-                    label: transaction.label!,
-                    amount: transaction.amount!,
-                    type: transaction.type!,
-                    notes: transaction.notes ?? "",
-                    //category_id: transaction.category?.id ?? "",  TODO: Implement this once we have a way to get the category id
-                  }),
-                  {
-                    loading: "Saving transaction...",
-                    success: "Transaction saved!",
-                    error: "Failed to save transaction",
-                  },
-                );
-                router.refresh();
-                closeDrawer();
-              });
+              if (transaction.id) {
+                console.log("HERE");
+                startTransition(async () => {
+                  toast.promise(
+                    updateTransaction(transaction.id, {
+                      label: transaction.label,
+                      amount: transaction.amount,
+                      type: transaction.type,
+                      notes: transaction.notes ?? "",
+                      category_id: transaction.category_id ?? "",
+                    }),
+                    {
+                      loading: "Updating transaction...",
+                      success: "Transaction updated!",
+                      error: "Failed to update transaction",
+                    },
+                  );
+                  router.refresh();
+                  closeDrawer();
+                });
+              } else {
+                startTransition(async () => {
+                  toast.promise(
+                    createTransaction({
+                      label: transaction.label!,
+                      amount: transaction.amount!,
+                      type: transaction.type!,
+                      notes: transaction.notes ?? "",
+                      category_id: transaction.category_id ?? "",
+                    }),
+                    {
+                      loading: "Saving transaction...",
+                      success: "Transaction saved!",
+                      error: "Failed to save transaction",
+                    },
+                  );
+                  router.refresh();
+                  closeDrawer();
+                });
+              }
             }}
           >
             Submit
