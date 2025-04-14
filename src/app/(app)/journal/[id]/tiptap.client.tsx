@@ -4,7 +4,7 @@ import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
 import { SelectJournalType } from "@/app/api/journal/types";
-import { updateJournal, updateJournalTags } from "@/app/api/journal/actions";
+import { updateJournal } from "@/app/api/journal/actions";
 import { cn } from "@/lib/utils";
 import { StarRating } from "@/components/ui/stars-rating";
 import { energyElementMap, moodElementMap, productivityElementMap } from "../mood-summary";
@@ -118,17 +118,18 @@ export default function JournalTipTapPage({
               <JournalRating
                 key={key}
                 label={key}
-                initialValue={parseInt(initialData.tags?.find(t => t.startsWith(`__internal_${ key }-`))?.split(`__internal_${ key }-`)[1] ?? '0')}
+                initialValue={initialData[key] ?? 0}
                 onClick={async (r) => {
                   startTransition(async () => {
-                    const newTags = [...initialData.tags]
-                    const index = newTags.findIndex(t => t.startsWith(`__internal_${ key }-`))
-                    if (index !== -1) {
-                      newTags[index] = `__internal_${ key }-${ r }`;
-                    } else {
-                      newTags.push(`__internal_${ key }-${ r }`);
-                    }
-                    await updateJournalTags(initialData.id, newTags)
+                    // const newTags = [...initialData.tags]
+                    // const index = newTags.findIndex(t => t.startsWith(`__internal_${ key }-`))
+                    // if (index !== -1) {
+                    //   newTags[index] = `__internal_${ key }-${ r }`;
+                    // } else {
+                    //   newTags.push(`__internal_${ key }-${ r }`);
+                    // }
+                    await updateJournal(initialData.id, { [key]: r })
+                    // await updateJournalTags(initialData.id)
                   })
                 }}
               />

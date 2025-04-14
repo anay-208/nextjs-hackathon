@@ -1,11 +1,10 @@
-"use cache"
+// "use cache"
 
 import { listJournals } from "@/app/api/journal/actions";
 import { SidebarJournalItemListClient } from "./journal-sidebar.client";
 import type { SelectJournalType } from "@/app/api/journal/types";
 import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
-import { Pin } from "lucide-react";
 
 export async function SidebarItemList() {
 
