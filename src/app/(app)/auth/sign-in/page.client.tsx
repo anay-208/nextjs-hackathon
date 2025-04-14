@@ -5,7 +5,7 @@ import { authClient } from '@/auth/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { test } from '@/actions/test'
-import { setUserCurrency } from '@/actions/finance/set-currency'
+import { updateCurrency } from '@/actions/finance/actions'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -17,9 +17,7 @@ export default function SignInPage() {
   useEffect(() => {
     // TODO: remove
     authClient.getSession().then(console.log)
-    setUserCurrency({
-      currency: "INR"
-    })
+    updateCurrency("INR")
     test().then(console.log)
   }, [])
 
