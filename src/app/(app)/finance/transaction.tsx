@@ -20,10 +20,16 @@ export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
 
 async function IncomeList({ timeFrame }: { timeFrame: Time }) {
   const timeRange = getTimeRange(timeFrame);
-  const rawIncomes = await getTransactionsByTimeRange(timeRange, {
-    limit: 4,
-    type: "income",
-  });
+  const rawIncomes = await getTransactionsByTimeRange(
+    timeRange,
+    {
+      limit: 4,
+      type: "income",
+    },
+    {
+      created_at: "desc",
+    },
+  );
   const incomes = rawIncomes.data ?? [];
 
   return (
@@ -45,10 +51,16 @@ async function IncomeList({ timeFrame }: { timeFrame: Time }) {
 }
 async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
   const timeRange = getTimeRange(timeFrame);
-  const rawExpenses = await getTransactionsByTimeRange(timeRange, {
-    limit: 4,
-    type: "expense",
-  });
+  const rawExpenses = await getTransactionsByTimeRange(
+    timeRange,
+    {
+      limit: 4,
+      type: "expense",
+    },
+    {
+      created_at: "desc",
+    },
+  );
   const expenses = rawExpenses.data ?? [];
 
   return (
