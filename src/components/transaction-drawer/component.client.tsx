@@ -35,6 +35,7 @@ import {
 } from "cmdk";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useCategoryDialog } from "../category/context";
 
 type EditableTransaction = NonNullable<
   Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
@@ -55,6 +56,7 @@ export default function GlobalDrawerClient({
 }) {
   const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
+  const { openDialog } = useCategoryDialog();
   const [transaction, setTransaction] = useState<EditableTransaction>({
     id: "",
     label: "",
@@ -136,6 +138,14 @@ export default function GlobalDrawerClient({
               <DropdownMenuContent>
                 <DropdownMenuLabel>Available Categories</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onSelect={() => {
+                    openDialog();
+                  }}
+                >
+                  Create new
+                </DropdownMenuItem>
                 {categories.map((t) => (
                   <DropdownMenuItem
                     key={t.id}
