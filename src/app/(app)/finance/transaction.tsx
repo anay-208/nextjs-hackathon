@@ -44,7 +44,7 @@ async function IncomeList({ timeFrame }: { timeFrame: Time }) {
         </div>
       )}
       <Button asChild variant="outline">
-        <Link href="/finance/incomes"> View More </Link>
+        <Link href="/finance/income"> View More </Link>
       </Button>
     </div>
   );
@@ -75,7 +75,7 @@ async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
         </div>
       )}
       <Button asChild variant="outline">
-        <Link href="/finance/expenses"> View More </Link>
+        <Link href="/finance/expense"> View More </Link>
       </Button>
     </div>
   );

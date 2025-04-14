@@ -1,6 +1,6 @@
 "use client";
 
-import { CategoryItem } from "@/app/api/finance/types";
+import { CategoryItemWithOptionalDates } from "@/app/api/finance/types";
 import {
   createContext,
   useContext,
@@ -10,7 +10,7 @@ import {
 } from "react";
 
 type CategoryDialogData = {
-  originalCategory?: CategoryItem;
+  originalCategory?: CategoryItemWithOptionalDates;
 };
 
 type CategoryDialogContextType = {
