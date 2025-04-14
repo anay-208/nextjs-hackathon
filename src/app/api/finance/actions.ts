@@ -5,6 +5,7 @@ import { handle, withAuth } from "../utils";
 import {
   dbCreateCategory,
   dbCreateTransaction,
+  dbDeleteCategory,
   dbDeleteTransaction,
   dbGetCategories,
   dbGetCategory,
@@ -106,7 +107,7 @@ export const getCategory = async (categoryId: string) =>
 
 export const deleteCategory = async (categoryId: string) => {
   return handle(
-    () => withAuth(({ user }) => dbDeleteTransaction(user.id, categoryId)),
+    () => withAuth(({ user }) => dbDeleteCategory(user.id, categoryId)),
     "deleteCategory",
   );
 };
