@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Check, Play } from "lucide-react";
 import {
   Command,
@@ -9,24 +8,21 @@ import {
   CommandItem,
   CommandEmpty,
 } from "cmdk";
-import {
-  createTransaction,
-  getTransactionPresets,
-} from "@/app/api/finance/actions";
+import { createTransaction } from "@/app/api/finance/actions";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { parseInput } from "./parse";
 import { useRouter } from "next/navigation";
+import { TransactionPresetsData } from "@/app/api/finance/types";
+import { useState } from "react";
 
 export function PresetsClient({
   presets,
 }: {
-  presets: NonNullable<
-    Awaited<ReturnType<typeof getTransactionPresets>>["data"]
-  >;
+  presets: TransactionPresetsData;
 }) {
-  const [value, setValue] = React.useState("");
-  const [searchValue, setSearchValue] = React.useState("");
+  const [value, setValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
   const handleSubmit = async () => {
     if (searchValue.length === 0) {

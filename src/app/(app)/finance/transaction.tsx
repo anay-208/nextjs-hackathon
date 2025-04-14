@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { getTimeRange, Time } from "./time";
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ListItem } from "./transcation.client";
+import { listTransactions } from "@/app/api/finance/actions";
 
 export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
   return (
@@ -20,16 +20,16 @@ export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
 
 async function IncomeList({ timeFrame }: { timeFrame: Time }) {
   const timeRange = getTimeRange(timeFrame);
-  const rawIncomes = await getTransactionsByTimeRange(
-    timeRange,
-    {
-      limit: 4,
+  const rawIncomes = await listTransactions({
+    timeRange: timeRange,
+    filter: {
       type: "income",
     },
-    {
+    sort: {
       created_at: "desc",
     },
-  );
+    pageSize: 4,
+  });
   const incomes = rawIncomes.data ?? [];
 
   return (
@@ -51,16 +51,16 @@ async function IncomeList({ timeFrame }: { timeFrame: Time }) {
 }
 async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
   const timeRange = getTimeRange(timeFrame);
-  const rawExpenses = await getTransactionsByTimeRange(
-    timeRange,
-    {
-      limit: 4,
+  const rawExpenses = await listTransactions({
+    timeRange: timeRange,
+    filter: {
       type: "expense",
     },
-    {
+    sort: {
       created_at: "desc",
     },
-  );
+    pageSize: 4,
+  });
   const expenses = rawExpenses.data ?? [];
 
   return (

@@ -1,23 +1,26 @@
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import { getTimeRange, Time } from "./time";
 import { AmountGraph } from "./graph.client";
+import { TransactionsData } from "@/app/api/finance/types";
+import { listTransactions } from "@/app/api/finance/actions";
 
 export default async function Graph({ timeFrame }: { timeFrame: Time }) {
-  let expenses: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  > = [];
-  let incomes: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  > = [];
+  let expenses: TransactionsData = [];
+  let incomes: TransactionsData = [];
   const timeRange = getTimeRange(timeFrame);
-  const expensesRaw = await getTransactionsByTimeRange(timeRange, {
-    type: "expense",
+  const expensesRaw = await listTransactions({
+    timeRange: timeRange,
+    filter: {
+      type: "expense",
+    },
   });
   if (expensesRaw && expensesRaw.data) {
     expenses = expensesRaw.data;
   }
-  const rawIncomes = await getTransactionsByTimeRange(timeRange, {
-    type: "income",
+  const rawIncomes = await listTransactions({
+    timeRange: timeRange,
+    filter: {
+      type: "income",
+    },
   });
   if (rawIncomes && rawIncomes.data) {
     incomes = rawIncomes.data;

@@ -21,7 +21,7 @@ import {
   isSameYear,
 } from "date-fns";
 import { TimeRange } from "@/app/api/types";
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
+import { TransactionsData } from "@/app/api/finance/types";
 
 const getDateKey = (date: Date, range: TimeRange): string => {
   const d = new Date(date);
@@ -36,9 +36,7 @@ const getDateKey = (date: Date, range: TimeRange): string => {
 };
 
 const groupTransactions = (
-  transactions: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >,
+  transactions: TransactionsData,
   range: TimeRange,
 ) => {
   const grouped: Record<string, number> = {};
@@ -86,9 +84,7 @@ export function AmountGraph({
   data,
   timeRange,
 }: {
-  data: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >;
+  data: TransactionsData;
   timeRange: TimeRange;
 }) {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1280px)" });

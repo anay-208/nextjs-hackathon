@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { isValidTime, Time } from "./time";
 import Amount from "./amount";
 import Presets from "./presets";

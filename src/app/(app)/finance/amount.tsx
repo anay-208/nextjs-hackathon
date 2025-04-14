@@ -1,16 +1,18 @@
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
 import { getTimeRange, Time } from "./time";
+import { listTransactions } from "@/app/api/finance/actions";
 
 export default async function Amount({ timeFrame }: { timeFrame: Time }) {
   let totalExpenses = 0;
   let totalIncome = 0;
 
   const timeRange = getTimeRange(timeFrame);
-  const expenses = await getTransactionsByTimeRange(timeRange, {
-    type: "expense",
+  const expenses = await listTransactions({
+    timeRange: timeRange,
+    filter: { type: "expense" },
   });
-  const incomes = await getTransactionsByTimeRange(timeRange, {
-    type: "income",
+  const incomes = await listTransactions({
+    timeRange: timeRange,
+    filter: { type: "income" },
   });
   if (expenses && expenses.data) {
     totalExpenses = Math.ceil(

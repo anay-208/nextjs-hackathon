@@ -1,22 +1,14 @@
 "use client";
 
-import {
-  deleteTransaction,
-  getTransactionsByTimeRange,
-} from "@/app/api/finance/actions";
+import { deleteTransaction } from "@/app/api/finance/actions";
 import { useTransactionDrawer } from "@/components/transaction-drawer/context";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { TransactionItem } from "@/app/api/finance/types";
 
-export function ListItem({
-  transaction,
-}: {
-  transaction: NonNullable<
-    Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
-  >[number];
-}) {
+export function ListItem({ transaction }: { transaction: TransactionItem }) {
   const { openTransactionDrawer } = useTransactionDrawer();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
