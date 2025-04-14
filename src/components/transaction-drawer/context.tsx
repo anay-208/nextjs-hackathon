@@ -9,45 +9,58 @@ import {
   ReactNode,
 } from "react";
 
-type DrawerData = {
+type TransactionDrawerData = {
   originalTransaction?: NonNullable<
     Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
   >[number];
 };
 
-type DrawerContextType = {
+type TransactionDrawerContextType = {
   isOpen: boolean;
-  data: DrawerData;
-  openDrawer: (data?: DrawerData) => void;
-  closeDrawer: () => void;
+  data: TransactionDrawerData;
+  openTransactionDrawer: (data?: TransactionDrawerData) => void;
+  closeTransactionDrawer: () => void;
 };
 
-const DrawerContext = createContext<DrawerContextType | undefined>(undefined);
+const TransactionDrawerContext = createContext<
+  TransactionDrawerContextType | undefined
+>(undefined);
 
-export function DrawerProvider({ children }: { children: ReactNode }) {
+export function TransactionDrawerProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<DrawerData>({});
+  const [data, setData] = useState<TransactionDrawerData>({});
 
-  const openDrawer = useCallback((newData?: DrawerData) => {
-    if (newData) setData(newData);
-    setIsOpen(true);
-  }, []);
+  const openTransactionDrawer = useCallback(
+    (newData?: TransactionDrawerData) => {
+      if (newData) setData(newData);
+      setIsOpen(true);
+    },
+    [],
+  );
 
-  const closeDrawer = useCallback(() => {
+  const closeTransactionDrawer = useCallback(() => {
     setIsOpen(false);
     setData({});
   }, []);
 
   return (
-    <DrawerContext.Provider value={{ isOpen, data, openDrawer, closeDrawer }}>
+    <TransactionDrawerContext.Provider
+      value={{ isOpen, data, openTransactionDrawer, closeTransactionDrawer }}
+    >
       {children}
-    </DrawerContext.Provider>
+    </TransactionDrawerContext.Provider>
   );
 }
 
-export function useDrawer() {
-  const context = useContext(DrawerContext);
+export function useTransactionDrawer() {
+  const context = useContext(TransactionDrawerContext);
   if (!context)
-    throw new Error("useDrawer must be used within a DrawerProvider");
+    throw new Error(
+      "useTransactionDrawer must be used within a TransactionDrawerProvider",
+    );
   return context;
 }

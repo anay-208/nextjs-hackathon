@@ -6,7 +6,7 @@ import {
 import GlobalDrawerClient from "./component.client";
 import { getTimeRange } from "@/app/(app)/finance/time";
 
-export async function GlobalDrawer() {
+export async function GlobalTransactionDrawer() {
   let categories: NonNullable<
     Awaited<ReturnType<typeof getCategories>>["data"]
   > = [];

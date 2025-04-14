@@ -4,7 +4,7 @@ import {
   deleteTransaction,
   getTransactionsByTimeRange,
 } from "@/app/api/finance/actions";
-import { useDrawer } from "@/components/transaction-drawer/context";
+import { useTransactionDrawer } from "@/components/transaction-drawer/context";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ export function ListItem({
     Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
   >[number];
 }) {
-  const { openDrawer } = useDrawer();
+  const { openTransactionDrawer } = useTransactionDrawer();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   return (
@@ -41,7 +41,7 @@ export function ListItem({
       <div className="flex h-full w-[10%] flex-row items-center justify-center gap-1">
         <button
           onClick={() => {
-            openDrawer({
+            openTransactionDrawer({
               originalTransaction: transaction,
             });
           }}

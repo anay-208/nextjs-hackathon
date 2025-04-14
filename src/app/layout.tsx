@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { DrawerProvider } from "@/components/transaction-drawer/context";
-import { GlobalDrawer } from "@/components/transaction-drawer/component";
+import { TransactionDrawerProvider } from "@/components/transaction-drawer/context";
+import { GlobalTransactionDrawer } from "@/components/transaction-drawer/component";
 import { Suspense } from "react";
 
 const inter = Inter({
@@ -13,7 +13,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lifelog",
-  description: "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
+  description:
+    "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
 };
 
 export default function RootLayout({
@@ -22,9 +23,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <DrawerProvider>
+    <TransactionDrawerProvider>
       <Suspense fallback={null}>
-        <GlobalDrawer />
+        <GlobalTransactionDrawer />
       </Suspense>
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} subpixel-antialiased`}>
@@ -32,6 +33,6 @@ export default function RootLayout({
           <Toaster />
         </body>
       </html>
-    </DrawerProvider>
+    </TransactionDrawerProvider>
   );
 }

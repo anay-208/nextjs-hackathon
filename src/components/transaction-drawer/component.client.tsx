@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDrawer } from "./context";
+import { useTransactionDrawer } from "./context";
 import {
   createTransaction,
   getCategories,
@@ -53,7 +53,7 @@ export default function GlobalDrawerClient({
     Awaited<ReturnType<typeof getTransactionPresets>>["data"]
   >;
 }) {
-  const { isOpen, data, closeDrawer } = useDrawer();
+  const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
   const [transaction, setTransaction] = useState<EditableTransaction>({
     id: "",
@@ -74,7 +74,7 @@ export default function GlobalDrawerClient({
     }
   }, [originalTransaction]);
   return (
-    <Drawer open={isOpen} onOpenChange={closeDrawer}>
+    <Drawer open={isOpen} onOpenChange={closeTransactionDrawer}>
       <DrawerContent className="flex h-[70svh] w-full flex-col items-center justify-center">
         <DrawerHeader>
           <DrawerTitle className="text-3xl font-bold">
@@ -270,7 +270,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
-                  closeDrawer();
+                  closeTransactionDrawer();
                 });
               } else {
                 startTransition(async () => {
@@ -289,7 +289,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
-                  closeDrawer();
+                  closeTransactionDrawer();
                 });
               }
             }}
