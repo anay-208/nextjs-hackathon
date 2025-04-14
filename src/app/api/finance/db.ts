@@ -6,8 +6,6 @@ import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
   AddTransactionInput,
-  SetBudgetInput,
-  SimilarTransactionsFilter,
   TransactionsFilter,
   TransactionsSorting,
 } from "./types";
@@ -91,51 +89,6 @@ export const dbGetTransactionsByTimeRange = async (
   });
 };
 
-export const dbCreateCategory = async (data: AddCategoryInput) => {
-  const result = await db
-    .insert(categoriesTable)
-    .values({ ...data, id: generateId("cat") })
-    .returning({ id: categoriesTable.id });
-  return result[0];
-};
-
-export const dbGetCategories = async (user_id: string) => {
-  return db.query.categoriesTable.findMany({
-    columns: {
-      user_id: false,
-    },
-    where: eq(categoriesTable.user_id, user_id),
-  });
-};
-
-export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
-  const { categoryId, budget } = input;
-  const result = await db
-    .update(categoriesTable)
-    .set({ budget, updated_at: new Date() })
-    .where(
-      and(
-        eq(categoriesTable.id, categoryId),
-        eq(categoriesTable.user_id, userId),
-      ),
-    )
-    .returning({ id: categoriesTable.id, budget: categoriesTable.budget });
-  return result[0];
-};
-
-export const dbGetCategory = async (categoryId: string, userId: string) => {
-  return db.query.categoriesTable.findFirst({
-    columns: {
-      id: false,
-      user_id: false,
-    },
-    where: and(
-      eq(categoriesTable.id, categoryId),
-      eq(categoriesTable.user_id, userId),
-    ),
-  });
-};
-
 export const dbGetTransactionPresets = async (
   userId: string,
   sort?: TransactionsSorting,
@@ -169,4 +122,64 @@ export const dbGetTransactionPresets = async (
       },
     },
   });
+};
+
+export const dbCreateCategory = async (data: AddCategoryInput) => {
+  const result = await db
+    .insert(categoriesTable)
+    .values({ ...data, id: generateId("cat") })
+    .returning({ id: categoriesTable.id });
+  return result[0];
+};
+
+export const dbGetCategories = async (user_id: string) => {
+  return db.query.categoriesTable.findMany({
+    limit: 25,
+    columns: {
+      user_id: false,
+    },
+    where: eq(categoriesTable.user_id, user_id),
+  });
+};
+
+export const dbUpdateCategory = async (
+  user_id: string,
+  categoryId: string,
+  data: Partial<NoUser<AddCategoryInput>>,
+) => {
+  await db
+    .update(categoriesTable)
+    .set({ ...data, updated_at: new Date() })
+    .where(
+      and(
+        eq(categoriesTable.id, categoryId),
+        eq(categoriesTable.user_id, user_id),
+      ),
+    );
+  return data;
+};
+
+export const dbGetCategory = async (categoryId: string, userId: string) => {
+  return db.query.categoriesTable.findFirst({
+    columns: {
+      id: false,
+      user_id: false,
+    },
+    where: and(
+      eq(categoriesTable.id, categoryId),
+      eq(categoriesTable.user_id, userId),
+    ),
+  });
+};
+
+export const dbDeleteCategory = async (user_id: string, categoryId: string) => {
+  await db
+    .delete(categoriesTable)
+    .where(
+      and(
+        eq(categoriesTable.id, categoryId),
+        eq(categoriesTable.user_id, user_id),
+      ),
+    );
+  return true;
 };

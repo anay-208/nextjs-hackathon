@@ -10,13 +10,12 @@ import {
   dbGetCategory,
   dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
-  dbSetBudget,
+  dbUpdateCategory,
   dbUpdateTransaction,
 } from "./db";
 import {
   AddCategoryInput,
   AddTransactionInput,
-  SetBudgetInput,
   TransactionsFilter,
   TransactionsSorting,
 } from "./types";
@@ -50,20 +49,6 @@ export const deleteTransaction = async (transactionId: string) => {
   );
 };
 
-export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
-  handle(
-    () =>
-      withAuth(({ user }) => dbCreateCategory({ ...data, user_id: user.id })),
-    "createCategory",
-  );
-
-export const setBudget = async (data: SetBudgetInput) => {
-  return handle(
-    () => withAuth(({ user }) => dbSetBudget(data, user.id)),
-    "setBudget",
-  );
-};
-
 export const getTransactionsByTimeRange = async (
   range: TimeRange,
   filter?: TransactionsFilter,
@@ -77,6 +62,29 @@ export const getTransactionsByTimeRange = async (
     "getTransactionsByTimeRange",
   );
 
+export const getTransactionPresets = async (sort?: TransactionsSorting) =>
+  handle(
+    () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
+    "getTransactionPresets",
+  );
+
+export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
+  handle(
+    () =>
+      withAuth(({ user }) => dbCreateCategory({ ...data, user_id: user.id })),
+    "createCategory",
+  );
+
+export const updateCategory = async (
+  categoryId: string,
+  data: Partial<AddCategoryInput>,
+) => {
+  return handle(
+    () => withAuth(({ user }) => dbUpdateCategory(user.id, categoryId, data)),
+    "updateCategory",
+  );
+};
+
 export const getCategories = async () =>
   handle(
     () => withAuth(({ user }) => dbGetCategories(user.id)),
@@ -85,12 +93,20 @@ export const getCategories = async () =>
 
 export const getCategory = async (categoryId: string) =>
   handle(
-    () => withAuth(({ user }) => dbGetCategory(categoryId, user.id)),
+    () =>
+      withAuth(async ({ user }) => {
+        const categoryData = await dbGetCategory(user.id, categoryId);
+        return {
+          ...categoryData,
+          id: categoryId,
+        };
+      }),
     "getCategory",
   );
 
-export const getTransactionPresets = async (sort?: TransactionsSorting) =>
-  handle(
-    () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
-    "getTransactionPresets",
+export const deleteCategory = async (categoryId: string) => {
+  return handle(
+    () => withAuth(({ user }) => dbDeleteTransaction(user.id, categoryId)),
+    "deleteCategory",
   );
+};
