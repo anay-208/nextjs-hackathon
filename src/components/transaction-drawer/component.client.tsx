@@ -73,9 +73,6 @@ export default function GlobalDrawerClient({
       setTransaction(originalTransaction);
     }
   }, [originalTransaction]);
-  useEffect(() => {
-    console.log(transaction);
-  }, [transaction]);
   return (
     <Drawer open={isOpen} onOpenChange={closeDrawer}>
       <DrawerContent className="flex h-[70svh] w-full flex-col items-center justify-center">
@@ -257,7 +254,6 @@ export default function GlobalDrawerClient({
                 return;
               }
               if (transaction.id) {
-                console.log("HERE");
                 startTransition(async () => {
                   toast.promise(
                     updateTransaction(transaction.id, {
