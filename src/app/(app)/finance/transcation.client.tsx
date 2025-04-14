@@ -1,6 +1,9 @@
 "use client";
 
-import { getTransactionsByTimeRange } from "@/app/api/finance/actions";
+import {
+  deleteTransaction,
+  getTransactionsByTimeRange,
+} from "@/app/api/finance/actions";
 import { useDrawer } from "@/components/transaction-drawer/context";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { useTransition } from "react";
@@ -48,18 +51,14 @@ export function ListItem({
         <button
           className="size-5"
           onClick={() => {
-            //TODO: Implement this once we have a way to delete transactions
-            //startTransition(async () => {
-            //  toast.promise(
-            //    deleteTransaction({}),
-            //    {
-            //      loading: "Deleting transaction...",
-            //      success: "Transaction deleted!",
-            //      error: "Failed to delete transaction",
-            //    },
-            //  );
-            //  router.refresh();
-            //});
+            startTransition(async () => {
+              toast.promise(deleteTransaction(transaction.id), {
+                loading: "Deleting transaction...",
+                success: "Transaction deleted!",
+                error: "Failed to delete transaction",
+              });
+              router.refresh();
+            });
           }}
         >
           {isPending ? (
