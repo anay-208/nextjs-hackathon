@@ -19,7 +19,6 @@ const timestamps = {
 };
 
 
-
 export const goalsTable = pgTable("goal_page", {
   id: uuid("id").primaryKey(),
   author_id: text("author_id").notNull(),
@@ -28,8 +27,6 @@ export const goalsTable = pgTable("goal_page", {
   deadline: timestamp("deadline", { mode: "date" }).notNull(),
   ...timestamps,
 })
-
-
 
 
 

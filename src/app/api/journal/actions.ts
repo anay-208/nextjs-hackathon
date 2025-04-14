@@ -28,7 +28,7 @@ export const createJournal = async (
 ) =>
   handle(
     () =>
-      withAuth(async ({user}) => {
+      withAuth(async ({ user }) => {
         const generatedTitle = faker.word.words(3);
         return await dbCreateJournal({
           ...data,
