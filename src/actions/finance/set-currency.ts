@@ -1,3 +1,4 @@
+"use server";
 import { authActionClient } from "@/safe-actions/authAction";
 import { z } from "zod";
 import { db } from "@/db"
