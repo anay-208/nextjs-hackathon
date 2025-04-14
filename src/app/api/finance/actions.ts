@@ -53,7 +53,7 @@ export const deleteTransaction = async (transactionId: string) => {
 export const listTransactions = async (data: {
   page?: number;
   pageSize?: number;
-  range?: TimeRange;
+  timeRange?: TimeRange;
   filter?: TransactionsFilter;
   sort?: TransactionsSorting;
 }) =>
@@ -63,8 +63,8 @@ export const listTransactions = async (data: {
         dbListTransactions({
           ...data,
           user_id: user.id,
-          page: data.page ?? 0,
-          pageSize: data.pageSize ?? 10,
+          page: data.page || 0,
+          pageSize: data.pageSize || 10,
         }),
       ),
     "listTransactions",
