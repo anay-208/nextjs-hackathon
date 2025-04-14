@@ -23,9 +23,7 @@ import {
   ListJournalSort,
 } from "./types";
 
-export const createJournal = async (
-  data: CreateJournalInput,
-) =>
+export const createJournal = async (data: CreateJournalInput) =>
   handle(
     () =>
       withAuth(async ({ user }) => {

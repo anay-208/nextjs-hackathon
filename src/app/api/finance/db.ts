@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { categoriesTable, transactionsTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { and, eq, gte, lte } from "drizzle-orm";
+import { and, count, eq, gte, lte } from "drizzle-orm";
 import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
@@ -141,6 +141,23 @@ export const dbGetTransactionPresets = async (
       },
     },
   });
+};
+
+export const dbGetTransactionsCount = async (
+  userId: string,
+  filter: TransactionsFilter,
+) => {
+  const result = await db
+    .select({ count: count() })
+    .from(transactionsTable)
+    .where(
+      and(
+        eq(transactionsTable.user_id, userId),
+        filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
+      ),
+    );
+
+  return result[0]?.count ?? 0;
 };
 
 export const dbCreateCategory = async (data: AddCategoryInput) => {
