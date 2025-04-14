@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; 
 import { anonymous } from "better-auth/plugins"
-// import "server-only"
+import "server-only"
 
 export const auth = betterAuth({
     // TODO: Social Providers
@@ -15,7 +15,7 @@ export const auth = betterAuth({
             currency: {
                 type: "string",
                 required: false,
-                defaultValue: "$",
+                defaultValue: "USD",
                 input: true
             }
         }
