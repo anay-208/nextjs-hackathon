@@ -10,8 +10,10 @@ import {
   TransactionPresetsData,
   TransactionsData,
 } from "@/app/api/finance/types";
+import { headers } from "next/headers";
 
 export async function GlobalTransactionDrawer() {
+  await headers();
   let categories: CategoryData = [];
   let transactions: TransactionsData = [];
   let presets: TransactionPresetsData = [];
