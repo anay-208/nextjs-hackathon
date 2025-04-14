@@ -10,7 +10,7 @@ import {
   dbGetCategories,
   dbGetCategory,
   dbGetTransactionPresets,
-  dbGetTransactionsByTimeRange,
+  dbListTransactions,
   dbUpdateCategory,
   dbUpdateTransaction,
 } from "./db";
@@ -50,17 +50,24 @@ export const deleteTransaction = async (transactionId: string) => {
   );
 };
 
-export const getTransactionsByTimeRange = async (
-  range: TimeRange,
-  filter?: TransactionsFilter,
-  sort?: TransactionsSorting,
-) =>
+export const listTransactions = async (data: {
+  page?: number;
+  pageSize?: number;
+  timeRange?: TimeRange;
+  filter?: TransactionsFilter;
+  sort?: TransactionsSorting;
+}) =>
   handle(
     () =>
       withAuth(({ user }) =>
-        dbGetTransactionsByTimeRange(user.id, range, filter, sort),
+        dbListTransactions({
+          ...data,
+          user_id: user.id,
+          page: data.page || 0,
+          pageSize: data.pageSize || 10,
+        }),
       ),
-    "getTransactionsByTimeRange",
+    "listTransactions",
   );
 
 export const getTransactionPresets = async (sort?: TransactionsSorting) =>
