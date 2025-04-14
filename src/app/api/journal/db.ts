@@ -235,7 +235,6 @@ export const dbDetachTagFromJournal = async (
         eq(journalsToTags.user_id, userId),
         eq(journalsToTags.journal_id, journalId),
         eq(journalsToTags.tag_id, tagId),
-      ),
+      ),    
     );
-  return true;
 };
