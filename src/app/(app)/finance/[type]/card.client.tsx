@@ -7,6 +7,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { deleteTransaction } from "@/app/api/finance/actions";
+import Link from "next/link";
 
 export function TransactionCard({ data }: { data: TransactionItem }) {
   const { openTransactionDrawer } = useTransactionDrawer();
@@ -24,11 +25,20 @@ export function TransactionCard({ data }: { data: TransactionItem }) {
           <p>Amount:</p>
           <p className="text-fg2 text-lg font-bold">{data.amount}</p>
         </div>
-        <div className="flex h-fit w-fit flex-col items-start justify-start">
-          <p className="text-fg2 text-lg font-bold">
-            {data.category?.label ?? "Uncategorized"}
-          </p>
-        </div>
+        {data.category_id && data.category ? (
+          <Link
+            href={`/finance/category/${data.category_id}`}
+            className="flex h-fit w-fit flex-col items-start justify-start"
+          >
+            <p>Category:</p>
+            <p className="text-fg2 text-lg font-bold">{data.category.label}</p>
+          </Link>
+        ) : (
+          <div className="flex h-fit w-fit flex-col items-start justify-start">
+            <p>Category:</p>
+            <p className="text-fg2 text-lg font-bold">Uncategorized</p>
+          </div>
+        )}
         <div className="flex h-fit w-fit flex-col items-start justify-start">
           <p>Created At:</p>
           <p className="text-fg2 text-lg font-bold">
