@@ -1,7 +1,6 @@
 "use client";
 
-import { createJournal, deleteJournal } from "@/app/api/journal/actions";
-import { SelectJournalType } from "@/app/api/journal/types";
+import { createJournal, deleteJournal, type GetListJournalResponse } from "@/app/api/journal/actions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,8 +16,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, type ComponentProps } from "react";
 import { toast } from "sonner";
 import { MoodSummary } from "./mood-summary";
-
-type JournalWithoutContent = Omit<SelectJournalType, "content">;
 
 function JournalCardBase(
   props: ComponentProps<"div"> & {
@@ -44,11 +41,11 @@ function JournalCardBase(
   );
 }
 
-export function JournalCard({ data }: { data: JournalWithoutContent }) {
+export function JournalCard({ data }: { data: NonNullable<GetListJournalResponse['data']>[number] }) {
 
-  const mood = parseInt(data.tags.find((t) => t.startsWith("__internal_mood-"))?.split('__internal_mood-')[1] ?? '0') || undefined
-  const energy = parseInt(data.tags.find((t) => t.startsWith("__internal_energy-"))?.split('__internal_energy-')[1] ?? '0') || undefined
-  const productivity = parseInt(data.tags.find((t) => t.startsWith("__internal_productivity-"))?.split('__internal_productivity-')[1] ?? '0') || undefined
+  const mood = data.mood ?? undefined
+  const energy = data.energy ?? undefined
+  const productivity = data.productivity ?? undefined
 
   return (
     <JournalCardBase
