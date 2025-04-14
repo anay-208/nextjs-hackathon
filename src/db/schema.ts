@@ -20,7 +20,7 @@ const timestamps = {
 
 
 export const goalsTable = pgTable("goal_page", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().$default(() => sql`random_uuid()`),
   author_id: text("author_id").notNull(),
   title: varchar({ length: 256 }).default("Untitled"),
   completed: boolean().default(false).notNull(),
