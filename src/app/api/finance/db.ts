@@ -175,7 +175,6 @@ export const dbGetTransactionPresets = async (
 ) => {
   return db.query.transactionsTable.findMany({
     columns: {
-      category_id: false,
       user_id: false,
       updated_at: false,
       is_preset: false,
