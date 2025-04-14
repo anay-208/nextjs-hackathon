@@ -9,10 +9,7 @@ import {
   ReactNode,
 } from "react";
 
-type DrawerType = "new" | "edit" | "custom" | null;
-
 type DrawerData = {
-  type?: DrawerType;
   originalTransaction?: NonNullable<
     Awaited<ReturnType<typeof getTransactionsByTimeRange>>["data"]
   >[number];
