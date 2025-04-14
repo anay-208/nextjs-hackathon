@@ -8,7 +8,6 @@ import {
   dbDeleteTransaction,
   dbGetCategories,
   dbGetCategory,
-  dbGetRecentSimilarTransactions,
   dbGetTransactionPresets,
   dbGetTransactionsByTimeRange,
   dbSetBudget,
@@ -82,23 +81,6 @@ export const getCategories = async () =>
   handle(
     () => withAuth(({ user }) => dbGetCategories(user.id)),
     "getCategories",
-  );
-
-export const getRecentSimilarTransactions = async (filter: {
-  amount: number;
-  days?: number;
-  categoryId?: string;
-}) =>
-  handle(
-    () =>
-      withAuth(({ user }) => {
-        const { amount, days = 30, categoryId } = filter;
-        return dbGetRecentSimilarTransactions(
-          { amount, days, categoryId },
-          user.id,
-        );
-      }),
-    "getRecentSimilarTransactions",
   );
 
 export const getCategory = async (categoryId: string) =>

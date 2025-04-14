@@ -108,39 +108,6 @@ export const dbGetCategories = async (user_id: string) => {
   });
 };
 
-export const dbGetRecentSimilarTransactions = async (
-  filter: SimilarTransactionsFilter,
-  user_id: string,
-) => {
-  const { amount, days, categoryId } = filter;
-  const threshold = 0.1 * amount; // 10% threshold for similarity
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - days);
-
-  return db.query.transactionsTable.findMany({
-    columns: {
-      category_id: false,
-      notes: false,
-      user_id: false,
-    },
-    where: and(
-      eq(transactionsTable.user_id, user_id),
-      gte(transactionsTable.created_at, startDate),
-      lte(transactionsTable.amount, amount + threshold),
-      gte(transactionsTable.amount, amount - threshold),
-      categoryId ? eq(transactionsTable.category_id, categoryId) : undefined,
-    ),
-    with: {
-      category: {
-        columns: {
-          label: true,
-          budget: true,
-        },
-      },
-    },
-  });
-};
-
 export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
   const { categoryId, budget } = input;
   const result = await db
