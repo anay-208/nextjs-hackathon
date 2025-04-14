@@ -12,22 +12,11 @@ export type AddCategoryInput = NoIdAndTimestamp<
 export type Transaction = InferSelectModel<typeof transactionsTable>;
 export type Category = InferSelectModel<typeof categoriesTable>;
 
-export type SimilarTransactionsFilter = {
-  amount: number;
-  days: number;
-  categoryId?: string;
-};
-
 export type TransactionsFilter = {
   type?: "income" | "expense";
-  limit?: number;
 };
 
 export type TransactionsSorting = {
   created_at?: "asc" | "desc";
-};
-
-export type SetBudgetInput = {
-  categoryId: string;
-  budget: number;
+  amount?: "asc" | "desc";
 };

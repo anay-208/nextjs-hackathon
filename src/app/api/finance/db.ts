@@ -50,12 +50,21 @@ export const dbDeleteTransaction = async (
   return true;
 };
 
-export const dbGetTransactionsByTimeRange = async (
-  user_id: string,
-  range: TimeRange,
-  filter?: TransactionsFilter,
-  sort?: TransactionsSorting,
-) => {
+export const dbListTransactions = async ({
+  user_id,
+  page,
+  pageSize,
+  range,
+  filter,
+  sort,
+}: {
+  user_id: string;
+  page: number;
+  pageSize: number;
+  range?: TimeRange;
+  filter?: TransactionsFilter;
+  sort?: TransactionsSorting;
+}) => {
   return db.query.transactionsTable.findMany({
     columns: {
       updated_at: false,
@@ -63,13 +72,22 @@ export const dbGetTransactionsByTimeRange = async (
     },
     where: and(
       eq(transactionsTable.user_id, user_id),
-      gte(transactionsTable.created_at, new Date(range.startDate)),
-      lte(transactionsTable.created_at, new Date(range.endDate)),
+      range
+        ? and(
+            gte(transactionsTable.created_at, new Date(range.startDate)),
+            lte(transactionsTable.created_at, new Date(range.endDate)),
+          )
+        : undefined,
       filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
     ),
 
     orderBy: (table, { asc, desc }) =>
       [
+        sort?.amount
+          ? sort.amount === "asc"
+            ? asc(table.amount)
+            : desc(table.amount)
+          : undefined,
         sort?.created_at
           ? sort.created_at === "asc"
             ? asc(table.created_at)
@@ -77,7 +95,8 @@ export const dbGetTransactionsByTimeRange = async (
           : undefined,
       ].filter((elmt) => typeof elmt !== "undefined"),
 
-    limit: filter?.limit,
+    limit: pageSize,
+    offset: page * pageSize,
     with: {
       category: {
         columns: {
