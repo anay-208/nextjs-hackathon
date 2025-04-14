@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { DrawerProvider } from "@/components/transaction-drawer/context";
+import { GlobalDrawer } from "@/components/transaction-drawer/component";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,11 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${ inter.className } subpixel-antialiased`}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
+    <DrawerProvider>
+      <Suspense fallback={null}>
+        <GlobalDrawer />
+      </Suspense>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${inter.className} subpixel-antialiased`}>
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    </DrawerProvider>
   );
 }
