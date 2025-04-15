@@ -1,6 +1,7 @@
 import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Illustration1 } from "./illustration1";
 
 export default async function Home() {
   return (
@@ -8,7 +9,7 @@ export default async function Home() {
       className="min-h-[100svh] w-full"
       style={{
         "--max-w": "1080px",
-        "--px": "1rem",
+        "--px": "2rem",
       }}
     >
       <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
@@ -31,7 +32,7 @@ export default async function Home() {
 
       <main>
         <section className="mx-auto max-w-(--max-w) px-(--px)">
-          <div className="flex gap-2 py-20">
+          <div className="flex flex-col md:flex-row gap-2 gap-y-8 py-20">
             <div className="flex flex-col gap-8">
               <h1 className="text-6xl font-semibold tracking-tighter text-pretty">
                 Your Personal Operating System for Real Life
@@ -49,8 +50,8 @@ export default async function Home() {
                 </Button>
               </div>
             </div>
-            <div className="h-80 w-full grow rounded-lg bg-zinc-100">
-              {/* Insert Illustration #1 */}
+            <div className="h-80 w-full grow rounded-lg flex items-center justify-center min-w-0">
+              <Illustration1 className="h-[130%]" />
             </div>
           </div>
           <div className="h-160 rounded-lg bg-zinc-100">
