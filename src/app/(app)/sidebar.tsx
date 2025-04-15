@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { ComponentProps, ReactNode, SVGProps } from "react"
 import { SidebarButton } from "./sidebar.client"
 import { SettingsClient } from "./settings.client"
+import { route } from "../routes"
 
 export function MainSidebar() {
   return (
@@ -15,15 +16,27 @@ export function MainSidebar() {
         {
           icon: MaterialSymbolsLightHomeRounded,
           label: "Dashboard",
-          href: "/dashboard",
+          href: route.dashboard,
           active: true,
         },
         {
           icon: MaterialSymbolsBook2,
           label: "Journals",
-          href: "/journal",
+          href: route.journal,
           active: false,
         },
+        {
+          icon: MaterialSymbolsAttachMoney,
+          label: "Finances",
+          href: route.finance,
+          active: false,
+        },
+        {
+          icon: MaterialSymbolsTrophy,
+          label: "Goals",
+          href: route.goals,
+          active: false,
+        }
       ].map(item =>
         <SidebarButton
           key={item.label}
@@ -34,11 +47,6 @@ export function MainSidebar() {
       )}
       <div className="grow" />
       <SettingsClient />
-      {/* <SidebarButtonBase
-        href={'#'}
-        icon={<MaterialSymbolsLightSettings className="size-6" />}
-        label={"Settings"}
-      /> */}
     </div>
   )
 }
@@ -57,6 +65,13 @@ export function MaterialSymbolsLightHomeRounded(props: SVGProps<SVGSVGElement>) 
 export function MaterialSymbolsBook2(props: SVGProps<SVGSVGElement>) {
   return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>{/* Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE */}<path fill="currentColor" d="M7.5 22q-1.45 0-2.475-1.025T4 18.5v-13q0-1.45 1.025-2.475T7.5 2H20v15q-.625 0-1.062.438T18.5 18.5t.438 1.063T20 20v2zm.5-7h2V4H8zm-.5 5h9.325q-.15-.35-.237-.712T16.5 18.5q0-.4.075-.775t.25-.725H7.5q-.65 0-1.075.438T6 18.5q0 .65.425 1.075T7.5 20"></path></svg>)
 }
+export function MaterialSymbolsAttachMoney(props: SVGProps<SVGSVGElement>) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>{/* Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE */}<path fill="currentColor" d="M11.025 21v-2.15q-1.325-.3-2.287-1.15t-1.413-2.4l1.85-.75q.375 1.2 1.113 1.825t1.937.625q1.025 0 1.738-.462t.712-1.438q0-.875-.55-1.387t-2.55-1.163q-2.15-.675-2.95-1.612t-.8-2.288q0-1.625 1.05-2.525t2.15-1.025V3h2v2.1q1.25.2 2.063.913t1.187 1.737l-1.85.8q-.3-.8-.85-1.2t-1.5-.4q-1.1 0-1.675.488T9.825 8.65q0 .825.75 1.3t2.6 1q1.725.5 2.613 1.588t.887 2.512q0 1.775-1.05 2.7t-2.6 1.15V21z"></path></svg>)
+}
+export function MaterialSymbolsTrophy(props: SVGProps<SVGSVGElement>) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>{/* Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE */}<path fill="currentColor" d="M7 21v-2h4v-3.1q-1.225-.275-2.187-1.037T7.4 12.95q-1.875-.225-3.137-1.637T3 8V7q0-.825.588-1.412T5 5h2V3h10v2h2q.825 0 1.413.588T21 7v1q0 1.9-1.263 3.313T16.6 12.95q-.45 1.15-1.412 1.913T13 15.9V19h4v2zm0-10.2V7H5v1q0 .95.55 1.713T7 10.8m10 0q.9-.325 1.45-1.088T19 8V7h-2z"></path></svg>)
+}
+
 export function MaterialSymbolsLightSettings(props: SVGProps<SVGSVGElement>) {
   return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>{/* Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE */}<path fill="currentColor" d="m10.135 21l-.362-2.892q-.479-.145-1.035-.454q-.557-.31-.947-.664l-2.668 1.135l-1.865-3.25l2.306-1.739q-.045-.27-.073-.558q-.03-.288-.03-.559q0-.252.03-.53q.028-.278.073-.626L3.258 9.126l1.865-3.212L7.771 7.03q.448-.373.97-.673q.52-.3 1.013-.464L10.134 3h3.732l.361 2.912q.575.202 1.016.463t.909.654l2.725-1.115l1.865 3.211l-2.382 1.796q.082.31.092.569t.01.51q0 .233-.02.491q-.019.259-.088.626l2.344 1.758l-1.865 3.25l-2.681-1.154q-.467.393-.94.673t-.985.445L13.866 21zm1.838-6.5q1.046 0 1.773-.727T14.473 12t-.727-1.773t-1.773-.727q-1.052 0-1.776.727T9.473 12t.724 1.773t1.776.727"></path></svg>)
 }
@@ -72,7 +87,7 @@ export function AppIcon(props: SVGProps<SVGSVGElement>) {
 
 
 
-export function SidebarButtonBase({icon, label, href, ...props}: ComponentProps<"a"> & {
+export function SidebarButtonBase({ icon, label, href, ...props }: ComponentProps<"a"> & {
   icon: ReactNode
   label: string
   href: string

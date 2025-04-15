@@ -5,4 +5,5 @@ export const route = {
   journal: "/journal",
   journalID: (id: string) => `/journal/${ id }`,
   finance: "/finance",
+  goals: "/goals",
 }
