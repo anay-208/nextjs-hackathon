@@ -3,9 +3,7 @@ import type { ComponentProps, SVGProps } from "react";
 import Link from "next/link";
 import { MaterialSymbolsBook2 } from "../sidebar";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
-import { authClient } from "@/auth/client";
-import { redirect } from "next/navigation";
-import { auth } from "@/auth/actions";
+import { serverAuth } from "@/auth/actions";
 import { listJournals } from "@/app/api/journal/actions";
 import { route } from "@/app/routes";
 
@@ -71,7 +69,7 @@ export default function Page() {
 }
 
 async function RecentJournals() {
-  await auth.protectedPage();
+  await serverAuth.protectedPage('/dashboard');
 
   const journals = await listJournals({
     sort: { created_at: "desc" },

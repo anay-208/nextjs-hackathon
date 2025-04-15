@@ -1,9 +1,9 @@
 "use server"
 
-import { authClient } from "@/auth/client"
+import { serverAuth } from "@/auth/actions"
 import { revalidatePath } from "next/cache"
 
 export async function logout() {
-  await authClient.signOut()
+  await serverAuth.signOut()
   revalidatePath('/')
 }

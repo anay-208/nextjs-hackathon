@@ -1,20 +1,24 @@
 import { route } from "@/app/routes";
-import { authClient } from "./client";
 import { redirect } from "next/navigation";
+import { auth } from ".";
+import { headers } from "next/headers";
 
-export const auth = {
+export const serverAuth = {
   async getSession() {
-    return authClient.getSession()
+    return auth.api.getSession({
+      headers: await headers()
+    })
   },
   async signOut() {
-    return authClient.signOut()
+    return auth.api.signOut({
+      headers: await headers()
+    })
   },
-  async protectedPage() {
-    const session = await authClient.getSession()
-    if (session.error && session.error.status) {
-      console.log(session.error)
-      throw redirect(route.signin)
-    }
+  async protectedPage(url: string) {
+    const session = await serverAuth.getSession()
+    if (!session) {
+      redirect(route.signin + '?redirectTo=' + url);
+    }    
     return session
   }
 }

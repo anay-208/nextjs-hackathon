@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { authClient } from '@/auth/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { test } from '@/actions/test'
 
@@ -12,6 +12,13 @@ export default function SignInPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const sp = useSearchParams()
+  const redirectTo = (() => {
+    const url = sp.get('redirectTo')
+    if (!url) return '/'
+    if (!url.startsWith('/')) return '/'
+    return url
+  })()
   
   useEffect(() => {
     // TODO: remove
@@ -26,7 +33,7 @@ export default function SignInPage() {
 
     try {
       await authClient.signIn.email({ email, password })
-      router.push('/') // Redirect to home page after successful sign in
+      router.push(redirectTo) // Redirect to home page after successful sign in
     } catch (err) {
       setError('Failed to sign in. Please check your credentials.')
     } finally {
@@ -36,8 +43,9 @@ export default function SignInPage() {
 
   const handleAnonymousSignIn = async () => {
     try {
-      await authClient.signIn.anonymous()
-      router.push('/')
+      const res = await authClient.signIn.anonymous()
+      console.log(res)
+      router.push(redirectTo)
     } catch (err) {
       setError('Failed to sign in anonymously. Please try again.')
     }

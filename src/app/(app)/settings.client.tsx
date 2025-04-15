@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { MaterialSymbolsLightSettings, SidebarButtonBase } from "./sidebar"
-import { Cross, LogOut, X } from "lucide-react"
+import { LogOut, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils"
 import { Portal } from "@radix-ui/react-portal"
 import { logout } from "./settings.action"
 
-export function SettingsClient(props: {
-}) {
+export function SettingsClient() {
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -82,6 +81,7 @@ function SettingsContent(props: {
         <button
           onClick={async () => {
             await logout()
+            props.setIsOpen(false)
           }}
           className="p-1.5 px-3 font-medium rounded-md hover:bg-hover text-fg flex gap-2 items-center clickable select-none">
           <LogOut size={16} />
