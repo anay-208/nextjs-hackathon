@@ -4,7 +4,7 @@ import Link from "next/link";
 import { MaterialSymbolsBook2 } from "../sidebar";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { serverAuth } from "@/auth/actions";
-import { listJournals } from "@/app/api/journal/actions";
+import { listJournals } from "@/actions/journal/actions";
 import { route } from "@/app/routes";
 
 export default function Page() {

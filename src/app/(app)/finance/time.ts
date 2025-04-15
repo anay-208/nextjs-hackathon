@@ -1,4 +1,4 @@
-import { TimeRange } from "@/app/api/types";
+import { TimeRange } from "@/actions/types";
 
 export const validTimes = [
   "today",

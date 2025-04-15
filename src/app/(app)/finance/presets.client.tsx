@@ -8,12 +8,12 @@ import {
   CommandItem,
   CommandEmpty,
 } from "cmdk";
-import { createTransaction } from "@/app/api/finance/actions";
+import { createTransaction } from "@/actions/finance/actions";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { parseInput } from "./parse";
 import { useRouter } from "next/navigation";
-import { TransactionPresetsData } from "@/app/api/finance/types";
+import { TransactionPresetsData } from "@/actions/finance/types";
 import { useState } from "react";
 
 export function PresetsClient({

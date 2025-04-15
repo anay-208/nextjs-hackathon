@@ -20,8 +20,8 @@ import {
   isSameMonth,
   isSameYear,
 } from "date-fns";
-import { TimeRange } from "@/app/api/types";
-import { TransactionsData } from "@/app/api/finance/types";
+import { TimeRange } from "@/actions/types";
+import { TransactionsData } from "@/actions/finance/types";
 
 const getDateKey = (date: Date, range: TimeRange): string => {
   const d = new Date(date);

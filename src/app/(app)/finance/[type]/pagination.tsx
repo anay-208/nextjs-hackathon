@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FinancePageSize } from "./constants";
-import { getTransactionsCount } from "@/app/api/finance/actions";
+import { getTransactionsCount } from "@/actions/finance/actions";
 import { PageType } from "./type";
 export async function Pagination(props: {
   currentPageData: Promise<{ page: number; type: PageType }>;

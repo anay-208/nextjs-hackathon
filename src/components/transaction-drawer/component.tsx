@@ -2,14 +2,14 @@ import {
   getCategories,
   getTransactionPresets,
   listTransactions,
-} from "@/app/api/finance/actions";
+} from "@/actions/finance/actions";
 import GlobalDrawerClient from "./component.client";
 import { getTimeRange } from "@/app/(app)/finance/time";
 import {
   CategoryData,
   TransactionPresetsData,
   TransactionsData,
-} from "@/app/api/finance/types";
+} from "@/actions/finance/types";
 import { headers } from "next/headers";
 import { serverAuth } from "@/auth/actions";
 

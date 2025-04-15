@@ -1,6 +1,6 @@
 "use client";
 
-import { CategoryItemWithOptionalDates } from "@/app/api/finance/types";
+import { CategoryItemWithOptionalDates } from "@/actions/finance/types";
 import {
   createContext,
   useContext,

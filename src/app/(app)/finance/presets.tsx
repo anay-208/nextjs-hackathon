@@ -1,4 +1,4 @@
-import { getTransactionPresets } from "@/app/api/finance/actions";
+import { getTransactionPresets } from "@/actions/finance/actions";
 import { PresetsClient } from "./presets.client";
 
 export default async function Presets() {

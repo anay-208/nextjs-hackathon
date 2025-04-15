@@ -1,7 +1,7 @@
 import { getTimeRange, Time } from "./time";
 import { AmountGraph } from "./graph.client";
-import { TransactionsData } from "@/app/api/finance/types";
-import { listTransactions } from "@/app/api/finance/actions";
+import { TransactionsData } from "@/actions/finance/types";
+import { listTransactions } from "@/actions/finance/actions";
 
 export default async function Graph({ timeFrame }: { timeFrame: Time }) {
   let expenses: TransactionsData = [];

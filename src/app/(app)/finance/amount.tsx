@@ -1,5 +1,5 @@
 import { getTimeRange, Time } from "./time";
-import { listTransactions } from "@/app/api/finance/actions";
+import { listTransactions } from "@/actions/finance/actions";
 
 export default async function Amount({ timeFrame }: { timeFrame: Time }) {
   let totalExpenses = 0;

@@ -1,12 +1,12 @@
 "use client";
 
-import { TransactionItem } from "@/app/api/finance/types";
+import { TransactionItem } from "@/actions/finance/types";
 import { useTransactionDrawer } from "@/components/transaction-drawer/context";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { deleteTransaction } from "@/app/api/finance/actions";
+import { deleteTransaction } from "@/actions/finance/actions";
 import Link from "next/link";
 
 export function TransactionCard({ data }: { data: TransactionItem }) {

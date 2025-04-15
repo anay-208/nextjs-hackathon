@@ -3,7 +3,7 @@ import { getTimeRange, Time } from "./time";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ListItem } from "./transcation.client";
-import { listTransactions } from "@/app/api/finance/actions";
+import { listTransactions } from "@/actions/finance/actions";
 import { route } from "@/app/routes";
 
 export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
