@@ -153,37 +153,33 @@ export function AmountGraph({
         />
         <ReferenceLine y={0} stroke="#e2e8f0" strokeDasharray="3 3" />
 
-        {hasData && (
-          <>
-            <Line
-              type="monotone"
-              dataKey="y"
-              stroke="#5656a9"
-              name="Amount"
-              strokeWidth={3}
-            />
-            <ReferenceLine
-              y={minAmount}
-              label={{
-                value: `Min: ₹${minAmount.toFixed(2)}`,
-                position: "insideBottomRight",
-                style: { fill: "#ef4444", fontSize: "12px" },
-              }}
-              stroke="#ef4444"
-              strokeDasharray="3 3"
-            />
-            <ReferenceLine
-              y={maxAmount}
-              label={{
-                value: `Max: ₹${maxAmount.toFixed(2)}`,
-                position: "insideTopRight",
-                style: { fill: "#22c55e", fontSize: "12px" },
-              }}
-              stroke="#22c55e"
-              strokeDasharray="3 3"
-            />
-          </>
-        )}
+        <Line
+          type="monotone"
+          dataKey="y"
+          stroke="#5656a9"
+          name="Amount"
+          strokeWidth={3}
+        />
+        <ReferenceLine
+          y={minAmount}
+          label={{
+            value: `Min: ₹${minAmount.toFixed(2)}`,
+            position: "insideBottomRight",
+            style: { fill: "#ef4444", fontSize: "12px" },
+          }}
+          stroke="#ef4444"
+          strokeDasharray="3 3"
+        />
+        <ReferenceLine
+          y={maxAmount}
+          label={{
+            value: `Max: ₹${maxAmount.toFixed(2)}`,
+            position: "insideTopRight",
+            style: { fill: "#22c55e", fontSize: "12px" },
+          }}
+          stroke="#22c55e"
+          strokeDasharray="3 3"
+        />
       </LineChart>
     </GraphWrapper>
   );
