@@ -22,6 +22,7 @@ import {
 } from "date-fns";
 import { TimeRange } from "@/actions/types";
 import { TransactionsData } from "@/actions/finance/types";
+import { cn } from "@/lib/utils";
 
 const getDateKey = (date: Date, range: TimeRange): string => {
   const d = new Date(date);
@@ -67,9 +68,24 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-function GraphWrapper({ children, title }: { children: any; title: string }) {
+function GraphWrapper({
+  children,
+  hasData,
+  title,
+}: {
+  children: any;
+  hasData: boolean;
+  title: string;
+}) {
   return (
-    <div className="flex h-[400px] w-full flex-col items-start justify-start gap-6 px-2">
+    <div
+      className={cn(
+        "flex h-[400px] w-full flex-col items-start justify-start gap-6 px-2",
+        {
+          hidden: !hasData,
+        },
+      )}
+    >
       <h2 className="text-lg text-white md:text-2xl">{title}</h2>
       <ResponsiveContainer width="100%" height="100%">
         {children}
@@ -87,12 +103,13 @@ export function AmountGraph({
 }) {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1280px)" });
   const points = groupTransactions(data, timeRange);
+  const hasData = points.length > 0;
 
-  const minAmount = Math.min(...points.map((p) => p.y));
-  const maxAmount = Math.max(...points.map((p) => p.y));
+  const minAmount = hasData ? Math.min(...points.map((p) => p.y)) : 0;
+  const maxAmount = hasData ? Math.max(...points.map((p) => p.y)) : 0;
 
   return (
-    <GraphWrapper title="AMOUNT OVER TIME">
+    <GraphWrapper hasData={hasData} title="AMOUNT OVER TIME">
       <LineChart
         data={points}
         margin={{
@@ -103,19 +120,13 @@ export function AmountGraph({
         }}
       >
         <CartesianGrid stroke="rgba(255, 255, 255, 0.2)" strokeWidth={2} />
-        <Legend
-          verticalAlign="top"
-          align="right"
-          wrapperStyle={{ paddingBottom: 10 }}
-        />
-        <Line
-          type="monotone"
-          dataKey="y"
-          stroke="#5656a9"
-          name="Amount"
-          strokeWidth={3}
-        />
-        <XAxis dataKey="x" style={{ fontSize: "0.8rem" }}>
+
+        <XAxis
+          dataKey="x"
+          style={{ fontSize: "0.8rem" }}
+          tick={hasData}
+          axisLine
+        >
           <Label
             value="Date"
             offset={-10}
@@ -123,7 +134,8 @@ export function AmountGraph({
             className="text-xss xl:text-sm"
           />
         </XAxis>
-        <YAxis style={{ fontSize: "0.8rem" }}>
+
+        <YAxis style={{ fontSize: "0.8rem" }} tick={hasData} axisLine>
           <Label
             value="Amount"
             angle={-90}
@@ -132,29 +144,46 @@ export function AmountGraph({
             className="text-xss xl:text-sm"
           />
         </YAxis>
-        <Tooltip content={<CustomTooltip />} />
+
+        <Tooltip content={hasData ? <CustomTooltip /> : null} />
+        <Legend
+          verticalAlign="top"
+          align="right"
+          wrapperStyle={{ paddingBottom: 10 }}
+        />
         <ReferenceLine y={0} stroke="#e2e8f0" strokeDasharray="3 3" />
 
-        <ReferenceLine
-          y={minAmount}
-          label={{
-            value: `Min: ₹${minAmount.toFixed(2)}`,
-            position: "insideBottomRight",
-            style: { fill: "#ef4444", fontSize: "12px" },
-          }}
-          stroke="#ef4444"
-          strokeDasharray="3 3"
-        />
-        <ReferenceLine
-          y={maxAmount}
-          label={{
-            value: `Max: ₹${maxAmount.toFixed(2)}`,
-            position: "insideTopRight",
-            style: { fill: "#22c55e", fontSize: "12px" },
-          }}
-          stroke="#22c55e"
-          strokeDasharray="3 3"
-        />
+        {hasData && (
+          <>
+            <Line
+              type="monotone"
+              dataKey="y"
+              stroke="#5656a9"
+              name="Amount"
+              strokeWidth={3}
+            />
+            <ReferenceLine
+              y={minAmount}
+              label={{
+                value: `Min: ₹${minAmount.toFixed(2)}`,
+                position: "insideBottomRight",
+                style: { fill: "#ef4444", fontSize: "12px" },
+              }}
+              stroke="#ef4444"
+              strokeDasharray="3 3"
+            />
+            <ReferenceLine
+              y={maxAmount}
+              label={{
+                value: `Max: ₹${maxAmount.toFixed(2)}`,
+                position: "insideTopRight",
+                style: { fill: "#22c55e", fontSize: "12px" },
+              }}
+              stroke="#22c55e"
+              strokeDasharray="3 3"
+            />
+          </>
+        )}
       </LineChart>
     </GraphWrapper>
   );
