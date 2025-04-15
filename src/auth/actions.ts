@@ -14,12 +14,13 @@ export const serverAuth = {
       headers: await headers()
     })
   },
-  async protectedPage(url?: string) {
+  async protectedPage<T extends string | undefined>(redirectToIfNotAuthenticated?: T) {
     const session = await serverAuth.getSession()
     if (!session) {
-      if (url) {
-        redirect(route.signin + '?redirectTo=' + url);
+      if (redirectToIfNotAuthenticated) {
+        redirect(route.signin + '?redirectTo=' + redirectToIfNotAuthenticated);
       }
+      return null as T extends string ? never : null
     }
     return session
   }
