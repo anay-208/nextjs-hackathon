@@ -17,7 +17,7 @@
   box-sizing: border-box;
   min-width: 50px;
   max-width: 250px;
-  padding: 6px 8px;
+  padding: 3px 4px;
   position: relative;
   vertical-align: top;
   overflow: hidden;
@@ -30,6 +30,10 @@
   background-color: #f8f9fa;
   font-weight: bold;
   text-align: left;
+}
+
+.tiptap-editor .tableWrapper tr p {
+  margin: 0.5rem 1rem;
 }
 
 .tiptap-editor .tableWrapper .selectedCell:after,
