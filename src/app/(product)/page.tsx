@@ -4,8 +4,9 @@ import Image from "next/image";
 import { Illustration1 } from "./illustration1";
 import Link from "next/link";
 import { Suspense } from "react";
-import { authClient } from "@/auth/client";
 import { serverAuth } from "@/auth/actions";
+import { route } from "../routes";
+import { CollapsibleColumn } from "@/components/ui/collapsible";
 
 export default function Home() {
   return (
@@ -24,9 +25,11 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3 text-sm font-medium tracking-tight">
-            <Suspense>
-              <HeaderButtons />
-            </Suspense>
+            <CollapsibleColumn className="[&:has(*>*:not(template))]:grid-cols-[1fr]">
+              <Suspense>
+                <HeaderButtons />
+              </Suspense>
+            </CollapsibleColumn>
           </div>
         </div>
       </header>
@@ -97,18 +100,19 @@ export default function Home() {
 
 async function HeaderButtons() {
   const session = await serverAuth.getSession();
+  // delay 1s
   return (
     <>
       {session
         ? <>
-          <Link href="/dashboard">
+          <Link href={route.dashboard}>
             <Button variant="default" className="h-8">
               Dashboard
             </Button>
           </Link>
         </>
         : <>
-          <Link href="/dashboard">
+          <Link href={route.signin('/dashboard')}>
             <Button variant="default" className="h-8">
               Get Started
             </Button>
