@@ -6,7 +6,8 @@ import { ListItem } from "./transcation.client";
 import { listTransactions } from "@/actions/finance/actions";
 import { route } from "@/app/routes";
 
-export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
+export async function TransactionList(props: { timeFrame: Promise<Time> }) {
+  const timeFrame = await props.timeFrame;
   return (
     <div className="flex h-fit w-full flex-col items-start justify-start gap-10">
       <Suspense fallback={<div>Loading...</div>}>

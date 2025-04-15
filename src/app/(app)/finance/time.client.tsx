@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Time, toReadableTime, validTimes } from "./time";
+import { Time, toReadableTime } from "./time";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTransition } from "react";
 
-export default function TimeSelector({ time }: { time: Time }) {
-  const otherTimes = validTimes.filter((t) => t !== time);
+export function TimeDropdown({
+  currentTime,
+  otherTimes,
+}: {
+  currentTime: Time;
+  otherTimes: Time[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -20,7 +25,7 @@ export default function TimeSelector({ time }: { time: Time }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{toReadableTime(time)}</DropdownMenuTrigger>
+      <DropdownMenuTrigger>{toReadableTime(currentTime)}</DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Available Times</DropdownMenuLabel>
         <DropdownMenuSeparator />

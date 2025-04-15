@@ -1,7 +1,8 @@
 import { getTimeRange, Time } from "./time";
 import { listTransactions } from "@/actions/finance/actions";
 
-export default async function Amount({ timeFrame }: { timeFrame: Time }) {
+export async function Amount(props: { timeFrame: Promise<Time> }) {
+  const timeFrame = await props.timeFrame;
   let totalExpenses = 0;
   let totalIncome = 0;
 
