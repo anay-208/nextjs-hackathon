@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Portal } from "@radix-ui/react-portal"
+import { logout } from "./settings.action"
 
 export function SettingsClient(props: {
 }) {
@@ -63,22 +64,32 @@ export function SettingsClient(props: {
   )
 }
 
+
+
+
 function SettingsContent(props: {
   setIsOpen: (isOpen: boolean) => void
   isOpen: boolean
 }) {
   return (
     <div className="flex gap-4 items-start max-w-[860px] px-4 pt-20 h-full mx-auto">
+      {/* Tab List */}
       <div className="bg-transparent p-1 w-40 rounded-xl flex flex-col gap-px">
         <div className="p-1.5 px-3 font-medium bg-main-3/18 rounded-md text-fg">
           Accounts
         </div>
         <hr className="border border-border my-2" />
-        <div className="p-1.5 px-3 font-medium rounded-md hover:bg-hover text-fg flex gap-2 items-center clickable select-none">
+        <button
+          onClick={async () => {
+            await logout()
+          }}
+          className="p-1.5 px-3 font-medium rounded-md hover:bg-hover text-fg flex gap-2 items-center clickable select-none">
           <LogOut size={16} />
           Log out
-        </div>
+        </button>
       </div>
+
+      {/* Tab Content */}
       <div className="bg-white p-8 w-40 rounded-xl grow">
 
         <div className="text-lg font-semibold">

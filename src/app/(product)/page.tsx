@@ -2,8 +2,11 @@ import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Illustration1 } from "./illustration1";
+import Link from "next/link";
+import { Suspense } from "react";
+import { authClient } from "@/auth/client";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div
       className="min-h-[100svh] w-full"
@@ -20,12 +23,15 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-3 text-sm font-medium tracking-tight">
-            <Button variant="ghost" className="h-8">
-              Log in
-            </Button>
-            <Button variant="default" className="h-8">
-              Get Started
-            </Button>
+            <Suspense>
+              <HeaderButtons />
+              {/* <Button variant="ghost" className="h-8">
+                Log in
+              </Button>
+              <Button variant="default" className="h-8">
+                Get Started
+              </Button> */}
+            </Suspense>
           </div>
         </div>
       </header>
@@ -42,12 +48,11 @@ export default async function Home() {
                 secure, cozy space.
               </div>
               <div className="flex gap-2">
-                <Button className="h-10 px-5 text-base">
-                  Get started now →
-                </Button>
-                <Button className="h-10 px-5 text-base" variant="secondary">
-                  Learn More
-                </Button>
+                <Link href="/dashboard">
+                  <Button className="h-10 px-5 text-base">
+                    Get started now →
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="h-80 w-full grow rounded-lg flex items-center justify-center min-w-0">
@@ -93,4 +98,28 @@ export default async function Home() {
       </footer>
     </div>
   );
+}
+
+async function HeaderButtons() {
+  const session = await authClient.getSession();
+  return (
+    <>
+      {session
+        ? <>
+          <Link href="/dashboard">
+            <Button variant="default" className="h-8">
+              Dashboard
+            </Button>
+          </Link>
+        </>
+        : <>
+          <Link href="/dashboard">
+            <Button variant="default" className="h-8">
+              Get Started
+            </Button>
+          </Link>
+        </>
+      }
+    </>
+  )
 }
