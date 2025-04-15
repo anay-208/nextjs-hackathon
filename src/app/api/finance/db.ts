@@ -79,6 +79,9 @@ export const dbListTransactions = async ({
           )
         : undefined,
       filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
+      filter?.category_id
+        ? eq(transactionsTable.category_id, filter.category_id)
+        : undefined,
     ),
 
     orderBy: (table, { asc, desc }) =>
@@ -154,6 +157,9 @@ export const dbGetTransactionsCount = async (
       and(
         eq(transactionsTable.user_id, userId),
         filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
+        filter?.category_id
+          ? eq(transactionsTable.category_id, filter.category_id)
+          : undefined,
       ),
     );
 

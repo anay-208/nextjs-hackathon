@@ -5,6 +5,7 @@ import { TransactionCard } from "./card.client";
 import { isValidPageType } from "./type";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
+import { GetTransactionListResponse } from "@/app/api/finance/types";
 export default async function Page(props: {
   params: Promise<{
     type: string;
@@ -62,7 +63,6 @@ export default async function Page(props: {
     </div>
   );
 }
-type GetTransactionListResponse = Awaited<ReturnType<typeof listTransactions>>; //TODO: Remove this when the  type exists in backend
 async function TransactionPageList(props: {
   transactionList: Promise<GetTransactionListResponse>;
 }) {
