@@ -1,6 +1,11 @@
 import { categoriesTable, transactionsTable } from "@/db/schema";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { APIResponse, ExtractData, ExtractDataItem, NoIdAndTimestamp } from "../types";
+import {
+  APIResponse,
+  ExtractData,
+  ExtractDataItem,
+  NoIdAndTimestamp,
+} from "../types";
 import {
   getCategories,
   getTransactionPresets,
@@ -19,6 +24,7 @@ export type Category = InferSelectModel<typeof categoriesTable>;
 
 export type TransactionsFilter = {
   type?: "income" | "expense";
+  category_id?: string;
 };
 
 export type TransactionsSorting = {
@@ -49,4 +55,6 @@ export type TransactionPresetsData = ExtractData<typeof getTransactionPresets>;
 export type TransactionPresetItem = ExtractDataItem<
   typeof getTransactionPresets
 >;
-type GetTransactionListResponse = APIResponse<ExtractData<typeof listTransactions>>;
+export type GetTransactionListResponse = APIResponse<
+  ExtractData<typeof listTransactions>
+>;
