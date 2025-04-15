@@ -3,7 +3,8 @@ import { AmountGraph } from "./graph.client";
 import { TransactionsData } from "@/actions/finance/types";
 import { listTransactions } from "@/actions/finance/actions";
 
-export default async function Graph({ timeFrame }: { timeFrame: Time }) {
+export async function Graph(props: { timeFrame: Promise<Time> }) {
+  const timeFrame = await props.timeFrame;
   let expenses: TransactionsData = [];
   let incomes: TransactionsData = [];
   const timeRange = getTimeRange(timeFrame);

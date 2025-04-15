@@ -12,36 +12,34 @@ export function ListItem({ transaction }: { transaction: TransactionItem }) {
   const { openTransactionDrawer } = useTransactionDrawer();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
   return (
-    <div className="flex h-fit w-full flex-row items-center justify-start gap-2">
-      <div className="flex h-full w-[30%] flex-col items-start justify-start gap-1">
-        <p>Label:</p>
+    <div className="border-border hover:bg-hover flex w-full flex-row flex-nowrap items-center border-t py-2 text-sm transition-colors md:grid md:grid-cols-6">
+      <div className="text-main-1 col-span-2 w-[50%] truncate md:w-auto">
         {transaction.label}
       </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
-        <p>Amount:</p>
+      <div className="text-main-1 w-[30%] truncate md:w-auto">
         {transaction.amount}
       </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
-        <p>Category:</p>
+      <div className="text-main-2 hidden truncate md:block">
         {transaction.category?.label ?? "Uncategorized"}
       </div>
-      <div className="flex h-full w-[20%] flex-col items-start justify-start gap-1">
-        <p>Created At:</p>
+      <div className="text-main-2 hidden truncate md:block">
         {transaction.created_at.toLocaleDateString()}
       </div>
-      <div className="flex h-full w-[10%] flex-row items-center justify-center gap-1">
+      <div className="flex justify-end gap-2">
         <button
           onClick={() => {
             openTransactionDrawer({
               originalTransaction: transaction,
             });
           }}
+          className="text-main-3 hover:text-primary"
         >
-          <Pen className="size-4" />
+          <Pen className="h-4 w-4" />
         </button>
         <button
-          className="size-5"
+          className="text-main-3 hover:text-destroy"
           onClick={() => {
             startTransition(async () => {
               toast.promise(deleteTransaction(transaction.id), {
@@ -54,9 +52,9 @@ export function ListItem({ transaction }: { transaction: TransactionItem }) {
           }}
         >
           {isPending ? (
-            <Loader2 className="size-4 animate-spin text-blue-500" />
+            <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
           ) : (
-            <Trash2 className="size-4 text-red-500" />
+            <Trash2 className="h-4 w-4 text-red-500" />
           )}
         </button>
       </div>
