@@ -53,15 +53,13 @@ const groupTransactions = (
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-sm bg-black p-2 text-white">
-        <p className="tracking-text text-sm font-medium text-white">
-          Date: <span className="inline text-blue-500">{label}</span>
+      <div className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border p-4 shadow-md outline-hidden">
+        <p className="text-muted text-sm font-medium tracking-tight">
+          Date: <span className="text-fg">{label}</span>
         </p>
-        <p className="tracking-text text-sm font-medium text-white">
+        <p className="text-muted text-sm font-medium tracking-tight">
           Amount:{" "}
-          <span className="inline text-blue-500">
-            ₹{payload[0].value.toFixed(2)}
-          </span>
+          <span className="text-fg">₹{payload[0].value.toFixed(2)}</span>
         </p>
       </div>
     );
@@ -71,7 +69,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 function GraphWrapper({ children, title }: { children: any; title: string }) {
   return (
-    <div className="flex h-[400px] w-full flex-col items-start justify-start gap-6">
+    <div className="flex h-[400px] w-full flex-col items-start justify-start gap-6 px-2">
       <h2 className="text-lg text-white md:text-2xl">{title}</h2>
       <ResponsiveContainer width="100%" height="100%">
         {children}
@@ -99,7 +97,7 @@ export function AmountGraph({
         data={points}
         margin={{
           top: -20,
-          right: 0,
+          right: 10,
           left: isTabletOrMobile ? 0 : 10,
           bottom: isTabletOrMobile ? 10 : 12,
         }}
@@ -113,7 +111,7 @@ export function AmountGraph({
         <Line
           type="monotone"
           dataKey="y"
-          stroke="#22c55e"
+          stroke="#5656a9"
           name="Amount"
           strokeWidth={3}
         />
@@ -127,7 +125,7 @@ export function AmountGraph({
         </XAxis>
         <YAxis style={{ fontSize: "0.8rem" }}>
           <Label
-            value="Amount (₹)"
+            value="Amount"
             angle={-90}
             position="insideLeft"
             style={{ textAnchor: "middle" }}
@@ -136,30 +134,27 @@ export function AmountGraph({
         </YAxis>
         <Tooltip content={<CustomTooltip />} />
         <ReferenceLine y={0} stroke="#e2e8f0" strokeDasharray="3 3" />
-        {minAmount < 0 && (
-          <ReferenceLine
-            y={minAmount}
-            label={{
-              value: `Min: ₹${minAmount.toFixed(2)}`,
-              position: "insideBottomRight",
-              style: { fill: "#ef4444", fontSize: "12px" },
-            }}
-            stroke="#ef4444"
-            strokeDasharray="3 3"
-          />
-        )}
-        {maxAmount > 0 && (
-          <ReferenceLine
-            y={maxAmount}
-            label={{
-              value: `Max: ₹${maxAmount.toFixed(2)}`,
-              position: "insideTopRight",
-              style: { fill: "#22c55e", fontSize: "12px" },
-            }}
-            stroke="#22c55e"
-            strokeDasharray="3 3"
-          />
-        )}
+
+        <ReferenceLine
+          y={minAmount}
+          label={{
+            value: `Min: ₹${minAmount.toFixed(2)}`,
+            position: "insideBottomRight",
+            style: { fill: "#ef4444", fontSize: "12px" },
+          }}
+          stroke="#ef4444"
+          strokeDasharray="3 3"
+        />
+        <ReferenceLine
+          y={maxAmount}
+          label={{
+            value: `Max: ₹${maxAmount.toFixed(2)}`,
+            position: "insideTopRight",
+            style: { fill: "#22c55e", fontSize: "12px" },
+          }}
+          stroke="#22c55e"
+          strokeDasharray="3 3"
+        />
       </LineChart>
     </GraphWrapper>
   );
