@@ -13,7 +13,7 @@ export const withAuth = async <T>(
   fn: (user: Awaited<ReturnType<typeof getValidUser>>) => Promise<T>,
 ): Promise<T> => {
   const user = await getValidUser();
-
+  
   return fn(user);
 };
 
