@@ -25,7 +25,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3 text-sm font-medium tracking-tight">
-            <CollapsibleColumn className="[&:has(*>*:not(template))]:grid-cols-[1fr]">
+            <CollapsibleColumn className="opacity-0 [&:has(*>*:not(template))]:grid-cols-[1fr] [&:has(*>*:not(template))]:opacity-100">
               <Suspense>
                 <HeaderButtons />
               </Suspense>

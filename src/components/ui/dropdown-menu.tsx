@@ -26,7 +26,6 @@ function DropdownMenuTrigger({
   return (
     <DropdownMenuPrimitive.Trigger
       data-slot="dropdown-menu-trigger"
-      className="border-border-strong rounded-md border-2 px-2"
       {...props}
     />
   );
