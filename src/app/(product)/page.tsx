@@ -5,6 +5,7 @@ import { Illustration1 } from "./illustration1";
 import Link from "next/link";
 import { Suspense } from "react";
 import { authClient } from "@/auth/client";
+import { serverAuth } from "@/auth/actions";
 
 export default function Home() {
   return (
@@ -25,12 +26,6 @@ export default function Home() {
           <div className="flex items-center gap-3 text-sm font-medium tracking-tight">
             <Suspense>
               <HeaderButtons />
-              {/* <Button variant="ghost" className="h-8">
-                Log in
-              </Button>
-              <Button variant="default" className="h-8">
-                Get Started
-              </Button> */}
             </Suspense>
           </div>
         </div>
@@ -101,7 +96,7 @@ export default function Home() {
 }
 
 async function HeaderButtons() {
-  const session = await authClient.getSession();
+  const session = await serverAuth.getSession();
   return (
     <>
       {session

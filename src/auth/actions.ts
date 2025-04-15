@@ -14,11 +14,13 @@ export const serverAuth = {
       headers: await headers()
     })
   },
-  async protectedPage(url: string) {
+  async protectedPage(url?: string) {
     const session = await serverAuth.getSession()
     if (!session) {
-      redirect(route.signin + '?redirectTo=' + url);
-    }    
+      if (url) {
+        redirect(route.signin + '?redirectTo=' + url);
+      }
+    }
     return session
   }
 }

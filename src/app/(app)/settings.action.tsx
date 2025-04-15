@@ -1,9 +1,9 @@
 "use server"
 
 import { serverAuth } from "@/auth/actions"
-import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
-export async function logout() {
+export async function logout(redirectTo: string) {
   await serverAuth.signOut()
-  revalidatePath('/')
+  redirect(redirectTo)
 }

@@ -80,7 +80,7 @@ function SettingsContent(props: {
         <hr className="border border-border my-2" />
         <button
           onClick={async () => {
-            await logout()
+            await logout('/')
             props.setIsOpen(false)
           }}
           className="p-1.5 px-3 font-medium rounded-md hover:bg-hover text-fg flex gap-2 items-center clickable select-none">
