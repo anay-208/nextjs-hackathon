@@ -6,8 +6,8 @@ export async function GET() {
     return Response.json({ res: "not allowed" }, { status: 403 });
   }
   try {
-    await seedDatabase();
-    return Response.json({ res: "ok" }, { status: 200 });
+    const seededData = await seedDatabase();
+    return Response.json({ res: "ok", data: seededData }, { status: 200 });
   } catch (error) {
     console.error("Error seeding database:", error);
     return Response.json({ res: "error" }, { status: 500 });
