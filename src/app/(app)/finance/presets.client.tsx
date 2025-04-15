@@ -94,10 +94,11 @@ export function PresetsClient({
           <div className="hidden md:block">Created At</div>
           <div className="text-right"></div>
         </div>
-
-        <CommandEmpty className="text-main-2 py-4 text-center">
-          No preset found.
-        </CommandEmpty>
+        {presets.length !== 0 && (
+          <CommandEmpty className="text-main-2 py-4 text-center">
+            No preset found.
+          </CommandEmpty>
+        )}
         {presets.length === 0 ? (
           <CommandEmpty className="text-main-2 py-4 text-center">
             No preset created.

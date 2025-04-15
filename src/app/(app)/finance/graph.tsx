@@ -29,7 +29,7 @@ export async function Graph(props: { timeFrame: Promise<Time> }) {
 
   const allTransactions = [...expenses, ...incomes];
   return (
-    <div className="flex h-fit w-full flex-row items-center justify-center gap-4">
+    <div className="relative flex h-fit w-full flex-row items-center justify-center gap-4">
       <AmountGraph data={allTransactions} timeRange={timeRange} />
     </div>
   );

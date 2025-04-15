@@ -6,6 +6,8 @@ import { Graph } from "./graph";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { Suspense } from "react";
 import { TimeSelector } from "./time-selector";
+import { Button } from "@/components/ui/button";
+import { AddButtons } from "./add.client";
 export default function Page(props: {
   searchParams: Promise<{
     timeFrame: string;
@@ -24,10 +26,15 @@ export default function Page(props: {
   });
   return (
     <AppContent>
-      <PageLocation>Finance</PageLocation>
-      <PageTitle>My Finance</PageTitle>
+      <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col">
+          <PageLocation>Finance</PageLocation>
+          <PageTitle>My Finance</PageTitle>
+          <TimeSelector time={getTimeFrame} />
+        </div>
+        <AddButtons />
+      </div>
       <Suspense>
-        <TimeSelector time={getTimeFrame} />
         <div className="flex flex-col gap-4 pt-12">
           <div className="grid h-full w-full flex-1 grid-cols-1 gap-4">
             <Amount timeFrame={getTimeFrame} />

@@ -25,7 +25,9 @@ export function TimeDropdown({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{toReadableTime(currentTime)}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className="border-border-strong rounded-md border px-2">
+        {toReadableTime(currentTime)}
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Available Times</DropdownMenuLabel>
         <DropdownMenuSeparator />
