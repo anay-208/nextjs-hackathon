@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionItem } from "@/app/api/finance/types";
+import { TransactionItem } from "@/actions/finance/types";
 import {
   createContext,
   useContext,

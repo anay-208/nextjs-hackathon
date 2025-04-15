@@ -1,6 +1,6 @@
 "use client";
 
-import { updateJournal } from "@/app/api/journal/actions";
+import { updateJournal } from "@/actions/journal/actions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Pin } from "lucide-react";

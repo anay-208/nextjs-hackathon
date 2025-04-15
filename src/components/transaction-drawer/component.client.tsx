@@ -20,11 +20,8 @@ import {
 import { useTransactionDrawer } from "./context";
 import {
   createTransaction,
-  getCategories,
-  getTransactionPresets,
-  listTransactions,
   updateTransaction,
-} from "@/app/api/finance/actions";
+} from "@/actions/finance/actions";
 import { useEffect, useState, useTransition } from "react";
 import {
   Command,
@@ -41,7 +38,7 @@ import {
   TransactionItemWithOptionalDate,
   TransactionPresetsData,
   TransactionsData,
-} from "@/app/api/finance/types";
+} from "@/actions/finance/types";
 
 export default function GlobalDrawerClient({
   categories,

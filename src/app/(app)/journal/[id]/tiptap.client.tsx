@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback, useTransition, useRef, Fragment, useO
 import TiptapEditor from "./tiptap-editor.client";
 import { Label } from "@/components/ui/label";
 import { JSONContent } from "@tiptap/core";
-import { SelectJournalType } from "@/app/api/journal/types";
-import { updateJournal } from "@/app/api/journal/actions";
+import { SelectJournalType } from "@/actions/journal/types";
+import { updateJournal } from "@/actions/journal/actions";
 import { cn } from "@/lib/utils";
 import { StarRating } from "@/components/ui/stars-rating";
 import { energyElementMap, moodElementMap, productivityElementMap } from "../mood-summary";

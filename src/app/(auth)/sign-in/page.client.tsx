@@ -5,6 +5,7 @@ import { authClient } from '@/auth/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { test } from '@/actions/test'
+import { updateCurrency } from '@/actions/finance/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -27,6 +28,7 @@ export default function SignInPage() {
   useEffect(() => {
     // TODO: remove
     authClient.getSession().then(console.log)
+    updateCurrency("INR")
     test().then(console.log)
   }, [])
 

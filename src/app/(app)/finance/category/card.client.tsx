@@ -1,11 +1,11 @@
 "use client";
 
-import { CategoryItem } from "@/app/api/finance/types";
+import { CategoryItem } from "@/actions/finance/types";
 import { Loader2, Pen, Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { deleteCategory } from "@/app/api/finance/actions";
+import { deleteCategory } from "@/actions/finance/actions";
 import Link from "next/link";
 import { useCategoryDialog } from "@/components/category/context";
 import { Button } from "@/components/ui/button";

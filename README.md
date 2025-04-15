@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/actions-reference/cli/create-next-app).
 
 ## Getting Started
 
@@ -37,6 +37,17 @@ If for some reason you want to start the database from scratch you can use the f
 ```sh
 docker compose down -v
 ```
+
+## Env Variables
+Add the following Env Variables
+
+
+| Name                   | Description                                                                                              | Required? |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- | --------- |
+| `DATABASE_URL`         | The read-only connection string to connect to the DB, used to query the posts and messages               | ✔️        |
+| `BETTER_AUTH_SECRET`    | Any random text or secret, required by better-auth. You can generate one from https://www.better-auth.com/docs/installation#set-environment-variables | ✔️        |
+| `GOOGLE_GENERATIVE_AI_API_KEY`    | Google Ai studio Api key to use Ai features powered by Gemini | ✔️        |
+
 
 ## Using AI features
 

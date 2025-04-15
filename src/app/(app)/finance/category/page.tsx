@@ -1,5 +1,5 @@
-import { getCategories } from "@/app/api/finance/actions";
-import { CategoryData } from "@/app/api/finance/types";
+import { getCategories } from "@/actions/finance/actions";
+import { CategoryData } from "@/actions/finance/types";
 import { CategoryCard } from "./card.client";
 
 export default async function Page() {

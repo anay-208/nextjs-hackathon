@@ -2,7 +2,7 @@ import { JournalCard, JournalCreateCard } from "./card.client";
 import "./[id]/tiptap.css";
 import { JournalDashboardSize } from "./constants";
 import { Pagination } from "./pagination";
-import { listJournals, type GetListJournalResponse } from "@/app/api/journal/actions";
+import { listJournals, type GetListJournalResponse } from "@/actions/journal/actions";
 import { Suspense } from "react";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { SearchJournalForm, SearchJournalInput } from "./search.client";
@@ -22,7 +22,7 @@ export default function Page(props: {
     if (params.pageNumber) {
       page = parseInt(params.pageNumber);
     }
-    return page;
+    return page; 
   })
 
   const getJournalPage = getSp.then(async params => {

@@ -10,12 +10,12 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-import { createCategory, updateCategory } from "@/app/api/finance/actions";
+import { createCategory, updateCategory } from "@/actions/finance/actions";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "./context";
 import { toast } from "sonner";
-import { CategoryItemWithOptionalDates } from "@/app/api/finance/types";
+import { CategoryItemWithOptionalDates } from "@/actions/finance/types";
 
 export default function GlobalCategoryDialog() {
   const { isOpen, data, closeDialog } = useCategoryDialog();

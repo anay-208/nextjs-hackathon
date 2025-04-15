@@ -1,4 +1,4 @@
-import { getJournalCount } from "@/app/api/journal/actions";
+import { getJournalCount } from "@/actions/journal/actions";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { JournalDashboardSize } from "./constants";

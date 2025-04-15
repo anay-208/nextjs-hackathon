@@ -1,11 +1,11 @@
-import { listTransactions } from "@/app/api/finance/actions";
+import { listTransactions } from "@/actions/finance/actions";
 import { FinancePageSize } from "./constants";
 import { Pagination } from "./pagination";
 import { TransactionCard } from "./card.client";
 import { isValidPageType } from "./type";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
-import { GetTransactionListResponse } from "@/app/api/finance/types";
+import { GetTransactionListResponse } from "@/actions/finance/types";
 export default async function Page(props: {
   params: Promise<{
     type: string;

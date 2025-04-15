@@ -9,5 +9,15 @@ export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg", 
     }),
-    plugins: [anonymous()]
+    plugins: [anonymous()],
+    user: {
+        additionalFields: {
+            currency: {
+                type: "string",
+                required: false,
+                defaultValue: "USD",
+                input: true
+            }
+        }
+    }
 });

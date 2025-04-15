@@ -1,4 +1,4 @@
-import { SelectJournalType } from "@/app/api/journal/types";
+import { SelectJournalType } from "@/actions/journal/types";
 
 const now = new Date();
 const journalData: SelectJournalType[] = Array.from({ length: 10 }, (_, i) => {
