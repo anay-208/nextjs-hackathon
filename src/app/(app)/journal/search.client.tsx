@@ -1,9 +1,10 @@
 "use client"
 
+import { route } from "@/app/routes"
 import { Input } from "@/components/ui/input"
 import { useLeadingThrottle } from "@/components/useLeadingThrottle"
 import { cn } from "@/lib/utils"
-import { Cross, X } from "lucide-react"
+import { X } from "lucide-react"
 import Form from "next/form"
 import { useState } from "react"
 
@@ -13,7 +14,7 @@ export function SearchJournalForm(props: {
   return (
     <Form
       id="search-journal-form"
-      action="/journal"
+      action={route.journal}
       className="w-full"
       autoComplete="off"
     >

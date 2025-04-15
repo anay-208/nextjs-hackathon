@@ -1,6 +1,16 @@
 import { categoriesTable, transactionsTable } from "@/db/schema";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { NoIdAndTimestamp } from "../types";
+import {
+  APIResponse,
+  ExtractData,
+  ExtractDataItem,
+  NoIdAndTimestamp,
+} from "../types";
+import {
+  getCategories,
+  getTransactionPresets,
+  listTransactions,
+} from "./actions";
 
 export type AddTransactionInput = NoIdAndTimestamp<
   InferInsertModel<typeof transactionsTable>
@@ -12,22 +22,39 @@ export type AddCategoryInput = NoIdAndTimestamp<
 export type Transaction = InferSelectModel<typeof transactionsTable>;
 export type Category = InferSelectModel<typeof categoriesTable>;
 
-export type SimilarTransactionsFilter = {
-  amount: number;
-  days: number;
-  categoryId?: string;
-};
-
 export type TransactionsFilter = {
   type?: "income" | "expense";
-  limit?: number;
+  category_id?: string;
 };
 
 export type TransactionsSorting = {
   created_at?: "asc" | "desc";
+  amount?: "asc" | "desc";
 };
 
-export type SetBudgetInput = {
-  categoryId: string;
-  budget: number;
+export type TransactionsData = ExtractData<typeof listTransactions>;
+export type TransactionItem = ExtractDataItem<typeof listTransactions>;
+export type TransactionItemWithOptionalDate = Omit<
+  TransactionItem,
+  "created_at"
+> & {
+  created_at?: Date;
 };
+
+export type CategoryData = ExtractData<typeof getCategories>;
+export type CategoryItem = ExtractDataItem<typeof getCategories>;
+export type CategoryItemWithOptionalDates = Omit<
+  CategoryItem,
+  "created_at" | "updated_at"
+> & {
+  created_at?: Date;
+  updated_at?: Date;
+};
+
+export type TransactionPresetsData = ExtractData<typeof getTransactionPresets>;
+export type TransactionPresetItem = ExtractDataItem<
+  typeof getTransactionPresets
+>;
+export type GetTransactionListResponse = APIResponse<
+  ExtractData<typeof listTransactions>
+>;

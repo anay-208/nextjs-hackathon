@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Suspense, type ComponentProps } from "react";
 import { SidebarItemList } from "./journal-sidebar.cached";
 import { SidebarNewEntryButton } from "./journal-sidebar.client";
+import { route } from "@/app/routes";
 
 
 
@@ -13,7 +14,7 @@ export function Sidebar() {
   return (
     <div>
       <div className="mb-4 flex flex-col gap-px pt-2">
-        <Link href="/journal">
+        <Link href={route.journal}>
           <SidebarItemBase className="clickable">
             <ArrowLeft className="size-4" />
             Back

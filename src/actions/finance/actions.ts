@@ -5,20 +5,20 @@ import { handle, withAuth } from "../utils";
 import {
   dbCreateCategory,
   dbCreateTransaction,
+  dbDeleteCategory,
   dbDeleteTransaction,
   dbGetCategories,
   dbGetCategory,
-  dbGetRecentSimilarTransactions,
   dbGetTransactionPresets,
-  dbGetTransactionsByTimeRange,
-  dbSetBudget,
   dbUpdateCurrency,
+  dbGetTransactionsCount,
+  dbListTransactions,
+  dbUpdateCategory,
   dbUpdateTransaction,
 } from "./db";
 import {
   AddCategoryInput,
   AddTransactionInput,
-  SetBudgetInput,
   TransactionsFilter,
   TransactionsSorting,
 } from "./types";
@@ -52,60 +52,24 @@ export const deleteTransaction = async (transactionId: string) => {
   );
 };
 
-export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
-  handle(
-    () =>
-      withAuth(({ user }) => dbCreateCategory({ ...data, user_id: user.id })),
-    "createCategory",
-  );
-
-export const setBudget = async (data: SetBudgetInput) => {
-  return handle(
-    () => withAuth(({ user }) => dbSetBudget(data, user.id)),
-    "setBudget",
-  );
-};
-
-export const getTransactionsByTimeRange = async (
-  range: TimeRange,
-  filter?: TransactionsFilter,
-  sort?: TransactionsSorting,
-) =>
-  handle(
-    () =>
-      withAuth(({ user }) =>
-        dbGetTransactionsByTimeRange(user.id, range, filter, sort),
-      ),
-    "getTransactionsByTimeRange",
-  );
-
-export const getCategories = async () =>
-  handle(
-    () => withAuth(({ user }) => dbGetCategories(user.id)),
-    "getCategories",
-  );
-
-export const getRecentSimilarTransactions = async (filter: {
-  amount: number;
-  days?: number;
-  categoryId?: string;
+export const listTransactions = async (data: {
+  page?: number;
+  pageSize?: number;
+  timeRange?: TimeRange;
+  filter?: TransactionsFilter;
+  sort?: TransactionsSorting;
 }) =>
   handle(
     () =>
-      withAuth(({ user }) => {
-        const { amount, days = 30, categoryId } = filter;
-        return dbGetRecentSimilarTransactions(
-          { amount, days, categoryId },
-          user.id,
-        );
-      }),
-    "getRecentSimilarTransactions",
-  );
-
-export const getCategory = async (categoryId: string) =>
-  handle(
-    () => withAuth(({ user }) => dbGetCategory(categoryId, user.id)),
-    "getCategory",
+      withAuth(({ user }) =>
+        dbListTransactions({
+          ...data,
+          user_id: user.id,
+          page: data.page || 0,
+          pageSize: data.pageSize || 10,
+        }),
+      ),
+    "listTransactions",
   );
 
 export const getTransactionPresets = async (sort?: TransactionsSorting) =>
@@ -123,3 +87,52 @@ export const updateCurrency = async (currency: string) => {
     "updateCurrency",
   );
 }
+export const getTransactionsCount = async (filter: TransactionsFilter) => {
+  return handle(
+    () => withAuth(({ user }) => dbGetTransactionsCount(user.id, filter)),
+    "getTransactionsCount",
+  );
+};
+
+export const createCategory = async (data: Omit<AddCategoryInput, "user_id">) =>
+  handle(
+    () =>
+      withAuth(({ user }) => dbCreateCategory({ ...data, user_id: user.id })),
+    "createCategory",
+  );
+
+export const updateCategory = async (
+  categoryId: string,
+  data: Partial<AddCategoryInput>,
+) => {
+  return handle(
+    () => withAuth(({ user }) => dbUpdateCategory(user.id, categoryId, data)),
+    "updateCategory",
+  );
+};
+
+export const getCategories = async () =>
+  handle(
+    () => withAuth(({ user }) => dbGetCategories(user.id)),
+    "getCategories",
+  );
+
+export const getCategory = async (categoryId: string) =>
+  handle(
+    () =>
+      withAuth(async ({ user }) => {
+        const categoryData = await dbGetCategory(user.id, categoryId);
+        return {
+          ...categoryData,
+          id: categoryId,
+        };
+      }),
+    "getCategory",
+  );
+
+export const deleteCategory = async (categoryId: string) => {
+  return handle(
+    () => withAuth(({ user }) => dbDeleteCategory(user.id, categoryId)),
+    "deleteCategory",
+  );
+};

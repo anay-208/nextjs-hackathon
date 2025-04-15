@@ -10,7 +10,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lifelog",
-  description: "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
+  description:
+    "Journaling meets habit tracking meets AI. Lifelog is your private, cozy space to organize and reflect on your real life.",
 };
 
 export default function RootLayout({
@@ -19,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${ inter.className } subpixel-antialiased`}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${inter.className} subpixel-antialiased`}>
+          {children}
+          <Toaster />
+        </body>
+      </html>
   );
 }

@@ -101,3 +101,16 @@
 @utility animate-place-in {
   animation: place-in 0.2s ease-out forwards;
 }
+
+@utility col-open {
+  @apply grid-cols-[1fr]
+}
+@utility col-closed {
+  @apply grid-cols-[0fr]
+}
+@utility row-open {
+  @apply grid-rows-[1fr]
+}
+@utility row-closed {
+  @apply grid-rows-[0fr]
+}

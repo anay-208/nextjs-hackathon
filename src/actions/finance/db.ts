@@ -1,13 +1,11 @@
 import { db } from "@/db";
 import { categoriesTable, transactionsTable, user as userTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { and, eq, gte, lte } from "drizzle-orm";
+import { and, count, eq, gte, lte } from "drizzle-orm";
 import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
   AddTransactionInput,
-  SetBudgetInput,
-  SimilarTransactionsFilter,
   TransactionsFilter,
   TransactionsSorting,
 } from "./types";
@@ -52,12 +50,21 @@ export const dbDeleteTransaction = async (
   return true;
 };
 
-export const dbGetTransactionsByTimeRange = async (
-  user_id: string,
-  range: TimeRange,
-  filter?: TransactionsFilter,
-  sort?: TransactionsSorting,
-) => {
+export const dbListTransactions = async ({
+  user_id,
+  page,
+  pageSize,
+  range,
+  filter,
+  sort,
+}: {
+  user_id: string;
+  page: number;
+  pageSize: number;
+  range?: TimeRange;
+  filter?: TransactionsFilter;
+  sort?: TransactionsSorting;
+}) => {
   return db.query.transactionsTable.findMany({
     columns: {
       updated_at: false,
@@ -65,13 +72,25 @@ export const dbGetTransactionsByTimeRange = async (
     },
     where: and(
       eq(transactionsTable.user_id, user_id),
-      gte(transactionsTable.created_at, new Date(range.startDate)),
-      lte(transactionsTable.created_at, new Date(range.endDate)),
+      range
+        ? and(
+            gte(transactionsTable.created_at, new Date(range.startDate)),
+            lte(transactionsTable.created_at, new Date(range.endDate)),
+          )
+        : undefined,
       filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
+      filter?.category_id
+        ? eq(transactionsTable.category_id, filter.category_id)
+        : undefined,
     ),
 
     orderBy: (table, { asc, desc }) =>
       [
+        sort?.amount
+          ? sort.amount === "asc"
+            ? asc(table.amount)
+            : desc(table.amount)
+          : undefined,
         sort?.created_at
           ? sort.created_at === "asc"
             ? asc(table.created_at)
@@ -79,7 +98,8 @@ export const dbGetTransactionsByTimeRange = async (
           : undefined,
       ].filter((elmt) => typeof elmt !== "undefined"),
 
-    limit: filter?.limit,
+    limit: pageSize,
+    offset: page * pageSize,
     with: {
       category: {
         columns: {
@@ -88,84 +108,6 @@ export const dbGetTransactionsByTimeRange = async (
         },
       },
     },
-  });
-};
-
-export const dbCreateCategory = async (data: AddCategoryInput) => {
-  const result = await db
-    .insert(categoriesTable)
-    .values({ ...data, id: generateId("cat") })
-    .returning({ id: categoriesTable.id });
-  return result[0];
-};
-
-export const dbGetCategories = async (user_id: string) => {
-  return db.query.categoriesTable.findMany({
-    columns: {
-      user_id: false,
-    },
-    where: eq(categoriesTable.user_id, user_id),
-  });
-};
-
-export const dbGetRecentSimilarTransactions = async (
-  filter: SimilarTransactionsFilter,
-  user_id: string,
-) => {
-  const { amount, days, categoryId } = filter;
-  const threshold = 0.1 * amount; // 10% threshold for similarity
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - days);
-
-  return db.query.transactionsTable.findMany({
-    columns: {
-      category_id: false,
-      notes: false,
-      user_id: false,
-    },
-    where: and(
-      eq(transactionsTable.user_id, user_id),
-      gte(transactionsTable.created_at, startDate),
-      lte(transactionsTable.amount, amount + threshold),
-      gte(transactionsTable.amount, amount - threshold),
-      categoryId ? eq(transactionsTable.category_id, categoryId) : undefined,
-    ),
-    with: {
-      category: {
-        columns: {
-          label: true,
-          budget: true,
-        },
-      },
-    },
-  });
-};
-
-export const dbSetBudget = async (input: SetBudgetInput, userId: string) => {
-  const { categoryId, budget } = input;
-  const result = await db
-    .update(categoriesTable)
-    .set({ budget, updated_at: new Date() })
-    .where(
-      and(
-        eq(categoriesTable.id, categoryId),
-        eq(categoriesTable.user_id, userId),
-      ),
-    )
-    .returning({ id: categoriesTable.id, budget: categoriesTable.budget });
-  return result[0];
-};
-
-export const dbGetCategory = async (categoryId: string, userId: string) => {
-  return db.query.categoriesTable.findFirst({
-    columns: {
-      id: false,
-      user_id: false,
-    },
-    where: and(
-      eq(categoriesTable.id, categoryId),
-      eq(categoriesTable.user_id, userId),
-    ),
   });
 };
 
@@ -214,3 +156,82 @@ export const dbUpdateCurrency = async ( user_id: string, currency: string) => {
     );
   return currency;
 }
+export const dbGetTransactionsCount = async (
+  userId: string,
+  filter: TransactionsFilter,
+) => {
+  const result = await db
+    .select({ count: count() })
+    .from(transactionsTable)
+    .where(
+      and(
+        eq(transactionsTable.user_id, userId),
+        filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
+        filter?.category_id
+          ? eq(transactionsTable.category_id, filter.category_id)
+          : undefined,
+      ),
+    );
+
+  return result[0]?.count ?? 0;
+};
+
+export const dbCreateCategory = async (data: AddCategoryInput) => {
+  const result = await db
+    .insert(categoriesTable)
+    .values({ ...data, id: generateId("cat") })
+    .returning({ id: categoriesTable.id });
+  return result[0];
+};
+
+export const dbGetCategories = async (user_id: string) => {
+  return db.query.categoriesTable.findMany({
+    limit: 25,
+    columns: {
+      user_id: false,
+    },
+    where: eq(categoriesTable.user_id, user_id),
+  });
+};
+
+export const dbUpdateCategory = async (
+  user_id: string,
+  categoryId: string,
+  data: Partial<NoUser<AddCategoryInput>>,
+) => {
+  await db
+    .update(categoriesTable)
+    .set({ ...data, updated_at: new Date() })
+    .where(
+      and(
+        eq(categoriesTable.id, categoryId),
+        eq(categoriesTable.user_id, user_id),
+      ),
+    );
+  return data;
+};
+
+export const dbGetCategory = async (categoryId: string, userId: string) => {
+  return db.query.categoriesTable.findFirst({
+    columns: {
+      id: false,
+      user_id: false,
+    },
+    where: and(
+      eq(categoriesTable.id, categoryId),
+      eq(categoriesTable.user_id, userId),
+    ),
+  });
+};
+
+export const dbDeleteCategory = async (user_id: string, categoryId: string) => {
+  await db
+    .delete(categoriesTable)
+    .where(
+      and(
+        eq(categoriesTable.id, categoryId),
+        eq(categoriesTable.user_id, user_id),
+      ),
+    );
+  return true;
+};
