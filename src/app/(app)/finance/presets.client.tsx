@@ -1,22 +1,21 @@
 "use client";
 
-import { Edit2, Play, Trash2 } from "lucide-react";
+import { createTransaction } from "@/actions/finance/actions";
+import { TransactionPresetsData } from "@/actions/finance/types";
+import { InputClassName } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
   Command,
-  CommandList,
-  CommandItem,
   CommandEmpty,
   CommandInput,
+  CommandItem,
+  CommandList,
 } from "cmdk";
-import { createTransaction } from "@/actions/finance/actions";
-import { cn } from "@/lib/utils";
+import { Play } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { parseInput } from "./parse";
-import { useRouter } from "next/navigation";
-import { TransactionPresetsData } from "@/actions/finance/types";
-import { useState } from "react";
-import { InputClassName } from "@/components/ui/input";
-import { useTransactionDrawer } from "@/components/transaction-drawer/context";
 export function PresetsClient({
   presets,
 }: {
@@ -24,7 +23,6 @@ export function PresetsClient({
 }) {
   const [value, setValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const { openTransactionDrawer } = useTransactionDrawer();
   const router = useRouter();
 
   const handleSubmit = async () => {
