@@ -87,7 +87,7 @@ const TiptapEditor = ({
       Table.configure({
         resizable: true,
         HTMLAttributes: {
-          class: "tiptap-table",
+          // class: "tiptap-table",
         },
       }),
       TableRow,

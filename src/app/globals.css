@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   body {
@@ -67,11 +68,13 @@
   --shadow-xl:  0 20px 25px -5px  --alpha(var(--color-main-4) / 10% ), 0 8px 10px -6px --alpha(var(--color-main-4) / 10% );
   --shadow-2xl: 0 25px 50px -12px --alpha(var(--color-main-4) / 20% );
 
+
 }
 
 @utility clickable {
   @apply cursor-pointer transition-transform active:translate-y-0.5;
 }
+
 @utility container-app-content {
   @apply max-w-[480px] md:max-w-[860px] mx-auto
 }

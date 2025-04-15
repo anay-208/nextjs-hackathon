@@ -6,6 +6,7 @@ import { listJournals, type GetListJournalResponse } from "@/actions/journal/act
 import { Suspense } from "react";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { SearchJournalForm, SearchJournalInput } from "./search.client";
+import { headers } from "next/headers";
 
 
 export default function Page(props: {
@@ -14,7 +15,7 @@ export default function Page(props: {
     search: string;
   }>;
 }) {
-
+  headers()
   const getSp = props.searchParams.then(params => params)
 
   const getPageNumber = getSp.then(params => {
