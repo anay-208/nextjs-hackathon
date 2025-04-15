@@ -145,7 +145,7 @@ export function AmountGraph({
           />
         </YAxis>
 
-        <Tooltip content={hasData ? <CustomTooltip /> : null} />
+        <Tooltip content={<CustomTooltip />} />
         <Legend
           verticalAlign="top"
           align="right"
