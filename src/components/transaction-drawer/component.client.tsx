@@ -41,6 +41,16 @@ import {
 } from "@/actions/finance/types";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Plus, Tag } from "lucide-react";
 
 export default function GlobalDrawerClient({
   categories,
@@ -126,6 +136,58 @@ export default function GlobalDrawerClient({
                   $
                 </span>
               </div>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="category" className="text-main-2">
+              Category
+            </Label>
+            <div className="flex gap-2">
+              <Select
+                value={transaction?.category_id ?? ""}
+                onValueChange={(value) => {
+                  const category = categories.find((t) => t.id === value)!;
+                  console.log(category);
+                  setTransaction({
+                    ...transaction,
+                    category: category,
+                    category_id: category.id,
+                  });
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        <div className="flex items-center">
+                          <Tag className="text-main-1 mr-2 h-3 w-3" />
+                          <span>{category.label}</span>
+                          {category.budget && category.budget > 0 && (
+                            <span className="text-main-2 ml-2 text-xs">
+                              (Budget: ${category.budget})
+                            </span>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="border-[var(--color-border-strong)] text-[var(--color-main-3)] hover:bg-[var(--color-hover)]"
+                onClick={() => {
+                  openDialog();
+                }}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
