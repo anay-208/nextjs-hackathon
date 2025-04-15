@@ -33,8 +33,7 @@ export const InputClassName = cn(
 
   "placeholder:text-placeholder",
 
-  "selection:bg-primary",
-  "selection:text-fg",
+  "selection:bg-fg/20",
 );
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {

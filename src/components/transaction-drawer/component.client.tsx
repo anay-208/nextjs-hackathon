@@ -51,6 +51,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Plus, Tag } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 export default function GlobalDrawerClient({
   categories,
@@ -181,7 +182,6 @@ export default function GlobalDrawerClient({
                 type="button"
                 variant="outline"
                 size="icon"
-                className="border-[var(--color-border-strong)] text-[var(--color-main-3)] hover:bg-[var(--color-hover)]"
                 onClick={() => {
                   openDialog();
                 }}
@@ -189,6 +189,21 @@ export default function GlobalDrawerClient({
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="note" className="text-main-1">
+              Note <span className="text-main-2 text-xs">(optional)</span>
+            </Label>
+            <Textarea
+              id="note"
+              name="note"
+              value={transaction?.notes ?? ""}
+              onChange={(e) => {
+                setTransaction({ ...transaction, notes: e.target.value });
+              }}
+              placeholder="Add additional details about this transaction"
+              className="min-h-[80px]"
+            />
           </div>
         </div>
         <DrawerFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
