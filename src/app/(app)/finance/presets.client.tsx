@@ -87,7 +87,7 @@ export function PresetsClient({
       </form>
 
       <CommandList className="flex h-full w-full flex-col overflow-y-auto">
-        <div className="border-border text-main-2 flex flex-row flex-nowrap gap-2 border-b px-3 py-2 text-left text-sm md:grid md:grid-cols-4">
+        <div className="border-border text-main-2 flex flex-row flex-nowrap border-b px-3 py-2 text-left text-sm md:grid md:grid-cols-4">
           <div className="w-[60%]">Label</div>
           <div className="w-[40%]">Amount</div>
           <div className="hidden md:block">Category</div>

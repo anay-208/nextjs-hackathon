@@ -35,17 +35,24 @@ async function IncomeList({ timeFrame }: { timeFrame: Time }) {
   const incomes = rawIncomes.data ?? [];
 
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 bg-slate-200 p-2">
+    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 p-2">
       <p className="text-lg font-bold">Income</p>
       {incomes.length === 0 && <p>No incomes found</p>}
       {incomes.length > 0 && (
         <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
+          <div className="text-main-2 flex w-full flex-row flex-nowrap py-2 text-left text-sm md:grid md:grid-cols-6">
+            <div className="col-span-2 w-[50%] md:w-auto">Label</div>
+            <div className="w-[30%] md:w-auto">Amount</div>
+            <div className="hidden md:block">Category</div>
+            <div className="hidden md:block">Created At</div>
+            <div className="text-right"></div>
+          </div>
           {incomes.map((i) => (
             <ListItem key={i.id} transaction={i} />
           ))}
         </div>
       )}
-      <Button asChild variant="outline">
+      <Button asChild>
         <Link href={route.financeIncome}> View More </Link>
       </Button>
     </div>
@@ -66,17 +73,24 @@ async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
   const expenses = rawExpenses.data ?? [];
 
   return (
-    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 bg-slate-200 p-2">
+    <div className="flex h-fit w-full flex-col items-start justify-start gap-2 p-2">
       <p className="text-lg font-bold">Expense</p>
       {expenses.length === 0 && <p>No expenses found</p>}
       {expenses.length > 0 && (
         <div className="flex h-fit w-full flex-col items-start justify-start gap-2">
+          <div className="text-main-2 flex w-full flex-row flex-nowrap py-2 text-left text-sm md:grid md:grid-cols-6">
+            <div className="col-span-2 w-[50%] md:w-auto">Label</div>
+            <div className="w-[30%] md:w-auto">Amount</div>
+            <div className="hidden md:block">Category</div>
+            <div className="hidden md:block">Created At</div>
+            <div className="text-right"></div>
+          </div>
           {expenses.map((i) => (
             <ListItem key={i.id} transaction={i} />
           ))}
         </div>
       )}
-      <Button asChild variant="outline">
+      <Button asChild>
         <Link href={route.financeExpense}> View More </Link>
       </Button>
     </div>
