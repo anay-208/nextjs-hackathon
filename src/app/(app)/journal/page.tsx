@@ -6,14 +6,19 @@ import { listJournals, type GetListJournalResponse } from "@/actions/journal/act
 import { Suspense } from "react";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { SearchJournalForm, SearchJournalInput } from "./search.client";
+import { headers } from "next/headers";
 
 
-export default function Page(props: {
+export default async function Page(props: {
   searchParams: Promise<{
     pageNumber: string;
     search: string;
   }>;
 }) {
+  // This is due to the issue 143 
+  // https://github.com/anay-208/nextjs-hackathon/issues/143
+  await headers();
+
 
   const getSp = props.searchParams.then(params => params)
 
