@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { route } from '@/app/routes'
 
 export default function SignUpPage() {
   const [name, setName] = useState('')
@@ -118,7 +119,7 @@ export default function SignUpPage() {
             </Button>
           </div>
 
-          <Link href="/auth/sign-in" className="text-sm text-main-3 hover:text-main-4">
+          <Link href={route.signin()} className="text-sm text-main-3 hover:text-main-4">
             Already have an account? Sign in
           </Link>
         </form>

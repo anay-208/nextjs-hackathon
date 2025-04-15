@@ -46,7 +46,7 @@ export default function Home() {
                 secure, cozy space.
               </div>
               <div className="flex gap-2">
-                <Link href="/dashboard">
+                <Link href={route.dashboard}>
                   <Button className="h-10 px-5 text-base">
                     Get started now →
                   </Button>

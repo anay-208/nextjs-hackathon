@@ -27,7 +27,7 @@ export default function Page() {
           <RecentJournals />
         </div>
         <Button className="mt-4" asChild>
-          <Link href={"/dashboard/journal"}>
+          <Link href={route.journal}>
             View All Journals
           </Link>
         </Button>
