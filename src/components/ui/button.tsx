@@ -47,10 +47,9 @@ const buttonVariants = cva(
           ),
         outline:
           cn(
-            "border",
-            "bg-background shadow-sm hover:bg-accent",
-            "hover:text-accent-foreground",
-            "dark:bg-input/30 dark:border-input dark:hover:bg-input/50"
+            "border border-border-strong",
+            "bg-(--bg) shadow-sm",
+            "hover:bg-hover",
           ),
         secondary:
           "bg-main-4/15 text-main-4 shadow-sm hover:bg-main-4/10",
@@ -58,10 +57,8 @@ const buttonVariants = cva(
           cn(
             "bg-main-4/0 text-secondary-foreground hover:bg-main-4/5",
             "hover:bg-hover",
-            // "bg-red-500",
             "aria-disabled:opacity-20",
           ),
-        // "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -96,7 +93,7 @@ function Button({
     <Comp
       data-slot="button"
       aria-disabled={props.disabled}
-      className={cn('clickable', buttonVariants({ variant, size, className }))}
+      className={cn('clickable', buttonVariants({ variant, size, className }), className)}
       {...props}
     />
   )

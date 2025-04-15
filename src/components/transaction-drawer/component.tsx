@@ -11,8 +11,13 @@ import {
   TransactionsData,
 } from "@/app/api/finance/types";
 import { headers } from "next/headers";
+import { serverAuth } from "@/auth/actions";
 
 export async function GlobalTransactionDrawer() {
+  const session = await serverAuth.protectedPage()
+  if (!session) {
+    return null;
+  }
   await headers();
   let categories: CategoryData = [];
   let transactions: TransactionsData = [];

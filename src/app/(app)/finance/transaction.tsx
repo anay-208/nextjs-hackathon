@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ListItem } from "./transcation.client";
 import { listTransactions } from "@/app/api/finance/actions";
+import { route } from "@/app/routes";
 
 export default function TransactionList({ timeFrame }: { timeFrame: Time }) {
   return (
@@ -44,7 +45,7 @@ async function IncomeList({ timeFrame }: { timeFrame: Time }) {
         </div>
       )}
       <Button asChild variant="outline">
-        <Link href="/finance/income"> View More </Link>
+        <Link href={route.financeIncome}> View More </Link>
       </Button>
     </div>
   );
@@ -75,7 +76,7 @@ async function ExpenseList({ timeFrame }: { timeFrame: Time }) {
         </div>
       )}
       <Button asChild variant="outline">
-        <Link href="/finance/expense"> View More </Link>
+        <Link href={route.financeExpense}> View More </Link>
       </Button>
     </div>
   );

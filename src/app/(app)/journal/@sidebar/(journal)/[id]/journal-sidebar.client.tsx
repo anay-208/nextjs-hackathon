@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { createJournal, deleteJournal, updateJournal } from "@/app/api/journal/actions"
 import { toast } from "sonner"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { route } from "@/app/routes"
 
 export function SidebarJournalItemListClient(
   props: {
@@ -53,7 +54,7 @@ export function SidebarJournalItemListClient(
                   const idRes = await deleteJournal(props.id);
                   if (props.id === currentJournalID) {
                     toast.dismiss();
-                    router.push("/journal");
+                    router.push(route.journal);
                   }
                   if (!idRes || !idRes.data)
                     throw new Error("Failed to delete journal");

@@ -1,14 +1,20 @@
 import Icon from "@/assets/icon.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Illustration1 } from "./illustration1";
+import Link from "next/link";
+import { Suspense } from "react";
+import { serverAuth } from "@/auth/actions";
+import { route } from "../routes";
+import { CollapsibleColumn } from "@/components/ui/collapsible";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div
       className="min-h-[100svh] w-full"
       style={{
         "--max-w": "1080px",
-        "--px": "1rem",
+        "--px": "2rem",
       }}
     >
       <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
@@ -19,19 +25,18 @@ export default async function Home() {
           </div>
 
           <div className="flex items-center gap-3 text-sm font-medium tracking-tight">
-            <Button variant="ghost" className="h-8">
-              Log in
-            </Button>
-            <Button variant="default" className="h-8">
-              Get Started
-            </Button>
+            <CollapsibleColumn className="opacity-0 [&:has(*>*:not(template))]:grid-cols-[1fr] [&:has(*>*:not(template))]:opacity-100">
+              <Suspense>
+                <HeaderButtons />
+              </Suspense>
+            </CollapsibleColumn>
           </div>
         </div>
       </header>
 
       <main>
         <section className="mx-auto max-w-(--max-w) px-(--px)">
-          <div className="flex gap-2 py-20">
+          <div className="flex flex-col md:flex-row gap-2 gap-y-8 py-20">
             <div className="flex flex-col gap-8">
               <h1 className="text-6xl font-semibold tracking-tighter text-pretty">
                 Your Personal Operating System for Real Life
@@ -41,16 +46,15 @@ export default async function Home() {
                 secure, cozy space.
               </div>
               <div className="flex gap-2">
-                <Button className="h-10 px-5 text-base">
-                  Get started now →
-                </Button>
-                <Button className="h-10 px-5 text-base" variant="secondary">
-                  Learn More
-                </Button>
+                <Link href={route.dashboard}>
+                  <Button className="h-10 px-5 text-base">
+                    Get started now →
+                  </Button>
+                </Link>
               </div>
             </div>
-            <div className="h-80 w-full grow rounded-lg bg-zinc-100">
-              {/* Insert Illustration #1 */}
+            <div className="h-80 w-full grow rounded-lg flex items-center justify-center min-w-0">
+              <Illustration1 className="h-[130%]" />
             </div>
           </div>
           <div className="h-160 rounded-lg bg-zinc-100">
@@ -92,4 +96,29 @@ export default async function Home() {
       </footer>
     </div>
   );
+}
+
+async function HeaderButtons() {
+  const session = await serverAuth.getSession();
+  // delay 1s
+  return (
+    <>
+      {session
+        ? <>
+          <Link href={route.dashboard}>
+            <Button variant="default" className="h-8">
+              Dashboard
+            </Button>
+          </Link>
+        </>
+        : <>
+          <Link href={route.signin('/dashboard')}>
+            <Button variant="default" className="h-8">
+              Get Started
+            </Button>
+          </Link>
+        </>
+      }
+    </>
+  )
 }
