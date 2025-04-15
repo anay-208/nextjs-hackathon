@@ -27,14 +27,18 @@ export async function Amount(props: { timeFrame: Promise<Time> }) {
   }
 
   return (
-    <div className="flex h-fit w-full flex-row items-center justify-center gap-4">
-      <div className="flex h-fit w-fit flex-col items-start justify-start gap-2">
-        <p className="text-lg">Total Expenses</p>
-        <p className="text-lg">${totalExpenses}</p>
+    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="border-border rounded-lg border bg-white p-4 shadow-sm">
+        <div className="text-main-2 mb-1 text-sm">Total Expenses</div>
+        <div className="text-main-0 text-xl font-medium">
+          ${totalExpenses.toFixed(2)}
+        </div>
       </div>
-      <div className="flex h-fit w-fit flex-col items-start justify-start gap-2">
-        <p className="text-lg">Total Income</p>
-        <p className="text-lg">${totalIncome}</p>
+      <div className="border-border rounded-lg border bg-white p-4 shadow-sm">
+        <div className="text-main-2 mb-1 text-sm">Total Income</div>
+        <div className="text-main-0 text-xl font-medium">
+          ${totalIncome.toFixed(2)}
+        </div>
       </div>
     </div>
   );
