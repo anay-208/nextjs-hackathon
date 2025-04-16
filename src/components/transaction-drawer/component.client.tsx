@@ -1,4 +1,7 @@
 "use client";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,15 +12,11 @@ import {
   SheetFooter,
   SheetClose,
 } from "@/components/ui/sheet";
-
-import { useTransactionDrawer } from "./context";
 import {
   createTransaction,
   updateTransaction,
 } from "@/actions/finance/actions";
-import { useEffect, useState, useTransition } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useTransactionDrawer } from "./context";
 import {
   CategoryData,
   TransactionItemWithOptionalDate,
@@ -44,6 +43,10 @@ export default function GlobalDrawerClient({
 }) {
   const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   const [transaction, setTransaction] =
     useState<TransactionItemWithOptionalDate>({
       id: "",
@@ -55,8 +58,15 @@ export default function GlobalDrawerClient({
       is_preset: false,
       category: { label: "", budget: 0 },
     });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const timeout = setTimeout(() => {
+      scrollRef.current?.scrollTo({ top: 0 });
+    }, 50); // let the DOM paint
+
+    return () => clearTimeout(timeout);
+  }, [isOpen]);
 
   useEffect(() => {
     if (originalTransaction) {
@@ -64,7 +74,7 @@ export default function GlobalDrawerClient({
     }
   }, [originalTransaction]);
 
-  const resetTransaction = () => {
+  const resetTransaction = () =>
     setTransaction({
       id: "",
       label: "",
@@ -75,66 +85,70 @@ export default function GlobalDrawerClient({
       is_preset: false,
       category: { label: "", budget: 0 },
     });
-  };
 
   return (
     <Sheet open={isOpen} onOpenChange={closeTransactionDrawer}>
       <SheetContent
         side="bottom"
-        className="flex h-[70svh] w-full flex-col items-start justify-start overflow-y-auto"
+        className="h-[70svh] w-full overflow-hidden p-0"
       >
-        <SheetHeader>
-          <SheetTitle className="text-main-0 text-xl">
-            Create a New Transaction
-          </SheetTitle>
-          <SheetDescription className="text-main-2">
-            Enter the details of your transaction below
-          </SheetDescription>
-        </SheetHeader>
-        <div className="w-full space-y-4 px-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-            <TransactionLabel
-              className="col-span-2"
+        <div
+          ref={scrollRef}
+          className="flex w-full flex-col space-y-4 overflow-y-auto px-4 pt-4"
+        >
+          <SheetHeader className="px-0">
+            <SheetTitle className="text-main-0 text-xl">
+              Create a New Transaction
+            </SheetTitle>
+            <SheetDescription className="text-main-2">
+              Enter the details of your transaction below
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="w-full space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+              <TransactionLabel
+                className="col-span-2"
+                transaction={transaction}
+                setTransaction={setTransaction}
+              />
+              <TransactionAmount
+                transaction={transaction}
+                setTransaction={setTransaction}
+              />
+              <TransactionDate
+                transaction={transaction}
+                setTransaction={setTransaction}
+              />
+            </div>
+            <TransactionCategory
+              transaction={transaction}
+              setTransaction={setTransaction}
+              categories={categories}
+            />
+            <TransactionNote
               transaction={transaction}
               setTransaction={setTransaction}
             />
-            <TransactionAmount
-              transaction={transaction}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <TransactionType
+                transaction={transaction}
+                setTransaction={setTransaction}
+              />
+              <TransactionPreset
+                transaction={transaction}
+                setTransaction={setTransaction}
+              />
+            </div>
+            <TransactionTabs
               setTransaction={setTransaction}
-            />
-            <TransactionDate
-              transaction={transaction}
-              setTransaction={setTransaction}
+              presets={presets}
+              recent={transactions}
             />
           </div>
-          <TransactionCategory
-            transaction={transaction}
-            setTransaction={setTransaction}
-            categories={categories}
-          />
-          <TransactionNote
-            transaction={transaction}
-            setTransaction={setTransaction}
-          />
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <TransactionType
-              transaction={transaction}
-              setTransaction={setTransaction}
-            />
-
-            <TransactionPreset
-              transaction={transaction}
-              setTransaction={setTransaction}
-            />
-          </div>
-          <TransactionTabs
-            setTransaction={setTransaction}
-            presets={presets}
-            recent={transactions}
-          />
         </div>
-        <SheetFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
+
+        <SheetFooter className="flex h-fit w-full flex-row items-center justify-center gap-4 px-4 pt-2 pb-4">
           <Button
             disabled={isPending}
             onClick={() => {
@@ -167,7 +181,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
-                  resetTransaction(); // Reset after submit
+                  resetTransaction();
                   closeTransactionDrawer();
                 });
               } else {
@@ -187,7 +201,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
-                  resetTransaction(); // Reset after submit
+                  resetTransaction();
                   closeTransactionDrawer();
                 });
               }
