@@ -31,6 +31,7 @@ import { Note } from "./ui/note";
 import { TransactionType } from "./ui/type";
 import { TransactionDate } from "./ui/date";
 import { TransactionTabs } from "./ui/tabs";
+import { Preset } from "./ui/preset";
 
 export default function GlobalDrawerClient({
   categories,
@@ -94,10 +95,15 @@ export default function GlobalDrawerClient({
             categories={categories}
           />
           <Note transaction={transaction} setTransaction={setTransaction} />
-          <TransactionType
-            transaction={transaction}
-            setTransaction={setTransaction}
-          />
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <TransactionType
+              transaction={transaction}
+              setTransaction={setTransaction}
+            />
+
+            <Preset transaction={transaction} setTransaction={setTransaction} />
+          </div>
           <TransactionTabs
             setTransaction={setTransaction}
             presets={presets}
