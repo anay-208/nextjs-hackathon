@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
 import { SearchFinanceForm, SearchFinanceInput } from "../shared/search.client";
+import { route } from "@/app/routes";
 
 export default function Page(props: {
   searchParams: Promise<{
@@ -39,7 +40,7 @@ export default function Page(props: {
   });
 
   return (
-    <SearchFinanceForm>
+    <SearchFinanceForm route={route.financeIncome}>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col rounded-lg bg-white px-5">
         <div className="sticky -top-4 z-10 -mx-9 -mt-4 flex items-center bg-white px-5 pt-1">
           <div className="flex items-center gap-1">
