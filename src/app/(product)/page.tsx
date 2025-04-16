@@ -1,14 +1,14 @@
 import Icon from "@/assets/icon.png";
+import { serverAuth } from "@/auth/actions";
 import { Button } from "@/components/ui/button";
+import { CollapsibleColumn } from "@/components/ui/collapsible";
 import Image from "next/image";
-import { Illustration1 } from "./illustration1";
 import Link from "next/link";
 import { Suspense } from "react";
-import { serverAuth } from "@/auth/actions";
 import { route } from "../routes";
-import { CollapsibleColumn } from "@/components/ui/collapsible";
+import { Illustration1 } from "./illustration1";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div
       className="min-h-[100svh] w-full"
@@ -36,7 +36,7 @@ export default function Home() {
 
       <main>
         <section className="mx-auto max-w-(--max-w) px-(--px)">
-          <div className="flex flex-col md:flex-row gap-2 gap-y-8 py-20">
+          <div className="flex flex-col gap-2 gap-y-8 py-20 md:flex-row">
             <div className="flex flex-col gap-8">
               <h1 className="text-6xl font-semibold tracking-tighter text-pretty">
                 Your Personal Operating System for Real Life
@@ -53,7 +53,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="h-80 w-full grow rounded-lg flex items-center justify-center min-w-0">
+            <div className="flex h-80 w-full min-w-0 grow items-center justify-center rounded-lg">
               <Illustration1 className="h-[130%]" />
             </div>
           </div>
@@ -103,22 +103,23 @@ async function HeaderButtons() {
   // delay 1s
   return (
     <>
-      {session
-        ? <>
+      {session ? (
+        <>
           <Link href={route.dashboard}>
             <Button variant="default" className="h-8">
               Dashboard
             </Button>
           </Link>
         </>
-        : <>
-          <Link href={route.signin('/dashboard')}>
+      ) : (
+        <>
+          <Link href={route.signin("/dashboard")}>
             <Button variant="default" className="h-8">
               Get Started
             </Button>
           </Link>
         </>
-      }
+      )}
     </>
-  )
+  );
 }

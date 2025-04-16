@@ -1,5 +1,7 @@
+import { auth } from "@/auth";
 import { faker } from "@faker-js/faker";
 import { InferInsertModel, sql } from "drizzle-orm";
+import { headers } from "next/headers";
 import { db } from "./index";
 import { categoriesTable, journalingTable, transactionsTable } from "./schema";
 
@@ -10,16 +12,26 @@ const getRandomDateInRange = (start: Date, end: Date) => {
   return date;
 };
 
-const seedJournalingTable = async () => {
+const generateCreatedAtAndUpdatedAt = () => {
+  const startOfMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    1,
+  );
+  const createdAt = getRandomDateInRange(startOfMonth, new Date());
+  const updatedAt =
+    Math.random() > 0.8
+      ? createdAt
+      : getRandomDateInRange(createdAt, new Date());
+  return { createdAt, updatedAt };
+};
+
+const seedJournalingTable = async (user_id: string) => {
   const journalEntries = Array.from({ length: 50 }).map(() => {
-    const createdAt = getRandomDateInRange(new Date(2020, 0, 1), new Date());
-    const updatedAt =
-      Math.random() > 0.5
-        ? createdAt
-        : getRandomDateInRange(createdAt, new Date());
+    const { createdAt, updatedAt } = generateCreatedAtAndUpdatedAt();
     return {
       id: faker.string.uuid(),
-      user_id: faker.string.uuid(),
+      user_id: user_id,
       title: faker.commerce.productName(),
       content: faker.lorem.paragraphs(),
       is_pinned: faker.datatype.boolean(),
@@ -34,18 +46,16 @@ const seedJournalingTable = async () => {
   });
 
   await db.insert(journalingTable).values(journalEntries);
+  return journalEntries;
 };
 
-const seedCategories = async () => {
+const seedCategories = async (user_id: string) => {
   const categoriesData = Array.from({ length: 10 }).map(() => {
-    const createdAt = getRandomDateInRange(new Date(2020, 0, 1), new Date());
-    const updatedAt =
-      Math.random() > 0.5
-        ? createdAt
-        : getRandomDateInRange(createdAt, new Date());
+    const { createdAt, updatedAt } = generateCreatedAtAndUpdatedAt();
+
     return {
       id: faker.string.uuid(),
-      user_id: faker.string.uuid(),
+      user_id: user_id,
       label: faker.commerce.department(),
       budget: parseFloat(faker.finance.amount()),
       created_at: createdAt,
@@ -58,17 +68,15 @@ const seedCategories = async () => {
 };
 
 const seedTransactions = async (
+  user_id: string,
   categoriesData: Awaited<ReturnType<typeof seedCategories>>,
 ) => {
   const transactionsData = Array.from({ length: 100 }).map(() => {
-    const createdAt = getRandomDateInRange(new Date(2020, 0, 1), new Date());
-    const updatedAt =
-      Math.random() > 0.5
-        ? createdAt
-        : getRandomDateInRange(createdAt, new Date());
+    const { createdAt, updatedAt } = generateCreatedAtAndUpdatedAt();
+
     return {
       id: faker.string.uuid(),
-      user_id: faker.string.uuid(),
+      user_id: user_id,
       category_id: faker.helpers.arrayElement(categoriesData).id,
       label: faker.commerce.productName(),
       amount: parseFloat(faker.finance.amount()),
@@ -80,6 +88,7 @@ const seedTransactions = async (
   });
 
   await db.insert(transactionsTable).values(transactionsData);
+  return transactionsData;
 };
 
 const cleanUpTables = async () => {
@@ -91,11 +100,21 @@ const cleanUpTables = async () => {
 export const seedDatabase = async () => {
   try {
     console.log("Starting database seeding...");
+    const headerList = await headers();
+    const session = await auth.api.getSession({ headers: headerList });
+    if (!session || !session.user)
+      throw new Error("No user available. Please sign in.");
+
     await cleanUpTables();
-    await seedJournalingTable();
-    const categoriesData = await seedCategories();
-    await seedTransactions(categoriesData);
+    const journalEntries = await seedJournalingTable(session.user.id);
+    const categoriesData = await seedCategories(session.user.id);
+    const transactionsData = await seedTransactions(
+      session.user.id,
+      categoriesData,
+    );
     console.log("Database seeding completed successfully.");
+
+    return { journalEntries, categoriesData, transactionsData };
   } catch (error) {
     console.error("Error during database seeding:", error);
     process.exit(1);

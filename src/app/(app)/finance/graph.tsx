@@ -3,7 +3,8 @@ import { AmountGraph } from "./graph.client";
 import { TransactionsData } from "@/actions/finance/types";
 import { listTransactions } from "@/actions/finance/actions";
 
-export default async function Graph({ timeFrame }: { timeFrame: Time }) {
+export async function Graph(props: { timeFrame: Promise<Time> }) {
+  const timeFrame = await props.timeFrame;
   let expenses: TransactionsData = [];
   let incomes: TransactionsData = [];
   const timeRange = getTimeRange(timeFrame);
@@ -28,7 +29,7 @@ export default async function Graph({ timeFrame }: { timeFrame: Time }) {
 
   const allTransactions = [...expenses, ...incomes];
   return (
-    <div className="flex h-fit w-full flex-row items-center justify-center gap-4">
+    <div className="relative flex h-fit w-full flex-row items-center justify-center gap-4">
       <AmountGraph data={allTransactions} timeRange={timeRange} />
     </div>
   );

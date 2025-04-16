@@ -1,5 +1,9 @@
 import { db } from "@/db";
-import { categoriesTable, transactionsTable, user as userTable } from "@/db/schema";
+import {
+  categoriesTable,
+  transactionsTable,
+  user as userTable,
+} from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { and, count, eq, gte, lte } from "drizzle-orm";
 import { NoUser, TimeRange } from "../types";
@@ -54,14 +58,14 @@ export const dbListTransactions = async ({
   user_id,
   page,
   pageSize,
-  range,
+  timeRange,
   filter,
   sort,
 }: {
   user_id: string;
   page: number;
   pageSize: number;
-  range?: TimeRange;
+  timeRange?: TimeRange;
   filter?: TransactionsFilter;
   sort?: TransactionsSorting;
 }) => {
@@ -72,10 +76,10 @@ export const dbListTransactions = async ({
     },
     where: and(
       eq(transactionsTable.user_id, user_id),
-      range
+      timeRange
         ? and(
-            gte(transactionsTable.created_at, new Date(range.startDate)),
-            lte(transactionsTable.created_at, new Date(range.endDate)),
+            gte(transactionsTable.created_at, new Date(timeRange.startDate)),
+            lte(transactionsTable.created_at, new Date(timeRange.endDate)),
           )
         : undefined,
       filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
@@ -146,16 +150,10 @@ export const dbGetTransactionPresets = async (
   });
 };
 
-
-export const dbUpdateCurrency = async ( user_id: string, currency: string) => {
-  await db
-    .update(userTable)
-    .set({ currency })
-    .where(
-      eq(userTable.id, user_id),
-    );
+export const dbUpdateCurrency = async (user_id: string, currency: string) => {
+  await db.update(userTable).set({ currency }).where(eq(userTable.id, user_id));
   return currency;
-}
+};
 export const dbGetTransactionsCount = async (
   userId: string,
   filter: TransactionsFilter,

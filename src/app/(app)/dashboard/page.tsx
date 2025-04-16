@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import type { ComponentProps, SVGProps } from "react";
+import { Suspense, type ComponentProps, type SVGProps } from "react";
 import Link from "next/link";
 import { MaterialSymbolsBook2 } from "../sidebar";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
@@ -24,7 +24,9 @@ export default function Page() {
           </CardTitle>
         </div>
         <div className="flex flex-col mt-1 text-[0.9rem] font-medium border border-border rounded-xl p-1 mt-4 grow">
-          <RecentJournals />
+          <Suspense>
+            <RecentJournals />
+          </Suspense>
         </div>
         <Button className="mt-4" asChild>
           <Link href={route.journal}>
@@ -62,6 +64,7 @@ export default function Page() {
           ))}
         </div>
       </Card>
+
     </div>
 
   </AppContent>

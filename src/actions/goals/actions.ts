@@ -12,13 +12,11 @@ export const createGoal = async (title: string, deadline: Date) =>
     "createGoal",
   );
 
-
 export const getGoals = async () =>
   handle(
     () => withAuth(({ user }) => dbGetGoals(user.id)),
     "getGoals",
   );
-
   
 export const getGoal = async (goalId: string) =>
   handle(
@@ -26,9 +24,8 @@ export const getGoal = async (goalId: string) =>
     "getGoal",
   );
 
-
-export const toggleGoalCompletion = async (goalId: string) =>
+export const toggleGoalCompletion = async (goalId: string, completed: boolean) =>
   handle(
-    () => withAuth(({ user }) => dbMarkGoalAsComplete(user.id, goalId)),
+    () => withAuth(({ user }) => dbMarkGoalAsComplete(user.id, goalId, completed)),
     "toggleGoalCompletion",
   );
