@@ -54,7 +54,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Chevron: ({ className, ...props }) => <ChevronDown className={cn(className, "h-4 w-4")} {...props} />,
+        Chevron: ({ className, ...props }) => (
+          <ChevronDown className={cn(className, "h-4 w-4")} {...props} />
+        ),
       }}
       {...props}
     />
