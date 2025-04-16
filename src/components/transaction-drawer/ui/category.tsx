@@ -34,7 +34,6 @@ export function TransactionCategory({
       <div className="flex gap-2">
         <Select
           name="category"
-          id="category"
           value={transaction?.category_id ?? ""}
           onValueChange={(value) => {
             const category = categories.find((t) => t.id === value)!;
