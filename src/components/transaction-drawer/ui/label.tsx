@@ -11,7 +11,9 @@ export function Label({
 }) {
   return (
     <div className="space-y-2">
-      <ShadLabel htmlFor="label" className="text-main-1"></ShadLabel>
+      <ShadLabel htmlFor="label" className="text-main-1">
+        Label
+      </ShadLabel>
       <Input
         id="label"
         name="label"
