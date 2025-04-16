@@ -12,7 +12,9 @@ export default function Page(props: {
   searchParams: Promise<{
     pageNumber: string;
     search: string;
-  }>; }) {
+  }>;
+}) {
+
   return (
     <AppContent>
       <PageLocation>Journal</PageLocation>
@@ -30,8 +32,7 @@ async function JournalPageList(props: {
     search: string;
   }>;
 }) {
-  const { pageNumber, search } = await props.searchParams;
-
+  let { pageNumber, search } = await props.searchParams;
   const journalList = await listJournals({
     page: pageNumber ? parseInt(pageNumber) : 0,
     pageSize: JournalDashboardSize,

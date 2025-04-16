@@ -9,7 +9,7 @@ export default function Layout(props: {
       <JournalSidebarClient>
         {props.sidebar}
       </JournalSidebarClient>
-      <div className="grow bg-white p-(--p) rounded-lg overflow-auto flex flex-col min-h-0">
+      <div className="grow bg-white p-(--p) rounded-lg  flex flex-col min-h-0 z-10">
         {props.children}
       </div>
     </div>

@@ -9,7 +9,6 @@ import {
   dbDeleteJournal,
   dbDeleteJournalTag,
   dbDetachTagFromJournal,
-  dbGenerateSummary,
   dbGetJournal,
   dbGetJournalCount,
   dbListJournals,
@@ -91,12 +90,7 @@ export const updateJournal = async (
     "updateJournal",
   );
 
-export const generateSummary = async (text: string) => {
-  return handle(
-    () => withAuth(() => dbGenerateSummary(text)),
-    "generateSummary",
-  );
-};
+
 
 export const createJournalTag = async (data: CreateJournalTagInput) => {
   return handle(

@@ -32,7 +32,7 @@ export default function AppLayout(props: {
 
           {/* Content */}
           <div className="grow p-2 pl-0 flex flex-col min-h-0">
-            <div className="grow rounded-lg bg-bg p-(--p) min-h-0 overflow-auto flex flex-col"
+            <div className="grow rounded-lg bg-bg p-(--p) min-h-0  flex flex-col"
               style={{
                 "--p": "1rem",
               }}

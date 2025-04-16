@@ -55,16 +55,7 @@ export default function JournalTipTapPage({
     setEditorContent(content);
   }, []);
 
-  const handlePublish = useCallback(() => {
-    if (!editorContent) return;
-    startTransition(async () => {
-      await updateJournal(initialData.id, {
-        title: title,
-        content: JSON.stringify(editorContent),
-      });
-    });
-  }, [editorContent, title, initialData.id]);
-
+  
   const leadingFirstThrottleRef = useRef<NodeJS.Timeout>(null);
   const latestTitleRef = useRef<string>(title);
   const latestEditorContentRef = useRef<JSONContent | null>(editorContent);
@@ -143,8 +134,7 @@ export default function JournalTipTapPage({
           onUpdate={handleEditorUpdate}
           editorContent={editorContent}
           setEditorContent={setEditorContent}
-          handlePublish={handlePublish}
-          isPublishing={isPending}
+          isPending={isPending}
         />
       )}
     </>
@@ -158,7 +148,7 @@ function JournalRating(props: {
   initialValue: number,
   onClick: (r: number) => Promise<void>
 }) {
-  const [pending, startTransition] = useTransition()
+  const [_, startTransition] = useTransition()
   const [state, addOptimistic] = useOptimistic(props.initialValue, (r: number, newR: number) => {
     return (newR)
   })

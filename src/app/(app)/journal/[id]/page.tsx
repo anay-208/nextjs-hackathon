@@ -7,9 +7,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { JournalPinnedTopBar } from "./pin.client";
 
+import Summarise from "./summarise";
+
 export default async function Page(props: {
   params: Promise<{ id: string }>;
 }) {
+
   return (
     <div className="min-w-0 flex-1 bg-white px-5 rounded-lg flex flex-col min-h-0">
       <div className="flex -mx-9 -mt-4 items-center px-5 pt-1 sticky -top-4 bg-white z-10">
@@ -28,9 +31,7 @@ export default async function Page(props: {
 
         </div>
         <div className="flex items-center gap-0 h-10">
-          <Button className="h-8" size="sm" variant="ghost">
-            Publish
-          </Button>
+          <Summarise id={props.params.then(p => p.id)} />
           <div className="transition-[grid-template-columns] grid grid-cols-[0fr] [&:has(.top-bar-pin-button)]:grid-cols-[1fr] overflow-hidden">
             <div className="min-w-0">
               <Suspense>
@@ -91,3 +92,6 @@ async function JournalPinned(props: {
     />
   )
 }
+
+
+

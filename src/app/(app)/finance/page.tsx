@@ -6,7 +6,6 @@ import { Graph } from "./graph";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { Suspense } from "react";
 import { TimeSelector } from "./time-selector";
-import { Button } from "@/components/ui/button";
 import { AddButtons } from "./add.client";
 export default function Page(props: {
   searchParams: Promise<{
