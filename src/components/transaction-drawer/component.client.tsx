@@ -9,39 +9,20 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useTransactionDrawer } from "./context";
 import {
   createTransaction,
   updateTransaction,
 } from "@/actions/finance/actions";
 import { useEffect, useState, useTransition } from "react";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "cmdk";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useCategoryDialog } from "../category/context";
 import {
   CategoryData,
   TransactionItemWithOptionalDate,
   TransactionPresetsData,
   TransactionsData,
 } from "@/actions/finance/types";
-import { Label as ShadLabel } from "../ui/label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { Label } from "./ui/label";
 import { Amount } from "./ui/amount";
 import { Category } from "./ui/category";
@@ -59,7 +40,6 @@ export default function GlobalDrawerClient({
 }) {
   const { isOpen, data, closeTransactionDrawer } = useTransactionDrawer();
   const { originalTransaction } = data;
-  const { openDialog } = useCategoryDialog();
   const [transaction, setTransaction] =
     useState<TransactionItemWithOptionalDate>({
       id: "",
