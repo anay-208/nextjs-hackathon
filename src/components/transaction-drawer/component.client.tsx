@@ -24,7 +24,7 @@ import {
   TransactionPresetsData,
   TransactionsData,
 } from "@/actions/finance/types";
-import { Label } from "./ui/label";
+import { TransactionLabel } from "./ui/label";
 import { Amount } from "./ui/amount";
 import { Category } from "./ui/category";
 import { Note } from "./ui/note";
@@ -93,7 +93,7 @@ export default function GlobalDrawerClient({
         </SheetHeader>
         <div className="w-full space-y-4 px-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-            <Label
+            <TransactionLabel
               className="col-span-2"
               transaction={transaction}
               setTransaction={setTransaction}
