@@ -1,7 +1,6 @@
 import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";

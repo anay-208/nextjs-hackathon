@@ -30,6 +30,7 @@ import { Category } from "./ui/category";
 import { Note } from "./ui/note";
 import { TransactionType } from "./ui/type";
 import { TransactionDate } from "./ui/date";
+import { TransactionTabs } from "./ui/tabs";
 
 export default function GlobalDrawerClient({
   categories,
@@ -64,7 +65,7 @@ export default function GlobalDrawerClient({
     <Sheet open={isOpen} onOpenChange={closeTransactionDrawer}>
       <SheetContent
         side="bottom"
-        className="flex w-full flex-col items-start justify-center overflow-y-auto"
+        className="flex h-[70svh] w-full flex-col items-start justify-start overflow-y-auto"
       >
         <SheetHeader>
           <SheetTitle className="text-main-0 text-xl">
@@ -96,6 +97,11 @@ export default function GlobalDrawerClient({
           <TransactionType
             transaction={transaction}
             setTransaction={setTransaction}
+          />
+          <TransactionTabs
+            setTransaction={setTransaction}
+            presets={presets}
+            recent={transactions}
           />
         </div>
         <SheetFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
