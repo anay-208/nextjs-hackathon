@@ -1,12 +1,9 @@
 import { db } from "@/db";
 import { journalingTable, journalsToTags, tagsTable } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { google } from "@ai-sdk/google";
-import { generateObject } from "ai";
 import { and, count, eq, ilike } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
-import { z } from "zod";
 import {
   CreateJournalInput,
   CreateJournalTagInput,

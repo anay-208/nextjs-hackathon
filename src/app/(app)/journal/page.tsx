@@ -6,7 +6,6 @@ import { listJournals } from "@/actions/journal/actions";
 import { Suspense } from "react";
 import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { SearchJournalForm, SearchJournalInput } from "./search.client";
-import { headers } from "next/headers";
 
 
 export default function Page(props: {
@@ -34,7 +33,6 @@ async function JournalPageList(props: {
   }>;
 }) {
   let { pageNumber, search } = await props.searchParams;
-  pageNumber = pageNumber ?? 0
   const journalList = await listJournals({
     page: pageNumber ? parseInt(pageNumber) : 0,
     pageSize: JournalDashboardSize,
