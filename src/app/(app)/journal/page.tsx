@@ -30,9 +30,11 @@ async function JournalPageList(props: {
     search: string;
   }>;
 }) {
-  const { pageNumber, search } = await props.searchParams;
+  const searchParams = await props.searchParams;
+  const { search } = searchParams;
+  const pageNumber = parseInt(searchParams.pageNumber) ?? 0;
   const journalList = await listJournals({
-    page: pageNumber ? parseInt(pageNumber) : 0,
+    page: pageNumber,
     pageSize: JournalDashboardSize,
     filter: {
       query: search ?? undefined,
@@ -51,7 +53,7 @@ async function JournalPageList(props: {
     <SearchJournalForm>
       <div className="flex flex-col gap-4 pt-12">
         <div className="flex gap-2">
-          <Pagination currentPage={parseInt(pageNumber)} />
+          <Pagination currentPage={pageNumber} />
           <SearchJournalInput />
         </div>
         <div className="grid h-full w-full flex-1 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
