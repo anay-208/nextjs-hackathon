@@ -57,11 +57,26 @@ export default function GlobalDrawerClient({
     });
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
   useEffect(() => {
     if (originalTransaction) {
       setTransaction(originalTransaction);
     }
   }, [originalTransaction]);
+
+  const resetTransaction = () => {
+    setTransaction({
+      id: "",
+      label: "",
+      amount: 0,
+      type: "expense",
+      notes: "",
+      category_id: "",
+      is_preset: false,
+      category: { label: "", budget: 0 },
+    });
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={closeTransactionDrawer}>
       <SheetContent
@@ -143,6 +158,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
+                  resetTransaction(); // Reset after submit
                   closeTransactionDrawer();
                 });
               } else {
@@ -162,6 +178,7 @@ export default function GlobalDrawerClient({
                     },
                   );
                   router.refresh();
+                  resetTransaction(); // Reset after submit
                   closeTransactionDrawer();
                 });
               }
@@ -170,7 +187,11 @@ export default function GlobalDrawerClient({
             Submit
           </Button>
           <SheetClose asChild>
-            <Button disabled={isPending} variant="outline">
+            <Button
+              disabled={isPending}
+              variant="outline"
+              onClick={resetTransaction}
+            >
               Cancel
             </Button>
           </SheetClose>

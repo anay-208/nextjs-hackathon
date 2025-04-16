@@ -89,7 +89,9 @@ function PresetsTab({
               <CommandItem
                 key={p.id}
                 value={p.label}
-                onSelect={() => setTransaction({ ...p, is_preset: true })}
+                onSelect={() =>
+                  setTransaction({ ...p, id: "", is_preset: true })
+                }
                 className="hover:bg-hover border-border flex flex-row flex-nowrap items-center gap-0 border-t px-0 py-2 text-sm transition-colors md:grid md:grid-cols-5"
               >
                 <div className="text-main-1 w-[60%] truncate px-0 md:col-span-2 md:w-auto">
@@ -164,7 +166,12 @@ function RecentTransactionsTab({
               <CommandItem
                 key={p.id}
                 value={p.label}
-                onSelect={() => setTransaction(p)}
+                onSelect={() =>
+                  setTransaction({
+                    ...p,
+                    id: "",
+                  })
+                }
                 className="hover:bg-hover border-border flex flex-row flex-nowrap items-center gap-0 border-t px-0 py-2 text-sm transition-colors md:grid md:grid-cols-5"
               >
                 <div className="text-main-1 w-[60%] truncate md:col-span-2 md:w-auto">
