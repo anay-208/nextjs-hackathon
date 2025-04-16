@@ -3,14 +3,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FinancePageSize } from "./constants";
 import { getTransactionsCount } from "@/actions/finance/actions";
-import { PageType } from "./type";
 export async function Pagination(props: {
-  currentPageData: Promise<{ page: number; type: PageType }>;
+  currentPageData: Promise<{ page: number }>;
+  type: "income" | "expense";
 }) {
-  const { page: currentPage, type } = await props.currentPageData;
-  const countRes = await getTransactionsCount({
-    type: type,
-  });
+  const { page: currentPage } = await props.currentPageData;
+  const { type } = props;
+  const countRes = await getTransactionsCount({ type });
   const count = countRes.data ?? 0;
   const totalPages = Math.ceil(count / FinancePageSize);
 

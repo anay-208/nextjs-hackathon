@@ -1,19 +1,17 @@
-import { Suspense, type ReactNode } from "react"
-import { MainSidebar } from "./sidebar"
-import { cn } from "@/lib/utils"
-import Providers from "../providers"
+import { Suspense, type ReactNode } from "react";
+import { MainSidebar } from "./sidebar";
+import { cn } from "@/lib/utils";
+import Providers from "../providers";
 
-export default function AppLayout(props: {
-  children: ReactNode
-}) {
+export default function AppLayout(props: { children: ReactNode }) {
   return (
     <Providers>
       <div
         id="app-layout"
         className={cn(
-          "bg-(--bg) h-screen flex *:min-w-0 tracking-tight text-foreground overflow-clip",
+          "text-foreground flex h-screen overflow-clip bg-(--bg) tracking-tight *:min-w-0",
           "data-[setting-open]:pointer-events-none",
-          "group/root"
+          "group/root",
         )}
         style={{
           "--bg": "color-mix(in oklab, var(--color-main-4) 5%, transparent)",
@@ -22,7 +20,7 @@ export default function AppLayout(props: {
         <div
           id="app-layout-content"
           className={cn(
-            "flex *:min-w-0 grow group-data-[setting-open]/root:scale-90 transition-[scale]"
+            "flex grow transition-[scale] *:min-w-0 group-data-[setting-open]/root:scale-90",
           )}
         >
           {/* Main Sidebar */}
@@ -31,24 +29,18 @@ export default function AppLayout(props: {
           </Suspense>
 
           {/* Content */}
-          <div className="grow p-2 pl-0 flex flex-col min-h-0">
-            <div className="grow rounded-lg bg-bg p-(--p) min-h-0  flex flex-col"
+          <div className="flex min-h-0 grow flex-col p-2 pl-0">
+            <div
+              className="bg-bg flex min-h-0 grow flex-col overflow-auto rounded-lg p-(--p)"
               style={{
                 "--p": "1rem",
               }}
             >
-              <Suspense>
-                {props.children}
-              </Suspense>
+              <Suspense>{props.children}</Suspense>
             </div>
           </div>
-
         </div>
       </div>
     </Providers>
-  )
+  );
 }
-
-
-
-
