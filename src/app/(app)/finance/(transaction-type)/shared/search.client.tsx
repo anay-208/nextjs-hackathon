@@ -1,6 +1,5 @@
 "use client";
 
-import { route } from "@/app/routes";
 import { Input } from "@/components/ui/input";
 import { useLeadingThrottle } from "@/components/useLeadingThrottle";
 import { cn } from "@/lib/utils";
@@ -8,11 +7,14 @@ import { X } from "lucide-react";
 import Form from "next/form";
 import { useState } from "react";
 
-export function SearchFinanceForm(props: { children?: React.ReactNode }) {
+export function SearchFinanceForm(props: {
+  children?: React.ReactNode;
+  route: string;
+}) {
   return (
     <Form
       id="search-finance-form"
-      action={route.financeIncome}
+      action={props.route}
       className="w-full"
       autoComplete="off"
     >
