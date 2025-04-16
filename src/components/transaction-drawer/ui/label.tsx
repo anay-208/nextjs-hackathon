@@ -1,9 +1,9 @@
 import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
 import { Input } from "@/components/ui/input";
-import { Label as ShadLabel } from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Dispatch, SetStateAction } from "react";
-export function Label({
+export function TransactionLabel({
   transaction,
   setTransaction,
   className,
@@ -14,9 +14,9 @@ export function Label({
 }) {
   return (
     <div className={cn("space-y-2", className)}>
-      <ShadLabel htmlFor="label" className="text-main-1">
+      <Label htmlFor="label" className="text-main-1">
         Label
-      </ShadLabel>
+      </Label>
       <Input
         id="label"
         name="label"

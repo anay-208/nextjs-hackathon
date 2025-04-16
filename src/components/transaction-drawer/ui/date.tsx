@@ -11,7 +11,7 @@ export function TransactionDate({
 }) {
   return (
     <div className="space-y-2">
-      <Label htmlFor="label" className="text-main-1">
+      <Label htmlFor="date" className="text-main-1">
         Date
       </Label>
       <DatePicker

@@ -1,8 +1,8 @@
 import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
 import { Input } from "@/components/ui/input";
-import { Label as ShadLabel } from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { Dispatch, SetStateAction } from "react";
-export function Amount({
+export function TransactionAmount({
   transaction,
   setTransaction,
 }: {
@@ -11,9 +11,9 @@ export function Amount({
 }) {
   return (
     <div className="space-y-2">
-      <ShadLabel htmlFor="label" className="text-main-1">
+      <Label htmlFor="amount" className="text-main-1">
         Amount
-      </ShadLabel>
+      </Label>
       <div className="relative">
         <Input
           id="amount"
