@@ -16,7 +16,7 @@ export default function Goals() {
   )
 }
 
-export async function GoalsPageContent() {
+async function GoalsPageContent() {
   const session = await serverAuth.protectedPage('/goals')
   const goals = await getGoals()
 
