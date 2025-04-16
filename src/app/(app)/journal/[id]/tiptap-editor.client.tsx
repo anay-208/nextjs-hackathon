@@ -24,7 +24,6 @@ import {
   AlignRight,
   AlignJustify,
   Heading1,
-  ImageIcon,
   NotepadTextIcon as Paragraph,
   MinusSquare,
   TableIcon,
@@ -34,7 +33,6 @@ import {
   LinkIcon,
   Undo,
   Redo,
-  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,31 +41,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ImageDialog } from "./image-dialog.client";
-import { ConfirmDialog } from "./confirm-dialog.client";
-import { NodeSelection } from "@tiptap/pm/state";
 import { cn } from "@/lib/utils";
 
 interface Props {
   onUpdate: (content: JSONContent) => void;
   editorContent: JSONContent;
   setEditorContent: React.Dispatch<React.SetStateAction<JSONContent>>;
-  handlePublish: () => void;
-  isPublishing: boolean;
+  isPending: boolean;
 }
 
 const TiptapEditor = ({
   onUpdate,
   editorContent,
   setEditorContent,
-  isPublishing,
+  isPending,
 }: Props) => {
-  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
-
+  
   const editor = useEditor({
-    editable: !isPublishing,
+    editable: true,
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
@@ -114,96 +105,8 @@ const TiptapEditor = ({
       attributes: {
         class: "prose dark:prose-invert max-w-none focus:outline-none prose-p:text-main-1 prose-h2:text-main-1 prose-h3:text-main-1 prose-h4:text-main-1 ",
       },
-      handleKeyDown: (view, event) => {
-        const { state } = view;
-        const { selection } = state;
-
-        console.log("Key:", event.key);
-        console.log("Selection type:", selection.constructor.name);
-        console.log("Selection:", selection);
-
-        if (
-          selection instanceof NodeSelection &&
-          selection.node.type.name === "image"
-        ) {
-          console.log("NodeSelection delete triggered");
-          event.preventDefault();
-          console.log("Image to delete:", selection.node.attrs.src);
-          setImageToDelete(selection.node.attrs.src);
-          setIsConfirmDialogOpen(true);
-          return true;
-        }
-
-        if (
-          selection.empty &&
-          (event.key === "Backspace" || event.key === "Delete")
-        ) {
-          const $pos = state.doc.resolve(selection.anchor);
-          console.log("Caret position:", selection.anchor);
-          console.log("Node before:", $pos.nodeBefore);
-          console.log("Node after:", $pos.nodeAfter);
-
-          const imageNode =
-            event.key === "Backspace" ? $pos.nodeBefore : $pos.nodeAfter;
-
-          if (imageNode && imageNode.type.name === "image") {
-            console.log("Caret-based delete triggered");
-            event.preventDefault();
-            console.log("Image to delete:", imageNode.attrs.src);
-            setImageToDelete(imageNode.attrs.src);
-            setIsConfirmDialogOpen(true);
-            return true;
-          }
-        }
-
-        console.log("No image delete triggered");
-        return false;
-      },
     },
   });
-
-  const handleImageInsert = useCallback(
-    (file: File, alt: string) => {
-      if (!editor) return;
-
-      const objectUrl = URL.createObjectURL(file);
-
-      editor.chain().focus().setImage({ src: objectUrl, alt }).run();
-
-      const uploadImage = async (file: File): Promise<string> => {
-        await new Promise((res) => setTimeout(res, 1000));
-        return "https://images2.alphacoders.com/113/1130463.png";
-      };
-
-      uploadImage(file).then((uploadedUrl) => {
-        editor.chain().focus().setImage({ src: uploadedUrl, alt }).run();
-
-        URL.revokeObjectURL(objectUrl);
-      });
-    },
-    [editor],
-  );
-
-  const handleImageDelete = useCallback(() => {
-    if (!editor) return;
-
-    // Get the current selection
-    const { state } = editor;
-    const { selection } = state;
-    const node = state.doc.nodeAt(selection.from);
-
-    if (node?.type.name === "image") {
-      const imageUrl = node.attrs.src;
-      console.log("Deleting image with URL:", imageUrl);
-
-      // TODO: Delete from bucket using this URL
-      // await deleteFromBucket(imageUrl);
-    }
-
-    editor.chain().focus().deleteSelection().run();
-    setImageToDelete(null);
-    setIsConfirmDialogOpen(false);
-  }, [editor, imageToDelete]);
 
   const insertTable = useCallback(() => {
     editor
@@ -268,42 +171,6 @@ const TiptapEditor = ({
     return null;
   }
 
-  function LocalSaveStatus({
-    lastLocalSaved,
-  }: {
-    lastLocalSaved: string | null;
-  }) {
-    const [secondsAgo, setSecondsAgo] = useState<number | null>(null);
-
-    useEffect(() => {
-      if (!lastLocalSaved) return;
-
-      const update = () => {
-        const saved = new Date(lastLocalSaved).getTime();
-        const now = Date.now();
-        setSecondsAgo(Math.floor((now - saved) / 1000));
-      };
-
-      update(); // initial update
-      const interval = setInterval(update, 1000);
-
-      return () => clearInterval(interval);
-    }, [lastLocalSaved]);
-
-    return (
-      <Button
-        variant="outline"
-        className="pointer-events-none select-none"
-        asChild
-        title="Changes saved locally"
-      >
-        <div>
-          {secondsAgo !== null ? <p>{secondsAgo}s ago</p> : <p>-</p>}
-          <span className="sr-only">Changes saved locally</span>
-        </div>
-      </Button>
-    );
-  }
   const ToolbarButton = ({
     onMouseDown,
     icon: Icon,
@@ -444,12 +311,7 @@ const TiptapEditor = ({
           </DropdownMenuContent>
         </DropdownMenu>
         <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
-        <ToolbarButton
-          onMouseDown={() => setIsImageDialogOpen(true)}
-          icon={ImageIcon}
-          isActive={() => false}
-          tooltip="Insert Image"
-        />
+        
         <ToolbarButton
           onMouseDown={() => editor.chain().focus().setHorizontalRule().run()}
           icon={MinusSquare}
@@ -534,25 +396,11 @@ const TiptapEditor = ({
           tooltip="Redo"
         />
         <div className="bg-border mx-1 h-6 w-px" aria-hidden="true" />
-        {isPublishing && <div className="flex gap-2 animate-pulse">
+        {isPending && <div className="flex gap-2 animate-pulse">
           Saving...
         </div>}
       </div>
-      <ImageDialog
-        isOpen={isImageDialogOpen}
-        onClose={() => setIsImageDialogOpen(false)}
-        onInsert={handleImageInsert}
-      />
-      <ConfirmDialog
-        isOpen={isConfirmDialogOpen}
-        onClose={() => {
-          setImageToDelete(null);
-          setIsConfirmDialogOpen(false);
-        }}
-        onConfirm={handleImageDelete}
-        title="Delete Image"
-        message="Are you sure you want to delete this image? This action cannot be undone."
-      />
+      
     </>
   );
 };

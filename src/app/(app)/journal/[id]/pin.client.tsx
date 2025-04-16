@@ -15,7 +15,7 @@ export function JournalPinnedTopBar(props: {
   const [optstate, addoptimistic] = useOptimistic(props.isPinned, (prev: boolean, value: boolean) => {
     return value
   })
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
 
   return (
     <Button className="top-bar-pin-button h-8" size="sm" variant="ghost"

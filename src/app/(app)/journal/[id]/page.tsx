@@ -6,6 +6,9 @@ import { getJournal, updateJournal } from "@/actions/journal/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { JournalPinnedTopBar } from "./pin.client";
+import { Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import SummariseButton from "./summarise-button";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>;
@@ -28,9 +31,7 @@ export default async function Page(props: {
 
         </div>
         <div className="flex items-center gap-0 h-10">
-          <Button className="h-8" size="sm" variant="ghost">
-            Publish
-          </Button>
+        <SummariseButton />
           <div className="transition-[grid-template-columns] grid grid-cols-[0fr] [&:has(.top-bar-pin-button)]:grid-cols-[1fr] overflow-hidden">
             <div className="min-w-0">
               <Suspense>
