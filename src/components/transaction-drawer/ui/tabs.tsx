@@ -57,11 +57,12 @@ function PresetsTab({
   return (
     <Command className="flex h-[300px] w-full flex-col rounded-md">
       <div className="relative">
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[var(--color-main-2)]" />
+        <Search className="absolute top-1/2 left-0 size-4 -translate-y-1/2 text-[var(--color-main-2)]" />
         <CommandInput
+          noIcon
           value={searchValue}
           onValueChange={(e) => setSearchValue(e)}
-          className={cn("pl-9")}
+          className={cn("pl-4")}
           placeholder="Search preset"
           autoComplete="none"
         />
@@ -134,11 +135,12 @@ function RecentTransactionsTab({
   return (
     <Command className="flex h-[300px] w-full flex-col rounded-md">
       <div className="relative">
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[var(--color-main-2)]" />
+        <Search className="-4 absolute top-1/2 left-0 size-4 -translate-y-1/2 text-[var(--color-main-2)]" />
         <CommandInput
+          noIcon
           value={searchValue}
           onValueChange={(e) => setSearchValue(e)}
-          className={cn("pl-9")}
+          className={cn("pl-4")}
           placeholder="Search recent transactions"
           autoComplete="none"
         />
