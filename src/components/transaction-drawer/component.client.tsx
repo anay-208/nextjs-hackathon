@@ -39,19 +39,13 @@ import {
   TransactionPresetsData,
   TransactionsData,
 } from "@/actions/finance/types";
-import { Label } from "../ui/label";
+import { Label as ShadLabel } from "../ui/label";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Plus, Tag } from "lucide-react";
 import { Textarea } from "../ui/textarea";
+import { Label } from "./ui/label";
+import { Amount } from "./ui/amount";
+import { Category } from "./ui/category";
+import { Note } from "./ui/note";
 
 export default function GlobalDrawerClient({
   categories,
@@ -96,115 +90,15 @@ export default function GlobalDrawerClient({
         </DrawerHeader>
         <div className="w-full space-y-4 px-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="label" className="text-main-1">
-                Label
-              </Label>
-              <Input
-                id="label"
-                name="label"
-                placeholder="Transaction Label"
-                value={transaction?.label}
-                onChange={(e) => {
-                  setTransaction({ ...transaction, label: e.target.value });
-                }}
-                required
-                maxLength={100}
-                autoFocus
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="label" className="text-main-1">
-                Amount
-              </Label>
-              <div className="relative">
-                <Input
-                  id="amount"
-                  name="amount"
-                  type="number"
-                  placeholder="0.00"
-                  className="pl-6"
-                  value={transaction?.amount}
-                  onChange={(e) => {
-                    setTransaction({
-                      ...transaction,
-                      amount: Number(e.target.value),
-                    });
-                  }}
-                  required
-                />
-                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--color-main-2)]">
-                  $
-                </span>
-              </div>
-            </div>
+            <Label transaction={transaction} setTransaction={setTransaction} />
+            <Amount transaction={transaction} setTransaction={setTransaction} />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-main-2">
-              Category
-            </Label>
-            <div className="flex gap-2">
-              <Select
-                value={transaction?.category_id ?? ""}
-                onValueChange={(value) => {
-                  const category = categories.find((t) => t.id === value)!;
-                  console.log(category);
-                  setTransaction({
-                    ...transaction,
-                    category: category,
-                    category_id: category.id,
-                  });
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Categories</SelectLabel>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        <div className="flex items-center">
-                          <Tag className="text-main-1 mr-2 h-3 w-3" />
-                          <span>{category.label}</span>
-                          {category.budget && category.budget > 0 && (
-                            <span className="text-main-2 ml-2 text-xs">
-                              (Budget: ${category.budget})
-                            </span>
-                          )}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={() => {
-                  openDialog();
-                }}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="note" className="text-main-1">
-              Note <span className="text-main-2 text-xs">(optional)</span>
-            </Label>
-            <Textarea
-              id="note"
-              name="note"
-              value={transaction?.notes ?? ""}
-              onChange={(e) => {
-                setTransaction({ ...transaction, notes: e.target.value });
-              }}
-              placeholder="Add additional details about this transaction"
-              className="min-h-[80px]"
-            />
-          </div>
+          <Category
+            transaction={transaction}
+            setTransaction={setTransaction}
+            categories={categories}
+          />
+          <Note transaction={transaction} setTransaction={setTransaction} />
         </div>
         <DrawerFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
           <Button
