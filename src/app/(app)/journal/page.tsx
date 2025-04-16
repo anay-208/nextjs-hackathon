@@ -32,7 +32,7 @@ async function JournalPageList(props: {
 }) {
   const searchParams = await props.searchParams;
   const { search } = searchParams;
-  const pageNumber = parseInt(searchParams.pageNumber || "0");
+  const pageNumber : number = !isNaN(parseInt(searchParams.pageNumber)) ? parseInt(searchParams.pageNumber)  : 0;
   const journalList = await listJournals({
     page: pageNumber,
     pageSize: JournalDashboardSize,
