@@ -4,9 +4,9 @@ import Link from "next/link";
 import { JournalDashboardSize } from "./constants";
 import { Button } from "@/components/ui/button";
 
-export async function Pagination(props: { currentPage: Promise<number> }) {
+export async function Pagination(props: { currentPage: number }) {
 
-  const currentPage = await props.currentPage;
+  const currentPage = props.currentPage;
   const countRes = await getJournalCount();
   const count = countRes.data ?? 0;
   const totalPages = Math.ceil(count / JournalDashboardSize);

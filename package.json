@@ -54,7 +54,7 @@
     "next-safe-action": "^7.10.5",
     "pg": "^8.14.1",
     "react": "^19.0.0",
-    "react-day-picker": "^9.6.5",
+    "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-responsive": "^10.0.1",
     "recharts": "^2.15.2",

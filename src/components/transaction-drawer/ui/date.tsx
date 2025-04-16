@@ -16,7 +16,7 @@ export function TransactionDate({
       </Label>
       <DatePicker
         date={transaction?.created_at ?? new Date()}
-        setDate={(date: Date) => {
+        setDate={(date: Date | undefined) => {
           setTransaction({ ...transaction, created_at: date });
         }}
       />
