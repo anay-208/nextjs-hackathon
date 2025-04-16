@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Calendar, Plus } from "lucide-react";
 import { useState } from "react";
-import type { Goal, GoalInsert } from "./types";
+import type { Goal } from "./types";
 import { createGoal, toggleGoalCompletion as toggleGoalCompletionAction  } from "@/actions/goals/actions";
 
 export default function GoalsPage({ goalsList }: { goalsList: Goal[]; author: string }) {
