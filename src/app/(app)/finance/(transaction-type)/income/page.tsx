@@ -58,7 +58,7 @@ export default function Page(props: {
           </div>
         </div>
         <div className="relative mx-auto flex min-h-0 w-full max-w-3xl grow flex-col gap-4 pt-10 pb-7">
-          <div className="flex gap-2">
+          <div className="flex flex-col items-center gap-2 md:flex-row md:items-start">
             <Pagination currentPageData={getPageNumber} type="income" />
             <SearchFinanceInput />
           </div>
