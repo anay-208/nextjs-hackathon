@@ -46,6 +46,7 @@ import { Label } from "./ui/label";
 import { Amount } from "./ui/amount";
 import { Category } from "./ui/category";
 import { Note } from "./ui/note";
+import { TransactionType } from "./ui/type";
 
 export default function GlobalDrawerClient({
   categories,
@@ -79,7 +80,7 @@ export default function GlobalDrawerClient({
   }, [originalTransaction]);
   return (
     <Drawer open={isOpen} onOpenChange={closeTransactionDrawer}>
-      <DrawerContent className="flex h-[100svh] w-full flex-1 flex-col items-start justify-center">
+      <DrawerContent className="flex w-full flex-col items-start justify-center overflow-y-auto">
         <DrawerHeader>
           <DrawerTitle className="text-main-0 text-xl">
             Create a new transaction
@@ -99,6 +100,10 @@ export default function GlobalDrawerClient({
             categories={categories}
           />
           <Note transaction={transaction} setTransaction={setTransaction} />
+          <TransactionType
+            transaction={transaction}
+            setTransaction={setTransaction}
+          />
         </div>
         <DrawerFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
           <Button
