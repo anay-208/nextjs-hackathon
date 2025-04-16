@@ -15,7 +15,6 @@ export default function Page(props: {
     search: string;
   }>;
 }) {
-  headers()
   const getSp = props.searchParams.then(params => params)
 
   const getPageNumber = getSp.then(params => {
