@@ -29,6 +29,7 @@ import { Amount } from "./ui/amount";
 import { Category } from "./ui/category";
 import { Note } from "./ui/note";
 import { TransactionType } from "./ui/type";
+import { TransactionDate } from "./ui/date";
 
 export default function GlobalDrawerClient({
   categories,
@@ -74,9 +75,17 @@ export default function GlobalDrawerClient({
           </SheetDescription>
         </SheetHeader>
         <div className="w-full space-y-4 px-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <Label transaction={transaction} setTransaction={setTransaction} />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+            <Label
+              className="col-span-2"
+              transaction={transaction}
+              setTransaction={setTransaction}
+            />
             <Amount transaction={transaction} setTransaction={setTransaction} />
+            <TransactionDate
+              transaction={transaction}
+              setTransaction={setTransaction}
+            />
           </div>
           <Category
             transaction={transaction}
