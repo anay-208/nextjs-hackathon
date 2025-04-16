@@ -13,7 +13,7 @@ export default function Page() {
   return <AppContent>
 
     <PageLocation>Home</PageLocation>
-    <PageTitle>Welcome back, Arinji</PageTitle>
+    <PageTitle>Welcome back, User</PageTitle>
 
     <div className="pt-12 grid grid-cols-1 md:grid-cols-2 gap-3">
       <Card>
