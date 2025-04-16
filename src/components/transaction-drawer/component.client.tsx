@@ -69,7 +69,7 @@ export default function GlobalDrawerClient({
       >
         <SheetHeader>
           <SheetTitle className="text-main-0 text-xl">
-            Create a new transaction
+            Create a New Transaction
           </SheetTitle>
           <SheetDescription className="text-main-2">
             Enter the details of your transaction below
