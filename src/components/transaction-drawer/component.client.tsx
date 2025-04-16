@@ -1,13 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 import { useTransactionDrawer } from "./context";
 import {
@@ -59,16 +60,19 @@ export default function GlobalDrawerClient({
     }
   }, [originalTransaction]);
   return (
-    <Drawer open={isOpen} onOpenChange={closeTransactionDrawer}>
-      <DrawerContent className="flex w-full flex-col items-start justify-center overflow-y-auto">
-        <DrawerHeader>
-          <DrawerTitle className="text-main-0 text-xl">
+    <Sheet open={isOpen} onOpenChange={closeTransactionDrawer}>
+      <SheetContent
+        side="bottom"
+        className="flex w-full flex-col items-start justify-center overflow-y-auto"
+      >
+        <SheetHeader>
+          <SheetTitle className="text-main-0 text-xl">
             Create a new transaction
-          </DrawerTitle>
-          <p className="text-main-2">
+          </SheetTitle>
+          <SheetDescription className="text-main-2">
             Enter the details of your transaction below
-          </p>
-        </DrawerHeader>
+          </SheetDescription>
+        </SheetHeader>
         <div className="w-full space-y-4 px-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Label transaction={transaction} setTransaction={setTransaction} />
@@ -85,7 +89,7 @@ export default function GlobalDrawerClient({
             setTransaction={setTransaction}
           />
         </div>
-        <DrawerFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
+        <SheetFooter className="flex h-fit w-full flex-row items-center justify-center gap-4">
           <Button
             disabled={isPending}
             onClick={() => {
@@ -144,13 +148,13 @@ export default function GlobalDrawerClient({
           >
             Submit
           </Button>
-          <DrawerClose asChild>
+          <SheetClose asChild>
             <Button disabled={isPending} variant="outline">
               Cancel
             </Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
