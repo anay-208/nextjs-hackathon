@@ -15,25 +15,6 @@ export default function Page(props: {
     search: string;
   }>;
 }) {
-  const getSp = props.searchParams.then(params => params)
-
-  // const getPageNumber = getSp.then(params => {
-  //   let page = 0;
-  //   if (params.pageNumber) {
-  //     page = parseInt(params.pageNumber);
-  //   }
-  //   return page; 
-  // })
-
-  // const getJournalPage = getSp.then(async params => {
-  //   return listJournals({
-  //     page: params.pageNumber ? parseInt(params.pageNumber) : 0,
-  //     pageSize: JournalDashboardSize,
-  //     filter: {
-  //       query: params.search ?? undefined,
-  //     }
-  //   });
-  // })
 
   return (
     <AppContent>
