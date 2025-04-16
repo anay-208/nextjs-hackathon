@@ -26,6 +26,8 @@ export const handle = async <T>(
 
     return { data: result, error: undefined };
   } catch (err: any) {
+    if (String(err).includes("Error: During prerendering"))
+      throw err;
     console.error(`Error in ${context}:`, err);
     return { data: undefined, error: err.message || "Unknown error" };
   }
