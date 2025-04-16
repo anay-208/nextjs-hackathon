@@ -40,7 +40,7 @@ export default function GlobalCategoryDialog() {
     <Dialog open={isOpen} onOpenChange={closeDialog}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Category Managemennt</DialogTitle>
+          <DialogTitle>Category Management</DialogTitle>
           <DialogDescription>
             Create a new category or edit an existing one. A Category is a way
             for you to organize your transactions, set budgets etc
