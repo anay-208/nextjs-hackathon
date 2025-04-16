@@ -1,8 +1,8 @@
 import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
-import { Label as ShadLabel } from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dispatch, SetStateAction } from "react";
-export function Note({
+export function TransactionNote({
   transaction,
   setTransaction,
 }: {
@@ -11,9 +11,9 @@ export function Note({
 }) {
   return (
     <div className="space-y-2">
-      <ShadLabel htmlFor="note" className="text-main-1">
+      <Label htmlFor="note" className="text-main-1">
         Note <span className="text-main-2 text-xs">(optional)</span>
-      </ShadLabel>
+      </Label>
       <Textarea
         id="note"
         name="note"

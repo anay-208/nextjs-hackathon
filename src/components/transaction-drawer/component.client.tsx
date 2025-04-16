@@ -25,13 +25,13 @@ import {
   TransactionsData,
 } from "@/actions/finance/types";
 import { TransactionLabel } from "./ui/label";
-import { Amount } from "./ui/amount";
-import { Category } from "./ui/category";
-import { Note } from "./ui/note";
+import { TransactionAmount } from "./ui/amount";
+import { TransactionCategory } from "./ui/category";
+import { TransactionNote } from "./ui/note";
 import { TransactionType } from "./ui/type";
 import { TransactionDate } from "./ui/date";
 import { TransactionTabs } from "./ui/tabs";
-import { Preset } from "./ui/preset";
+import { TransactionPreset } from "./ui/preset";
 
 export default function GlobalDrawerClient({
   categories,
@@ -98,18 +98,24 @@ export default function GlobalDrawerClient({
               transaction={transaction}
               setTransaction={setTransaction}
             />
-            <Amount transaction={transaction} setTransaction={setTransaction} />
+            <TransactionAmount
+              transaction={transaction}
+              setTransaction={setTransaction}
+            />
             <TransactionDate
               transaction={transaction}
               setTransaction={setTransaction}
             />
           </div>
-          <Category
+          <TransactionCategory
             transaction={transaction}
             setTransaction={setTransaction}
             categories={categories}
           />
-          <Note transaction={transaction} setTransaction={setTransaction} />
+          <TransactionNote
+            transaction={transaction}
+            setTransaction={setTransaction}
+          />
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <TransactionType
@@ -117,7 +123,10 @@ export default function GlobalDrawerClient({
               setTransaction={setTransaction}
             />
 
-            <Preset transaction={transaction} setTransaction={setTransaction} />
+            <TransactionPreset
+              transaction={transaction}
+              setTransaction={setTransaction}
+            />
           </div>
           <TransactionTabs
             setTransaction={setTransaction}

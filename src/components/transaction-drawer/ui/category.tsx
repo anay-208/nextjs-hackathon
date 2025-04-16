@@ -16,7 +16,7 @@ import { Label as ShadLabel } from "@/components/ui/label";
 import { Dispatch, SetStateAction } from "react";
 import { useCategoryDialog } from "@/components/category/context";
 import { Button } from "@/components/ui/button";
-export function Category({
+export function TransactionCategory({
   transaction,
   setTransaction,
   categories,
@@ -33,6 +33,8 @@ export function Category({
       </ShadLabel>
       <div className="flex gap-2">
         <Select
+          name="category"
+          id="category"
           value={transaction?.category_id ?? ""}
           onValueChange={(value) => {
             const category = categories.find((t) => t.id === value)!;
