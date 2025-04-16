@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { useCategoryDialog } from "./context";
 import { toast } from "sonner";
 import { CategoryItemWithOptionalDates } from "@/actions/finance/types";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export default function GlobalCategoryDialog() {
   const { isOpen, data, closeDialog } = useCategoryDialog();
@@ -45,37 +47,45 @@ export default function GlobalCategoryDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="flex h-full w-full flex-col items-start justify-start gap-4">
-          <div className="flex h-fit w-fit flex-col items-start justify-start">
-            <p>Label:</p>
-            <input
-              className="h-fit w-full border-2 border-red-500 focus:outline-none"
-              type="text"
-              name="label"
-              placeholder="Category Label"
-              value={category.label}
-              onChange={(e) => {
-                setCategory({ ...category, label: e.target.value });
-              }}
-              required
-              maxLength={100}
-              autoFocus
-            />
+          <div className="space-y-2">
+            <Label htmlFor="label" className="text-main-1">
+              Label
+            </Label>
+            <div className="relative">
+              <Input
+                id="label"
+                name="label"
+                type="text"
+                placeholder="Category Label"
+                value={category?.label}
+                onChange={(e) => {
+                  setCategory({ ...category, label: e.target.value });
+                }}
+                required
+              />
+            </div>
           </div>
-          <div className="flex h-fit w-fit flex-col items-start justify-start">
-            <p>Budget:</p>
-            <input
-              className="h-fit w-full border-2 border-red-500 focus:outline-none"
-              type="number"
-              name="label"
-              placeholder="Budget"
-              value={category.budget ?? ""}
-              onChange={(e) => {
-                setCategory({ ...category, budget: Number(e.target.value) });
-              }}
-              required
-              maxLength={100}
-              autoFocus
-            />
+          <div className="space-y-2">
+            <Label htmlFor="budget" className="text-main-1">
+              Budget
+            </Label>
+            <div className="relative">
+              <Input
+                id="budget"
+                name="budget"
+                type="number"
+                placeholder="0.00"
+                className="pl-6"
+                value={category?.budget ?? ""}
+                onChange={(e) => {
+                  setCategory({ ...category, budget: Number(e.target.value) });
+                }}
+                required
+              />
+              <span className="absolute top-1/2 left-3 -translate-y-1/2 text-[var(--color-main-2)]">
+                $
+              </span>
+            </div>
           </div>
         </div>
 
