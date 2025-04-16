@@ -5,7 +5,7 @@ import {
   user as userTable,
 } from "@/db/schema";
 import { generateId } from "@/lib/utils";
-import { and, count, eq, gte, lte } from "drizzle-orm";
+import { and, count, eq, gte, ilike, lte } from "drizzle-orm";
 import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
@@ -85,6 +85,9 @@ export const dbListTransactions = async ({
       filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
       filter?.category_id
         ? eq(transactionsTable.category_id, filter.category_id)
+        : undefined,
+      filter?.query
+        ? ilike(transactionsTable.label, `%${filter.query}%`)
         : undefined,
     ),
 
@@ -167,6 +170,9 @@ export const dbGetTransactionsCount = async (
         filter?.type ? eq(transactionsTable.type, filter.type) : undefined,
         filter?.category_id
           ? eq(transactionsTable.category_id, filter.category_id)
+          : undefined,
+        filter?.query
+          ? ilike(transactionsTable.label, `%${filter.query}%`)
           : undefined,
       ),
     );

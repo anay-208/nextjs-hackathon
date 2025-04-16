@@ -25,6 +25,7 @@ export type Category = InferSelectModel<typeof categoriesTable>;
 export type TransactionsFilter = {
   type?: "income" | "expense";
   category_id?: string;
+  query?: string
 };
 
 export type TransactionsSorting = {
