@@ -17,23 +17,23 @@ export default function Page(props: {
 }) {
   const getSp = props.searchParams.then(params => params)
 
-  const getPageNumber = getSp.then(params => {
-    let page = 0;
-    if (params.pageNumber) {
-      page = parseInt(params.pageNumber);
-    }
-    return page; 
-  })
+  // const getPageNumber = getSp.then(params => {
+  //   let page = 0;
+  //   if (params.pageNumber) {
+  //     page = parseInt(params.pageNumber);
+  //   }
+  //   return page; 
+  // })
 
-  const getJournalPage = getSp.then(async params => {
-    return listJournals({
-      page: params.pageNumber ? parseInt(params.pageNumber) : 0,
-      pageSize: JournalDashboardSize,
-      filter: {
-        query: params.search ?? undefined,
-      }
-    });
-  })
+  // const getJournalPage = getSp.then(async params => {
+  //   return listJournals({
+  //     page: params.pageNumber ? parseInt(params.pageNumber) : 0,
+  //     pageSize: JournalDashboardSize,
+  //     filter: {
+  //       query: params.search ?? undefined,
+  //     }
+  //   });
+  // })
 
   return (
     <AppContent>
@@ -52,8 +52,8 @@ async function JournalPageList(props: {
     search: string;
   }>;
 }) {
-  const { pageNumber, search } = await props.searchParams;
-
+  let { pageNumber, search } = await props.searchParams;
+  pageNumber = pageNumber ?? 0
   const journalList = await listJournals({
     page: pageNumber ? parseInt(pageNumber) : 0,
     pageSize: JournalDashboardSize,
