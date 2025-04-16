@@ -13,31 +13,6 @@ export default async function Page(props: {
   params: Promise<{ id: string }>;
 }) {
 
-
-  const onSummaryClick = async () => {
-    const id = await props.params.then(p => p.id);
-    const response = await fetch(`/api/journal/${id}/summarise`, {
-      method: "GET",
-    });
-
-    if (!response.body) {
-      throw new Error("No response body");
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder("utf-8");
-    let done = false;
-
-    while (!done) {
-      const { value, done: readerDone } = await reader.read();
-      done = readerDone;
-      if (value) {
-        const chunk = decoder.decode(value, { stream: true });
-        console.log(chunk); // Process the streamed chunk (e.g., append to UI)
-      }
-    }
-  }
-
   return (
     <div className="min-w-0 flex-1 bg-white px-5 rounded-lg flex flex-col min-h-0">
       <div className="flex -mx-9 -mt-4 items-center px-5 pt-1 sticky -top-4 bg-white z-10">
@@ -56,7 +31,7 @@ export default async function Page(props: {
 
         </div>
         <div className="flex items-center gap-0 h-10">
-          <Summarise />
+          <Summarise id={props.params.then(p => p.id)} />
           <div className="transition-[grid-template-columns] grid grid-cols-[0fr] [&:has(.top-bar-pin-button)]:grid-cols-[1fr] overflow-hidden">
             <div className="min-w-0">
               <Suspense>
