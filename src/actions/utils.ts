@@ -1,10 +1,11 @@
 import { auth } from "@/auth";
 import { headers } from "next/headers";
 import { APIResponse } from "./types";
+import { unauthorized } from "next/navigation";
 
 export const getValidUser = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session || !session.user) throw new Error("Unauthorized");
+  if (!session || !session.user) return unauthorized();
 
   return session;
 };
