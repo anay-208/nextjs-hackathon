@@ -18,7 +18,7 @@ export const serverAuth = {
     const session = await serverAuth.getSession()
     if (!session) {
       if (redirectToIfNotAuthenticated) {
-        redirect(route.signin + '?redirectTo=' + redirectToIfNotAuthenticated);
+        redirect(route.signin(redirectToIfNotAuthenticated));
       }
       return null as T extends string ? never : null
     }
