@@ -36,7 +36,7 @@ export const dbCreateJournal = async (
 
 export const dbGetJournal = async (journalId: string, userId: string) => {
   "use cache";
-  cacheTag("journals", `journal-${ journalId }`);
+  cacheTag("journals", `journal-${journalId}`);
   return db.query.journalingTable.findFirst({
     where: and(
       eq(journalingTable.id, journalId),
@@ -164,8 +164,6 @@ export const dbUpdateJournal = async (
   return data;
 };
 
-
-
 export const dbCreateJournalTag = async (
   user_id: string,
   data: CreateJournalTagInput,
@@ -185,6 +183,7 @@ export const dbDeleteJournalTag = async (user_id: string, tagId: string) => {
   await db
     .delete(tagsTable)
     .where(and(eq(tagsTable.id, tagId), eq(tagsTable.user_id, user_id)));
+  revalidateTag("journals");
   return true;
 };
 
@@ -197,6 +196,7 @@ export const dbUpdateJournalTag = async (
     .update(tagsTable)
     .set({ ...data, updated_at: new Date() })
     .where(and(eq(tagsTable.id, tagId), eq(tagsTable.user_id, user_id)));
+  revalidateTag("journals");
   return data;
 };
 
@@ -208,6 +208,7 @@ export const dbAttachTagToJournal = async (
   await db
     .insert(journalsToTags)
     .values({ journal_id: journalId, tag_id: tagId, user_id: userId });
+  revalidateTag("journals");
   return true;
 };
 
@@ -225,5 +226,6 @@ export const dbDetachTagFromJournal = async (
         eq(journalsToTags.tag_id, tagId),
       ),
     );
+  revalidateTag("journals");
   return true;
 };

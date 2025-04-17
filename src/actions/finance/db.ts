@@ -6,6 +6,8 @@ import {
 } from "@/db/schema";
 import { generateId } from "@/lib/utils";
 import { and, count, eq, gte, ilike, lte } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { NoUser, TimeRange } from "../types";
 import {
   AddCategoryInput,
@@ -19,6 +21,7 @@ export const dbCreateTransaction = async (data: AddTransactionInput) => {
     .insert(transactionsTable)
     .values({ ...data, id: generateId("txn") })
     .returning({ id: transactionsTable.id });
+  revalidateTag("transactions");
   return result[0];
 };
 
@@ -36,6 +39,7 @@ export const dbUpdateTransaction = async (
         eq(transactionsTable.user_id, user_id),
       ),
     );
+  revalidateTag("transactions");
   return data;
 };
 
@@ -51,6 +55,7 @@ export const dbDeleteTransaction = async (
         eq(transactionsTable.user_id, user_id),
       ),
     );
+  revalidateTag("transactions");
   return true;
 };
 
@@ -69,6 +74,8 @@ export const dbListTransactions = async ({
   filter?: TransactionsFilter;
   sort?: TransactionsSorting;
 }) => {
+  "use cache";
+  cacheTag("transactions");
   return db.query.transactionsTable.findMany({
     columns: {
       updated_at: false,
@@ -122,6 +129,8 @@ export const dbGetTransactionPresets = async (
   userId: string,
   sort?: TransactionsSorting,
 ) => {
+  "use cache";
+  cacheTag("transactions");
   return db.query.transactionsTable.findMany({
     columns: {
       user_id: false,
@@ -161,6 +170,8 @@ export const dbGetTransactionsCount = async (
   userId: string,
   filter: TransactionsFilter,
 ) => {
+  "use cache";
+  cacheTag("transactions");
   const result = await db
     .select({ count: count() })
     .from(transactionsTable)
@@ -185,10 +196,13 @@ export const dbCreateCategory = async (data: AddCategoryInput) => {
     .insert(categoriesTable)
     .values({ ...data, id: generateId("cat") })
     .returning({ id: categoriesTable.id });
+  revalidateTag("categories");
   return result[0];
 };
 
 export const dbGetCategories = async (user_id: string) => {
+  "use cache";
+  cacheTag("categories");
   return db.query.categoriesTable.findMany({
     limit: 25,
     columns: {
@@ -212,10 +226,13 @@ export const dbUpdateCategory = async (
         eq(categoriesTable.user_id, user_id),
       ),
     );
+  revalidateTag("categories");
   return data;
 };
 
 export const dbGetCategory = async (userId: string, categoryId: string) => {
+  "use cache";
+  cacheTag("categories");
   return db.query.categoriesTable.findFirst({
     where: and(
       eq(categoriesTable.id, categoryId),
@@ -233,5 +250,6 @@ export const dbDeleteCategory = async (user_id: string, categoryId: string) => {
         eq(categoriesTable.user_id, user_id),
       ),
     );
+  revalidateTag("categories");
   return true;
 };
