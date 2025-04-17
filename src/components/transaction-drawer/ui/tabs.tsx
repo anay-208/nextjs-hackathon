@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
-  TransactionItemWithOptionalDate,
+  FrontendAddTransactionInput,
   TransactionPresetsData,
   TransactionsData,
 } from "@/actions/finance/types";
@@ -20,7 +20,7 @@ export function TransactionTabs({
   presets,
   recent,
 }: {
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
   presets: TransactionPresetsData;
   recent: TransactionsData;
 }) {
@@ -49,7 +49,7 @@ function PresetsTab({
   setTransaction,
   presets,
 }: {
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
   presets: TransactionPresetsData;
 }) {
   const [searchValue, setSearchValue] = useState("");
@@ -127,7 +127,7 @@ function RecentTransactionsTab({
   setTransaction,
   recent,
 }: {
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
   recent: TransactionsData;
 }) {
   const [searchValue, setSearchValue] = useState("");

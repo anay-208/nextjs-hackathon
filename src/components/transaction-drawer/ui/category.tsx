@@ -10,7 +10,7 @@ import {
 import { Plus, Tag } from "lucide-react";
 import {
   CategoryData,
-  TransactionItemWithOptionalDate,
+  FrontendAddTransactionInput,
 } from "@/actions/finance/types";
 import { Label as ShadLabel } from "@/components/ui/label";
 import { Dispatch, SetStateAction } from "react";
@@ -21,8 +21,8 @@ export function TransactionCategory({
   setTransaction,
   categories,
 }: {
-  transaction: TransactionItemWithOptionalDate;
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  transaction: FrontendAddTransactionInput;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
   categories: CategoryData;
 }) {
   const { openDialog } = useCategoryDialog();
@@ -40,7 +40,6 @@ export function TransactionCategory({
             console.log(category);
             setTransaction({
               ...transaction,
-              category: category,
               category_id: category.id,
             });
           }}
