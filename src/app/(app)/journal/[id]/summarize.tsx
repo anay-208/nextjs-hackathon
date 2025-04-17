@@ -94,8 +94,6 @@ function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summar
 }
 
 
-
-
 function AiResponseUI({
   content,
   onClose,
@@ -103,11 +101,20 @@ function AiResponseUI({
   content: string;
   onClose: () => void;
 }) {
+  const [isClosing, setIsClosing] = useState(false); // State to handle closing animation
+
+  const handleClose = () => {
+    setIsClosing(true); // Trigger the closing animation
+    setTimeout(() => {
+      onClose(); // Call the onClose function after the animation ends
+    }, 600); // Match the duration of the animation
+  };
+
   return (
     <div
       className={cn(
         "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
-        "animate-fade-in"
+        isClosing ? "animate-fancy-disappear" : "animate-fancy-appear" // Use appear or disappear animation
       )}
       style={{
         backdropFilter: "blur(25px)",
@@ -116,7 +123,7 @@ function AiResponseUI({
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-medium text-black sm:text-3xl">Summary</h2>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="text-black hover:text-gray-700 transition"
         >
           <X className="clickable h-5 w-5 sm:h-6 sm:w-6" />
