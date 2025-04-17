@@ -16,10 +16,10 @@ export async function CategoryHeader({
         </Button>
       </Link>
       <div className="text-muted/50">/</div>
-
       <Button className="text-fg/90 h-8 px-2" size="sm" variant="ghost">
         Category
       </Button>
+      <div className="text-muted/50">/</div>
       <Link href={`/finance/category/${categoryData?.data?.id}`}>
         <Button className="text-fg/90 h-8 px-2" size="sm" variant="ghost">
           {categoryData?.data?.label}
