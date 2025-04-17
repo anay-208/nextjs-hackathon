@@ -2,13 +2,14 @@ import { route } from "@/app/routes";
 import { redirect } from "next/navigation";
 import { auth } from ".";
 import { headers } from "next/headers";
+import { cache } from "react";
 
 export const serverAuth = {
-  async getSession() {
+  getSession: cache(async () => {
     return auth.api.getSession({
       headers: await headers()
     })
-  },
+  }),
   async signOut() {
     return auth.api.signOut({
       headers: await headers()

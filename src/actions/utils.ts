@@ -1,15 +1,12 @@
-import { auth } from "@/auth";
-import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 import { APIResponse } from "./types";
-import React from "react";
+import { serverAuth } from "@/auth/actions";
 
-export const getValidUser = React.cache(async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
+export const getValidUser = async () => {
+  const session = await serverAuth.getSession();
   if (!session || !session.user) return unauthorized();
-
   return session;
-});
+};
 
 export const withAuth = async <T>(
   fn: (user: Awaited<ReturnType<typeof getValidUser>>) => Promise<T>,
