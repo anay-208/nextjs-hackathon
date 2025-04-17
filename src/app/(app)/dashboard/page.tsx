@@ -50,25 +50,6 @@ export default function Page() {
           <UserStreaksSummary />
         </Suspense>
 
-        {/* <div className="pt-4">
-          <div className="text-5xl font-bold">
-            948
-          </div>
-          <div>day streak!</div>
-        </div>
-
-        <div className="mt-4 bg-main-4/5 flex justify-between gap-1 text-sm p-4 rounded-md items-center">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => (
-            <div key={index} className="mb-1 grow flex flex-col gap-1 items-center font-semibold flex-1">
-              <div className="text-muted">
-                {day}
-              </div>
-              <div className="w-full flex justify-center py-2 bg-amber-500 rounded-md">
-                <MaterialSymbolsLocalFireDepartmentRounded className="size-5 text-white" />
-              </div>
-            </div>
-          ))}
-        </div> */}
       </Card>
 
     </div>
