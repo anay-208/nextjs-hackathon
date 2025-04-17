@@ -1,17 +1,16 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FinancePageSize } from "./constants";
-import { getTransactionsCount } from "@/actions/finance/actions";
-export async function Pagination(props: {
+import { FinancePageSize } from "../../shared/constants";
+import { getCategory, getTransactionsCount } from "@/actions/finance/actions";
+export async function CategoryPagination(props: {
   currentPageData: Promise<{ page: number }>;
   countRes: Promise<
     NonNullable<Awaited<ReturnType<typeof getTransactionsCount>>>
   >;
-  type: "income" | "expense";
+  categoryData: Promise<NonNullable<Awaited<ReturnType<typeof getCategory>>>>;
 }) {
   const { page: currentPage } = await props.currentPageData;
-  const { type } = props;
   const { data } = await props.countRes;
   const count = data ?? 0;
 
@@ -20,11 +19,14 @@ export async function Pagination(props: {
   const hasPrevPage = currentPage > 0;
   const hasNextPage = currentPage < totalPages - 1;
 
+  const { data: categoryData } = await props.categoryData;
+  const id = categoryData?.id;
+
   return (
     <div className="flex flex-row items-center gap-2">
       <Button asChild disabled={!hasPrevPage} variant="ghost" size="icon">
         <Link
-          href={`/finance/${type}?pageNumber=${currentPage - 1}`}
+          href={`/finance/category/${id}?pageNumber=${currentPage - 1}`}
           scroll={false}
           aria-label="Previous page"
         >
@@ -39,7 +41,7 @@ export async function Pagination(props: {
 
       <Button asChild disabled={!hasNextPage} variant="ghost" size="icon">
         <Link
-          href={`/finance/${type}?pageNumber=${currentPage + 1}`}
+          href={`/finance/category/${id}?pageNumber=${currentPage + 1}`}
           scroll={false}
           aria-label="Next page"
         >

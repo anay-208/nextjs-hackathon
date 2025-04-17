@@ -217,10 +217,6 @@ export const dbUpdateCategory = async (
 
 export const dbGetCategory = async (userId: string, categoryId: string) => {
   return db.query.categoriesTable.findFirst({
-    columns: {
-      id: false,
-      user_id: false,
-    },
     where: and(
       eq(categoriesTable.id, categoryId),
       eq(categoriesTable.user_id, userId),

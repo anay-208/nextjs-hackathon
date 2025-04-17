@@ -11,6 +11,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -76,9 +77,20 @@ export function TransactionCard({ data }: { data: TransactionItem }) {
 
         <div>
           <div className="text-fg-2 text-sm">Category:</div>
-          <div className="text-main-1 text-base">
-            {data.category?.label ?? "Uncategorized"}
-          </div>
+          {data.category_id && data.category?.label ? (
+            <Button asChild variant="link" className="px-0">
+              <Link
+                href={`/finance/category/${data.category_id}`}
+                className="text-main-1 text-base"
+              >
+                {data.category.label}
+              </Link>
+            </Button>
+          ) : (
+            <div className="text-main-1 text-base">
+              {data.category?.label ?? "Uncategorized"}
+            </div>
+          )}
         </div>
 
         <div>
