@@ -1,12 +1,12 @@
-import { isValidTime, Time } from "./time";
-import { Amount } from "./amount";
-import Presets from "./presets";
-import { TransactionList } from "./transaction";
-import { Graph } from "./graph";
-import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { Suspense } from "react";
-import { TimeSelector } from "./time-selector";
+import { AppContent, PageLocation, PageTitle } from "../content-layouts";
 import { AddButtons } from "./add.client";
+import { Amount } from "./amount";
+import { Graph } from "./graph";
+import Presets from "./presets";
+import { isValidTime, Time } from "./time";
+import { TimeSelector } from "./time-selector";
+import { TransactionList } from "./transaction";
 export default function Page(props: {
   searchParams: Promise<{
     timeFrame: string;
@@ -34,7 +34,7 @@ export default function Page(props: {
         <AddButtons />
       </div>
       <Suspense>
-        <div className="flex flex-col gap-4 pt-12">
+        <div className="animate-in fade-in-0 flex flex-col gap-4 pt-12">
           <div className="grid h-full w-full flex-1 grid-cols-1 gap-4">
             <Amount timeFrame={getTimeFrame} />
             <Presets />

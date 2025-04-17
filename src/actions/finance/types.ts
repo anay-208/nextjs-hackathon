@@ -15,6 +15,15 @@ import {
 export type AddTransactionInput = NoIdAndTimestamp<
   InferInsertModel<typeof transactionsTable>
 >;
+export type FrontendAddTransactionInput = Omit<
+  AddTransactionInput,
+  "user_id"
+> & {
+  user_id?: string;
+  id?: string;
+  created_at?: Date;
+};
+
 export type AddCategoryInput = NoIdAndTimestamp<
   InferInsertModel<typeof categoriesTable>
 >;
@@ -25,7 +34,7 @@ export type Category = InferSelectModel<typeof categoriesTable>;
 export type TransactionsFilter = {
   type?: "income" | "expense";
   category_id?: string;
-  query?: string
+  query?: string;
 };
 
 export type TransactionsSorting = {

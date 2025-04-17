@@ -9,7 +9,7 @@ import { JournalPinnedTopBar } from "./pin.client";
 
 import Summarize from "./summarize";
 
-export default async function Page(props: {
+export default function Page(props: {
   params: Promise<{ id: string }>;
 }) {
 

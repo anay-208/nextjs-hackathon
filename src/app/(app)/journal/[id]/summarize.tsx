@@ -27,7 +27,6 @@ export default function Summarize({ id }: Props) {
       });
 
       if (!response.ok) {
-        alert("Failed to fetch summary");
         throw new Error("Failed to fetch summary");
       }
 
@@ -52,7 +51,7 @@ export default function Summarize({ id }: Props) {
       }
     } catch (error) {
       console.error("Error fetching summary:", error);
-      setAiResponse("An error occurred while fetching the summary.");
+      setAiResponse("An error occurred while fetching the summary. Are you sure you've added proper text?");
     } finally {
       setSummarizing(false);
     }

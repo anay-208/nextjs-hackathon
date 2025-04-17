@@ -1,4 +1,4 @@
-import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
+import { FrontendAddTransactionInput } from "@/actions/finance/types";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
@@ -8,8 +8,8 @@ export function TransactionType({
   transaction,
   setTransaction,
 }: {
-  transaction: TransactionItemWithOptionalDate;
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  transaction: FrontendAddTransactionInput;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
 }) {
   return (
     <div className="space-y-2">

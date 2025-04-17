@@ -39,6 +39,9 @@ export default function Page(props: {
         type: "income",
         query: searchParams.search ?? undefined,
       },
+      sort: {
+        created_at: "desc",
+      },
     });
   });
 

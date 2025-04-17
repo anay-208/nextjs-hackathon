@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { route } from "../routes";
 import { Illustration1 } from "./illustration1";
+import { redirect } from "next/navigation";
+import { AnonymousSignInButton } from "@/auth/client-boundary";
 
 export default async function Home() {
   return (
@@ -51,6 +53,13 @@ export default async function Home() {
                     Get started now →
                   </Button>
                 </Link>
+                <Button asChild variant="secondary" className="h-10 px-5 text-base">
+                  <AnonymousSignInButton
+                    redirectTo={route.dashboard}
+                  >
+                    Preview App Anonymously
+                  </AnonymousSignInButton>
+                </Button>
               </div>
             </div>
             <div className="flex h-80 w-full min-w-0 grow items-center justify-center rounded-lg">
