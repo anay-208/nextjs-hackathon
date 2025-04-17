@@ -167,13 +167,7 @@ export default function GlobalDrawerClient({
               if (transaction.id) {
                 startTransition(async () => {
                   toast.promise(
-                    updateTransaction(transaction.id, {
-                      label: transaction.label,
-                      amount: transaction.amount,
-                      type: transaction.type,
-                      notes: transaction.notes ?? "",
-                      category_id: transaction.category_id ?? "",
-                    }),
+                    updateTransaction(transaction.id, transaction),
                     {
                       loading: "Updating transaction...",
                       success: "Transaction updated!",
@@ -186,20 +180,11 @@ export default function GlobalDrawerClient({
                 });
               } else {
                 startTransition(async () => {
-                  toast.promise(
-                    createTransaction({
-                      label: transaction.label!,
-                      amount: transaction.amount!,
-                      type: transaction.type!,
-                      notes: transaction.notes ?? "",
-                      category_id: transaction.category_id ?? "",
-                    }),
-                    {
-                      loading: "Saving transaction...",
-                      success: "Transaction saved!",
-                      error: "Failed to save transaction",
-                    },
-                  );
+                  toast.promise(createTransaction(transaction), {
+                    loading: "Saving transaction...",
+                    success: "Transaction saved!",
+                    error: "Failed to save transaction",
+                  });
                   router.refresh();
                   resetTransaction();
                   closeTransactionDrawer();
