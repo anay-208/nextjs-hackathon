@@ -1,14 +1,14 @@
 import Icon from "@/assets/icon.png";
 import { serverAuth } from "@/auth/actions";
+import { AnonymousSignInButton } from "@/auth/client-boundary";
 import { Button } from "@/components/ui/button";
 import { CollapsibleColumn } from "@/components/ui/collapsible";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { route } from "../routes";
+import AutoRedirectToDashboard from "./AutoRedirect";
 import { Illustration1 } from "./illustration1";
-import { redirect } from "next/navigation";
-import { AnonymousSignInButton } from "@/auth/client-boundary";
 
 export default async function Home() {
   return (
@@ -19,6 +19,9 @@ export default async function Home() {
         "--px": "2rem",
       }}
     >
+      <Suspense>
+        <AutoRedirectToDashboard />
+      </Suspense>
       <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
         <div className="flex max-w-(--max-w) grow items-center justify-between px-(--px)">
           <div className="flex items-center gap-1">
@@ -53,10 +56,12 @@ export default async function Home() {
                     Get started now →
                   </Button>
                 </Link>
-                <Button asChild variant="secondary" className="h-10 px-5 text-base">
-                  <AnonymousSignInButton
-                    redirectTo={route.dashboard}
-                  >
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="h-10 px-5 text-base"
+                >
+                  <AnonymousSignInButton redirectTo={route.dashboard}>
                     Preview App Anonymously
                   </AnonymousSignInButton>
                 </Button>
