@@ -105,7 +105,7 @@ export default function SignUpPage() {
           <div className="flex flex-col gap-4">
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={true}
             >
               {isLoading ? 'Creating account...' : 'Sign up'}
             </Button>
