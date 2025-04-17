@@ -1,4 +1,7 @@
-import { listTransactions } from "@/actions/finance/actions";
+import {
+  getTransactionsCount,
+  listTransactions,
+} from "@/actions/finance/actions";
 import { FinancePageSize } from "../shared/constants";
 import { Pagination } from "../shared/pagination";
 import { TransactionPageList } from "../shared/list";
@@ -39,6 +42,9 @@ export default function Page(props: {
     });
   });
 
+  const getCountRes = getTransactionsCount({
+    type: "expense",
+  });
   return (
     <SearchFinanceForm route={route.financeIncome}>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col rounded-lg bg-white px-5">
@@ -60,7 +66,11 @@ export default function Page(props: {
         </div>
         <div className="relative mx-auto flex min-h-0 w-full max-w-3xl grow flex-col gap-4 pt-10 pb-7">
           <div className="flex flex-col items-center gap-2 md:flex-row md:items-start">
-            <Pagination currentPageData={getPageNumber} type="income" />
+            <Pagination
+              currentPageData={getPageNumber}
+              countRes={getCountRes}
+              type="income"
+            />
             <SearchFinanceInput />
           </div>
           <Suspense fallback={<div className="p-4">Loading...</div>}>
