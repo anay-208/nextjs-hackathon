@@ -16,43 +16,29 @@ export default function Summarize({ id }: Props) {
 
 
 
-
   const onSummaryClick = async () => {
     setSummarizing(true);
     setAiResponse("");
     setHide(false);
 
-    const response = await fetch(`/api/journal/${await id}/summarize`, {
-      method: "GET",
-    });
+    try {
+      const response = await fetch(`/api/journal/${await id}/summarize`, {
+        method: "GET",
+      });
 
-    if (!response.body) {
-      throw new Error("No response body, aborting summarize");
-    }
-
-    const reader = response.body.getReader();
-    let done = false;
-    let result = "";
-
-    while (!done) {
-      const { value, done: readerDone } = await reader.read();
-      done = readerDone;
-
-      if (value) {
-        try {
-          // Parse the chunk directly as JSON
-          const parsedChunk = new TextDecoder().decode(value);
-          // Check if the chunk contains the "0" key
-        
-          result += parsedChunk; // Append the content
-          setAiResponse(result); // Update the response progressively
-        } catch (error) {
-          console.error("Error parsing chunk as JSON:", error);
-        }
+      if (!response.ok) {
+        alert("Failed to fetch summary")
+        throw new Error("Failed to fetch summary");
       }
-    }
 
-    setSummarizing(false);
+      const result = await response.text(); // Directly get the full text response
+      setAiResponse(result); // Set the AI response
+    } catch (error) {
+      console.error("Error fetching summary:", error);
+      setAiResponse("An error occurred while fetching the summary.");
+    } finally {
+      setSummarizing(false);
+    }
   };
 
   return (
