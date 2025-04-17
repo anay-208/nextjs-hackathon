@@ -83,7 +83,7 @@ function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summar
         className={cn(
           "hidden sm:inline",
           summarizing &&
-            "relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
+            "relative text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
         )}
       >
         {summarizing ? "Summarizing" : "Summarize"}
@@ -105,7 +105,7 @@ function AiResponseUI({
   return (
     <div
       className={cn(
-        "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
+        "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-2/3 sm:w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
         "animate-fade-in"
       )}
       style={{
