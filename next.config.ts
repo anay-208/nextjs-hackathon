@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
     useCache: true,
     ppr: true,
     dynamicIO: true,
-    authInterrupts: true
+    authInterrupts: true,
+    nodeMiddleware: true,
+
   },
   eslint: {
     ignoreDuringBuilds: true,

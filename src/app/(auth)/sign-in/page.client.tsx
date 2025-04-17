@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import { authClient } from '@/auth/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { test } from '@/actions/test'
-import { updateCurrency } from '@/actions/finance/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -25,26 +23,26 @@ export default function SignInPage() {
     return url
   })()
 
-  useEffect(() => {
-    // TODO: remove
-    authClient.getSession().then(console.log)
-    updateCurrency("INR")
-    test().then(console.log)
-  }, [])
+  // useEffect(() => {
+  //   // TODO: remove
+  //   authClient.getSession().then(console.log)
+  //   updateCurrency("INR")
+  //   test().then(console.log)
+  // }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    //   setError('')
     setIsLoading(true)
 
-    try {
-      await authClient.signIn.email({ email, password })
-      router.push(redirectTo) // Redirect to home page after successful sign in
-    } catch {
-      setError('Failed to sign in. Please check your credentials.')
-    } finally {
-      setIsLoading(false)
-    }
+    //   try {
+    //     await authClient.signIn.email({ email, password })
+    //     router.push(redirectTo) // Redirect to home page after successful sign in
+    //   } catch {
+    //     setError('Failed to sign in. Please check your credentials.')
+    //   } finally {
+    //     setIsLoading(false)
+    //   }
   }
 
   const handleAnonymousSignIn = async () => {
@@ -64,6 +62,7 @@ export default function SignInPage() {
           <h2 className="mt-2 text-4xl font-semibold  tracking-tighter">
             Sign in to your account
           </h2>
+          <span className='mt-2'>Since the project is part of a hackathon, only anonymous sign in is enabled now.</span>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px flex flex-col gap-4">
@@ -76,7 +75,7 @@ export default function SignInPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
+                // required
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -91,7 +90,7 @@ export default function SignInPage() {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                required
+                // required
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -106,12 +105,13 @@ export default function SignInPage() {
           <div className="flex flex-col gap-4">
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled
+            // disabled={isLoading}
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
 
-            <Button variant="outline" className="bg-white" onClick={handleAnonymousSignIn}>
+            <Button variant="outline" className="bg-white" onClick={handleAnonymousSignIn} disabled={isLoading}>
               Preview app anonymously
             </Button>
           </div>

@@ -79,12 +79,12 @@ async function RecentJournals() {
     pageSize: 3,
   })
 
-  if (!journals.data) {
-    return <div className="text-muted">No journals found</div>
+  if (!journals.data || journals.data.length === 0) {
+    return <div className="text-muted m-2">No journals found</div>
   }
 
   if (journals.error) {
-    return <div className="text-destroy">Error fetching journals</div>
+    return <div className="text-destroy m-2">Error fetching journals</div>
   }
 
   return <>

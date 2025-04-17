@@ -19,17 +19,17 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+  //   setError('')
     setIsLoading(true)
 
-    try {
-      await authClient.signUp.email({ name, email, password })
-      router.push('/') // Redirect to home page after successful sign up
-    } catch {
-      setError('Failed to sign up. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
+  //   try {
+  //     await authClient.signUp.email({ name, email, password })
+  //     router.push('/') // Redirect to home page after successful sign up
+  //   } catch {
+  //     setError('Failed to sign up. Please try again.')
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
   }
 
   const handleAnonymousSignIn = async () => {
@@ -114,6 +114,7 @@ export default function SignUpPage() {
               variant="outline" className="bg-white"
               type="button"
               onClick={handleAnonymousSignIn}
+              disabled={isLoading}
             >
               Preview app anonymously
             </Button>
