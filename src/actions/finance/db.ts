@@ -202,7 +202,7 @@ export const dbCreateCategory = async (data: AddCategoryInput) => {
 
 export const dbGetCategories = async (
   user_id: string,
-  data: {
+  options: {
     sort?: Pick<TransactionsSorting, "created_at">;
   },
 ) => {
@@ -216,8 +216,8 @@ export const dbGetCategories = async (
 
     orderBy: (table, { asc, desc }) =>
       [
-        data.sort?.created_at
-          ? data.sort.created_at === "asc"
+        options.sort?.created_at
+          ? options.sort.created_at === "asc"
             ? asc(table.created_at)
             : desc(table.created_at)
           : undefined,
