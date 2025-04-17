@@ -19,7 +19,7 @@ import {
 import { useTransactionDrawer } from "./context";
 import {
   CategoryData,
-  TransactionItemWithOptionalDate,
+  FrontendAddTransactionInput,
   TransactionPresetsData,
   TransactionsData,
 } from "@/actions/finance/types";
@@ -47,17 +47,15 @@ export default function GlobalDrawerClient({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const [transaction, setTransaction] =
-    useState<TransactionItemWithOptionalDate>({
-      id: "",
-      label: "",
-      amount: 0,
-      type: "expense",
-      notes: "",
-      category_id: "",
-      is_preset: false,
-      category: { label: "", budget: 0 },
-    });
+  const [transaction, setTransaction] = useState<FrontendAddTransactionInput>({
+    id: "",
+    label: "",
+    amount: 0,
+    type: "expense",
+    notes: "",
+    category_id: "",
+    is_preset: false,
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -70,6 +68,7 @@ export default function GlobalDrawerClient({
 
   useEffect(() => {
     if (originalTransaction) {
+      console.log(originalTransaction);
       setTransaction(originalTransaction);
     }
   }, [originalTransaction]);
@@ -83,7 +82,6 @@ export default function GlobalDrawerClient({
       notes: "",
       category_id: "",
       is_preset: false,
-      category: { label: "", budget: 0 },
     });
 
   return (
@@ -106,17 +104,13 @@ export default function GlobalDrawerClient({
           </SheetHeader>
 
           <div className="w-full space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <TransactionLabel
                 className="col-span-2"
                 transaction={transaction}
                 setTransaction={setTransaction}
               />
               <TransactionAmount
-                transaction={transaction}
-                setTransaction={setTransaction}
-              />
-              <TransactionDate
                 transaction={transaction}
                 setTransaction={setTransaction}
               />
@@ -164,16 +158,13 @@ export default function GlobalDrawerClient({
                 toast.error("Please select a transaction type");
                 return;
               }
+              if (!transaction.category_id) {
+                transaction.category_id = undefined;
+              }
               if (transaction.id) {
                 startTransition(async () => {
                   toast.promise(
-                    updateTransaction(transaction.id, {
-                      label: transaction.label,
-                      amount: transaction.amount,
-                      type: transaction.type,
-                      notes: transaction.notes ?? "",
-                      category_id: transaction.category_id ?? "",
-                    }),
+                    updateTransaction(transaction.id!, transaction),
                     {
                       loading: "Updating transaction...",
                       success: "Transaction updated!",
@@ -186,20 +177,11 @@ export default function GlobalDrawerClient({
                 });
               } else {
                 startTransition(async () => {
-                  toast.promise(
-                    createTransaction({
-                      label: transaction.label!,
-                      amount: transaction.amount!,
-                      type: transaction.type!,
-                      notes: transaction.notes ?? "",
-                      category_id: transaction.category_id ?? "",
-                    }),
-                    {
-                      loading: "Saving transaction...",
-                      success: "Transaction saved!",
-                      error: "Failed to save transaction",
-                    },
-                  );
+                  toast.promise(createTransaction(transaction), {
+                    loading: "Saving transaction...",
+                    success: "Transaction saved!",
+                    error: "Failed to save transaction",
+                  });
                   router.refresh();
                   resetTransaction();
                   closeTransactionDrawer();

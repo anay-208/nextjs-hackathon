@@ -1,4 +1,4 @@
-import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
+import { FrontendAddTransactionInput } from "@/actions/finance/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -8,8 +8,8 @@ export function TransactionLabel({
   setTransaction,
   className,
 }: {
-  transaction: TransactionItemWithOptionalDate;
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  transaction: FrontendAddTransactionInput;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
   className?: string;
 }) {
   return (

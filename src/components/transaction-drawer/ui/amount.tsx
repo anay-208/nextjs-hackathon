@@ -1,4 +1,4 @@
-import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
+import { FrontendAddTransactionInput } from "@/actions/finance/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dispatch, SetStateAction } from "react";
@@ -6,8 +6,8 @@ export function TransactionAmount({
   transaction,
   setTransaction,
 }: {
-  transaction: TransactionItemWithOptionalDate;
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  transaction: FrontendAddTransactionInput;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
 }) {
   return (
     <div className="space-y-2">

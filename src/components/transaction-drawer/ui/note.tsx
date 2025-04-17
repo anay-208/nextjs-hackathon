@@ -1,4 +1,4 @@
-import { TransactionItemWithOptionalDate } from "@/actions/finance/types";
+import { FrontendAddTransactionInput } from "@/actions/finance/types";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dispatch, SetStateAction } from "react";
@@ -6,8 +6,8 @@ export function TransactionNote({
   transaction,
   setTransaction,
 }: {
-  transaction: TransactionItemWithOptionalDate;
-  setTransaction: Dispatch<SetStateAction<TransactionItemWithOptionalDate>>;
+  transaction: FrontendAddTransactionInput;
+  setTransaction: Dispatch<SetStateAction<FrontendAddTransactionInput>>;
 }) {
   return (
     <div className="space-y-2">
