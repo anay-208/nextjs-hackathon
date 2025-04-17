@@ -10,10 +10,10 @@ import {
   dbGetCategories,
   dbGetCategory,
   dbGetTransactionPresets,
-  dbUpdateCurrency,
   dbGetTransactionsCount,
   dbListTransactions,
   dbUpdateCategory,
+  dbUpdateCurrency,
   dbUpdateTransaction,
 } from "./db";
 import {
@@ -80,13 +80,10 @@ export const getTransactionPresets = async (sort?: TransactionsSorting) =>
 
 export const updateCurrency = async (currency: string) => {
   return handle(
-    () =>
-      withAuth(({ user }) =>
-        dbUpdateCurrency(user.id, currency ),
-      ),
+    () => withAuth(({ user }) => dbUpdateCurrency(user.id, currency)),
     "updateCurrency",
   );
-}
+};
 export const getTransactionsCount = async (filter: TransactionsFilter) => {
   return handle(
     () => withAuth(({ user }) => dbGetTransactionsCount(user.id, filter)),

@@ -215,7 +215,7 @@ export const dbUpdateCategory = async (
   return data;
 };
 
-export const dbGetCategory = async (categoryId: string, userId: string) => {
+export const dbGetCategory = async (userId: string, categoryId: string) => {
   return db.query.categoriesTable.findFirst({
     columns: {
       id: false,
