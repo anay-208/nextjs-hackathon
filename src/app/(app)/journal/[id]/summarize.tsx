@@ -20,19 +20,32 @@ export default function Summarize({ id }: Props) {
     setSummarizing(true);
     setAiResponse("");
     setHide(false);
-
+  
     try {
       const response = await fetch(`/api/journal/${await id}/summarize`, {
         method: "GET",
       });
-
+  
       if (!response.ok) {
-        alert("Failed to fetch summary")
+        alert("Failed to fetch summary");
         throw new Error("Failed to fetch summary");
       }
-
-      const result = await response.text(); // Directly get the full text response
-      setAiResponse(result); // Set the AI response
+  
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let done = false;
+      let result = "";
+  
+      while (!done) {
+        const { value, done: readerDone } = await reader?.read()!;
+        done = readerDone;
+  
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          result += chunk; // Append the chunk to the result
+          setAiResponse(result); // Update the response progressively
+        }
+      }
     } catch (error) {
       console.error("Error fetching summary:", error);
       setAiResponse("An error occurred while fetching the summary.");
@@ -102,7 +115,7 @@ function AiResponseUI({
           onClick={onClose}
           className="text-black hover:text-gray-700 transition"
         >
-          <X className="h-5 w-5 sm:h-6 sm:w-6" />
+          <X className="clickable h-5 w-5 sm:h-6 sm:w-6" />
         </button>
       </div>
       <p className="whitespace-pre-wrap text-base mt-4 text-black sm:text-lg">
