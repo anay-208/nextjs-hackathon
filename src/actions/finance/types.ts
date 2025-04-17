@@ -14,7 +14,16 @@ import {
 
 export type AddTransactionInput = NoIdAndTimestamp<
   InferInsertModel<typeof transactionsTable>
-> & { created_at?: Date };
+>;
+export type FrontendAddTransactionInput = Omit<
+  AddTransactionInput,
+  "user_id"
+> & {
+  user_id?: string;
+  id?: string;
+  created_at?: Date;
+};
+
 export type AddCategoryInput = NoIdAndTimestamp<
   InferInsertModel<typeof categoriesTable>
 >;
