@@ -19,56 +19,68 @@
   --color-main-2: #5f5f86;
   --color-main-3: #5e5ea1;
   --color-main-4: #5656a9;
-  --color-red:    #d62625;
+  --color-red: #d62625;
 
   /* Semantics */
-  --color-infer-bg:      var(--bg); /* Inherit from parent element */
-  --color-bg:            #ffffff; 
-  --color-fg:            var(--color-main-1);
-  --color-fg-2:          --alpha(var(--color-main-1) / 80%);
-  --color-radio:         --alpha(var(--color-main-2) / 75%);
-  --color-muted:         --alpha(var(--color-main-2) / 75%);
+  --color-infer-bg: var(--bg); /* Inherit from parent element */
+  --color-bg: #ffffff;
+  --color-fg: var(--color-main-1);
+  --color-fg-2: --alpha(var(--color-main-1) / 80%);
+  --color-radio: --alpha(var(--color-main-2) / 75%);
+  --color-muted: --alpha(var(--color-main-2) / 75%);
 
-  --color-selected:      --alpha(var(--color-main-3) / 10%);
-  --color-focus:         --alpha(var(--color-main-3) / 75%);
-  --color-input:         --alpha(var(--color-main-3) / 25%);
-  --color-border:        --alpha(var(--color-main-3) / 10%);
+  --color-selected: --alpha(var(--color-main-3) / 10%);
+  --color-focus: --alpha(var(--color-main-3) / 75%);
+  --color-input: --alpha(var(--color-main-3) / 25%);
+  --color-border: --alpha(var(--color-main-3) / 10%);
   --color-border-strong: --alpha(var(--color-main-3) / 25%);
-  --color-placeholder:   --alpha(var(--color-main-3) / 25%);
-  --color-popover:       #ffffff;
-  --color-item-active:   --alpha(var(--color-main-3) / 18%);
+  --color-placeholder: --alpha(var(--color-main-3) / 25%);
+  --color-popover: #ffffff;
+  --color-item-active: --alpha(var(--color-main-3) / 18%);
 
-  
-  --color-hover:         --alpha(var(--color-main-4) / 5%);
-  --color-primary:       var(--color-main-4);
+  --color-hover: --alpha(var(--color-main-4) / 5%);
+  --color-primary: var(--color-main-4);
 
-  --color-destroy:       var(--color-red);
+  --color-destroy: var(--color-red);
 
   /* Font Size */
-  --text-xs:   0.625rem; /* 12px */
-  --text-sm:   0.813rem; /* 13px */
+  --text-xs: 0.625rem; /* 12px */
+  --text-sm: 0.813rem; /* 13px */
   --text-base: 0.875rem; /* 14px */
-  --text-lg:   1rem; /* 16px */
-  --text-xl:   1.125rem; /* 18px */
-  --text-2xl:  1.25rem; /* 20px */
-  --text-3xl:  1.5rem; /* 24px */
-  --text-4xl:  1.75rem; /* 28px */
-  --text-5xl:  2rem; /* 32px */
-  --text-6xl:  2.5rem; /* 40px */
-  --text-7xl:  3rem; /* 48px */
-  --text-8xl:  4rem; /* 64px */
-  --text-9xl:  5rem; /* 80px */
+  --text-lg: 1rem; /* 16px */
+  --text-xl: 1.125rem; /* 18px */
+  --text-2xl: 1.25rem; /* 20px */
+  --text-3xl: 1.5rem; /* 24px */
+  --text-4xl: 1.75rem; /* 28px */
+  --text-5xl: 2rem; /* 32px */
+  --text-6xl: 2.5rem; /* 40px */
+  --text-7xl: 3rem; /* 48px */
+  --text-8xl: 4rem; /* 64px */
+  --text-9xl: 5rem; /* 80px */
 
   /* Shadow */
-  --shadow-2xs: 0 1px  2px  -1px  --alpha(var(--color-main-4) / 10% );
-  --shadow-xs:  0 1px  2px  -1px  --alpha(var(--color-main-4) / 20% );
-  --shadow-sm:  0 1px  3px  0     --alpha(var(--color-main-4) / 10% ), 0 1px 2px -1px --alpha(var(--color-main-4) / 10% );
-  --shadow-md:  0 4px  6px  -1px  --alpha(var(--color-main-4) / 10% ), 0 2px 4px -2px --alpha(var(--color-main-4) / 10% );
-  --shadow-lg:  0 10px 15px -3px  --alpha(var(--color-main-4) / 10% ), 0 4px 6px -4px --alpha(var(--color-main-4) / 10% );
-  --shadow-xl:  0 20px 25px -5px  --alpha(var(--color-main-4) / 10% ), 0 8px 10px -6px --alpha(var(--color-main-4) / 10% );
-  --shadow-2xl: 0 25px 50px -12px --alpha(var(--color-main-4) / 20% );
+  --shadow-2xs: 0 1px 2px -1px --alpha(var(--color-main-4) / 10%);
+  --shadow-xs: 0 1px 2px -1px --alpha(var(--color-main-4) / 20%);
+  --shadow-sm:
+    0 1px 3px 0 --alpha(var(--color-main-4) / 10%),
+    0 1px 2px -1px --alpha(var(--color-main-4) / 10%);
+  --shadow-md:
+    0 4px 6px -1px --alpha(var(--color-main-4) / 10%),
+    0 2px 4px -2px --alpha(var(--color-main-4) / 10%);
+  --shadow-lg:
+    0 10px 15px -3px --alpha(var(--color-main-4) / 10%),
+    0 4px 6px -4px --alpha(var(--color-main-4) / 10%);
+  --shadow-xl:
+    0 20px 25px -5px --alpha(var(--color-main-4) / 10%),
+    0 8px 10px -6px --alpha(var(--color-main-4) / 10%);
+  --shadow-2xl: 0 25px 50px -12px --alpha(var(--color-main-4) / 20%);
+}
 
-
+@layer base {
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
 }
 
 @utility clickable {
@@ -76,7 +88,7 @@
 }
 
 @utility container-app-content {
-  @apply max-w-[480px] md:max-w-[860px] mx-auto
+  @apply mx-auto max-w-[480px] md:max-w-[860px];
 }
 
 @keyframes card-insert {
@@ -106,18 +118,17 @@
 }
 
 @utility col-open {
-  @apply grid-cols-[1fr]
+  @apply grid-cols-[1fr];
 }
 @utility col-closed {
-  @apply grid-cols-[0fr]
+  @apply grid-cols-[0fr];
 }
 @utility row-open {
-  @apply grid-rows-[1fr]
+  @apply grid-rows-[1fr];
 }
 @utility row-closed {
-  @apply grid-rows-[0fr]
+  @apply grid-rows-[0fr];
 }
-
 
 @keyframes fade-in {
   0% {
@@ -210,7 +221,6 @@
   animation: slide-in-left 0.5s ease-out forwards;
 }
 
-
 @keyframes shine {
   0% {
     background-position: -200%;
@@ -224,3 +234,4 @@
   background-size: 200% auto;
   animation: shine 1.5s linear infinite;
 }
+
