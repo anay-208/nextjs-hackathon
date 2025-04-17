@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { route } from "../routes";
+import ActionButtons from "./ActionButtons";
 import { Illustration1 } from "./illustration1";
 
 export default async function Home() {
@@ -17,6 +18,7 @@ export default async function Home() {
         "--px": "2rem",
       }}
     >
+      <ActionButtons />
       <header className="bg-bg border-border sticky top-0 mx-auto flex h-12 w-full justify-center border-b">
         <div className="flex max-w-(--max-w) grow items-center justify-between px-(--px)">
           <div className="flex items-center gap-1">
