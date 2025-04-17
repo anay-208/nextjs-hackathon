@@ -32,12 +32,16 @@ export default function Summarize({ id }: Props) {
       }
   
       const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("Failed to get reader from response body");
+      }
+  
       const decoder = new TextDecoder("utf-8");
       let done = false;
       let result = "";
   
       while (!done) {
-        const { value, done: readerDone } = await reader?.read()!;
+        const { value, done: readerDone } = await reader.read();
         done = readerDone;
   
         if (value) {
