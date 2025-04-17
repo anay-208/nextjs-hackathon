@@ -18,24 +18,28 @@ export function MainSidebar() {
           label: "Dashboard",
           href: route.dashboard,
           active: true,
+          tooltip: "Dashboard",
         },
         {
           icon: MaterialSymbolsBook2,
           label: "Journals",
           href: route.journal,
           active: false,
+          tooltip: "Journals",
         },
         {
           icon: MaterialSymbolsAttachMoney,
           label: "Finances",
           href: route.finance,
           active: false,
+          tooltip: "Finances",
         },
         {
           icon: MaterialSymbolsTrophy,
           label: "Goals",
           href: route.goals,
           active: false,
+          tooltip: "Goals",
         }
       ].map(item =>
         <SidebarButton
@@ -43,6 +47,7 @@ export function MainSidebar() {
           href={item.href}
           icon={<item.icon className="size-6" />}
           label={item.label}
+          tooltip={item.tooltip}
         />
       )}
       <div className="grow" />
