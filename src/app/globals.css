@@ -248,3 +248,42 @@
   background-size: 200% 200%;
   animation: gradient-x 2s linear infinite;
 }
+
+@keyframes fancy-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(0) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@utility animate-fancy-appear {
+  animation: fancy-appear 0.6s ease-out forwards;
+}
+
+
+@keyframes fancy-disappear {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+}
+
+@utility animate-fancy-disappear {
+  animation: fancy-disappear 0.6s ease-out forwards;
+}

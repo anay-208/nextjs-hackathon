@@ -18,7 +18,7 @@ export default function Page(props: {
       <div className="flex -mx-9 -mt-4 items-center px-5 pt-1 sticky -top-4 bg-white z-10">
         <div className="flex items-center gap-1">
           <Link href={'/journal'}>
-            <Button className="h-8 text-fg/90 px-2" size="sm" variant="ghost">
+            <Button  className="h-8 text-fg/90 px-2" size="sm" variant="ghost">
               Journal
             </Button>
           </Link>
@@ -31,7 +31,10 @@ export default function Page(props: {
 
         </div>
         <div className="flex items-center gap-0 h-10">
+          <div>
           <Summarize id={props.params.then(p => p.id)} />
+
+          </div>
           <div className="transition-[grid-template-columns] grid grid-cols-[0fr] [&:has(.top-bar-pin-button)]:grid-cols-[1fr] overflow-hidden">
             <div className="min-w-0">
               <Suspense>
@@ -77,7 +80,7 @@ async function JournalPinned(props: {
 }) {
   const id = await props.id;
   const journalRes = await getJournal(id);
-  if (!journalRes) notFound();
+  if (!journalRes) notFound()
 
   const journalData = journalRes.data;
   if (!journalData) notFound();

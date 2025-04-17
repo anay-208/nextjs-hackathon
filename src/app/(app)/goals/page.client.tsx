@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  createGoal,
+  toggleGoalCompletion as toggleGoalCompletionAction,
+} from "@/actions/goals/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,25 +16,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
 import { CalendarIcon, Plus } from "lucide-react";
+import Form from "next/form";
 import { startTransition, useOptimistic, useState } from "react";
 import type { Goal } from "./types";
-import { createGoal, toggleGoalCompletion as toggleGoalCompletionAction } from "@/actions/goals/actions";
-import { Label } from "@/components/ui/label";
-import Form from "next/form";
-import { cn } from "@/lib/utils";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 
-export default function GoalsPage(props: { goalsList: Goal[]; author: string }) {
-
-  const [goalList, optimisticUpdate] = useOptimistic(props.goalsList, (curr, newVal: Goal) => {
-    return [newVal, ...curr];
-  })
+export default function GoalsPage(props: {
+  goalsList: Goal[];
+  author: string;
+}) {
+  const [goalList, optimisticUpdate] = useOptimistic(
+    props.goalsList,
+    (curr, newVal: Goal) => {
+      return [newVal, ...curr];
+    },
+  );
 
   const [newDialogOpen, setNewDialogOpen] = useState(false);
 
   return (
-    <div className="container mx-auto py-8 animate-in fade-in-0">
+    <div className="animate-in fade-in-0 container mx-auto py-8">
       <div className="mb-6 flex items-center justify-between">
         <Dialog open={newDialogOpen} onOpenChange={setNewDialogOpen}>
           <DialogTrigger asChild>
@@ -44,8 +52,8 @@ export default function GoalsPage(props: { goalsList: Goal[]; author: string }) 
             </DialogHeader>
             <AddGoalDialogContent
               onCreate={(goal) => {
-                optimisticUpdate(goal)
-                setNewDialogOpen(false)
+                optimisticUpdate(goal);
+                setNewDialogOpen(false);
               }}
             />
           </DialogContent>
@@ -60,16 +68,15 @@ export default function GoalsPage(props: { goalsList: Goal[]; author: string }) 
             <GoalItem key={goal.id} data={goal} />
           ))}
       </div>
-
-
     </div>
   );
 }
 
-
-
 function GoalItem(props: { data: Goal }) {
-  const [goal, optimisticUpdate] = useOptimistic(props.data, (curr, newVal: Partial<Goal>) => ({ ...curr, ...newVal }));
+  const [goal, optimisticUpdate] = useOptimistic(
+    props.data,
+    (curr, newVal: Partial<Goal>) => ({ ...curr, ...newVal }),
+  );
 
   const formatDate = (date: Date): string => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -103,7 +110,10 @@ function GoalItem(props: { data: Goal }) {
   };
 
   return (
-    <Card key={goal.id} className={cn('relative', goal.completed ? "opacity-70" : "")}>
+    <Card
+      key={goal.id}
+      className={cn("relative", goal.completed ? "opacity-70" : "")}
+    >
       <CardHeader className="pb-0">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-2">
@@ -111,19 +121,24 @@ function GoalItem(props: { data: Goal }) {
               checked={goal.completed}
               onCheckedChange={() => {
                 startTransition(async () => {
-                  optimisticUpdate({ completed: !goal.completed, });
-                  const res = await toggleGoalCompletionAction(goal.id, !goal.completed)
+                  optimisticUpdate({ completed: !goal.completed });
+                  const res = await toggleGoalCompletionAction(
+                    goal.id,
+                    !goal.completed,
+                  );
                   if (!res || !res.data) {
                     console.log(res);
                     return alert("an unknown error occured");
                   }
-                })
+                });
               }}
               className="mt-1 size-7"
             />
             <div>
               <CardTitle className={goal.completed ? "line-through" : ""}>
-                {goal.title ?? <span className="text-muted">Untitled Goal</span>}
+                {goal.title ?? (
+                  <span className="text-muted">Untitled Goal</span>
+                )}
               </CardTitle>
               <div className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
                 <CalendarIcon className="h-4 w-4" />
@@ -133,43 +148,42 @@ function GoalItem(props: { data: Goal }) {
                 </Badge>
               </div>
             </div>
-
           </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="text-muted-foreground text-sm">
           {getDaysRemaining(goal.deadline) > 0
-            ? `${ getDaysRemaining(goal.deadline) } days remaining`
+            ? `${getDaysRemaining(goal.deadline)} days remaining`
             : "Deadline passed"}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
-
-function AddGoalDialogContent(props: {
-  onCreate: (goal: Goal) => void;
-}) {
+function AddGoalDialogContent(props: { onCreate: (goal: Goal) => void }) {
   const [date, setDate] = useState(new Date());
 
   return (
     <div>
-      <Form action={(form) => {
-        const goalTitle = form.get("goal-title") as string;
-        const goalDeadline = date
-        startTransition(async () => {
-          props.onCreate({
-            title: goalTitle, deadline: goalDeadline, completed: false,
-            id: "",
-            user_id: "",
-            created_at: new Date(),
-            updated_at: new Date()
-          })
-          await createGoal(goalTitle, goalDeadline)
-        })
-      }}
+      <Form
+        action={(form) => {
+          const goalTitle = form.get("goal-title") as string;
+          const goalDeadline = date;
+          startTransition(async () => {
+            props.onCreate({
+              title: goalTitle,
+              deadline: goalDeadline,
+              completed: false,
+              id: "",
+              user_id: "",
+              created_at: new Date(),
+              updated_at: new Date(),
+            });
+            await createGoal(goalTitle, goalDeadline);
+          });
+        }}
         className="flex flex-col gap-2"
       >
         <div className="space-y-2">
@@ -187,18 +201,14 @@ function AddGoalDialogContent(props: {
           <Label htmlFor="goal-deadline" className="text-sm font-medium">
             Deadline
           </Label>
-          <DatePicker
-            date={date}
-            setDate={date => setDate(date!)}
-          />
+          <DatePicker date={date} setDate={(date) => setDate(date!)} />
         </div>
-        <Button
-          type="submit"
-          className="w-full mt-4"
-        >
-          Add Goal
-        </Button>
+        <DialogClose asChild>
+          <Button type="submit" className="mt-4 w-full">
+            Add Goal
+          </Button>
+        </DialogClose>
       </Form>
     </div>
-  )
+  );
 }

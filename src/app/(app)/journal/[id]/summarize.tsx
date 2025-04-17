@@ -20,29 +20,29 @@ export default function Summarize({ id }: Props) {
     setSummarizing(true);
     setAiResponse("");
     setHide(false);
-  
+
     try {
       const response = await fetch(`/api/journal/${await id}/summarize`, {
         method: "GET",
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to fetch summary");
       }
-  
+
       const reader = response.body?.getReader();
       if (!reader) {
         throw new Error("Failed to get reader from response body");
       }
-  
+
       const decoder = new TextDecoder("utf-8");
       let done = false;
       let result = "";
-  
+
       while (!done) {
         const { value, done: readerDone } = await reader.read();
         done = readerDone;
-  
+
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
           result += chunk; // Append the chunk to the result
@@ -68,31 +68,32 @@ export default function Summarize({ id }: Props) {
 }
 function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summarizing: boolean }) {
   return (
-    <Button
-      disabled={summarizing}
-      className={cn(
-        "text-white flex items-center gap-2",
-        summarizing
-          ? "bg-gradient-to-r from-purple-500 via-purple-700 to-purple-500 animate-gradient-x"
-          : "bg-purple-600 hover:bg-purple-700"
-      )}
-      onClick={onClick}
-    >
-      <Sparkles className="h-4 w-4" />
-      <span
+    <>
+      <Button
+        title="Your data might be used by Google to train their AI. Please don't input any personal information as this is a part of a hackathon."
+        disabled={summarizing}
         className={cn(
-          "hidden sm:inline",
-          summarizing &&
-            "relative text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
+          "text-white flex items-center gap-2",
+          summarizing
+            ? "bg-gradient-to-r from-purple-500 via-purple-700 to-purple-500 animate-gradient-x"
+            : "bg-purple-600 hover:bg-purple-700"
         )}
+        onClick={onClick}
       >
-        {summarizing ? "Summarizing" : "Summarize"}
-      </span>
-    </Button>
+        <Sparkles className="h-4 w-4" />
+        <span
+          className={cn(
+            "hidden sm:inline",
+            summarizing &&
+            "relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
+          )}
+        >
+          {summarizing ? "Summarizing" : "Summarize with Ai*"}
+        </span>
+      </Button>
+    </>
   );
 }
-
-
 
 
 function AiResponseUI({
@@ -102,11 +103,20 @@ function AiResponseUI({
   content: string;
   onClose: () => void;
 }) {
+  const [isClosing, setIsClosing] = useState(false); // State to handle closing animation
+
+  const handleClose = () => {
+    setIsClosing(true); // Trigger the closing animation
+    setTimeout(() => {
+      onClose(); // Call the onClose function after the animation ends
+    }, 600); // Match the duration of the animation
+  };
+
   return (
     <div
       className={cn(
-        "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-2/3 sm:w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
-        "animate-fade-in"
+        "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
+        isClosing ? "animate-fancy-disappear" : "animate-fancy-appear" // Use appear or disappear animation
       )}
       style={{
         backdropFilter: "blur(25px)",
@@ -115,7 +125,7 @@ function AiResponseUI({
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-medium text-black sm:text-3xl">Summary</h2>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="text-black hover:text-gray-700 transition"
         >
           <X className="clickable h-5 w-5 sm:h-6 sm:w-6" />

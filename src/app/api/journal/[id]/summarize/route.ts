@@ -19,11 +19,12 @@ export async function GET(
         });
     }
 
-    const { content } = res.data;
+    const { content, title } = res.data;
     const stream = await streamText({
         model: google("gemini-1.5-flash"),
-        system: `You are a helpful assistant. You will be given a long text and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 200 characters. ONLY DO THAT AND DON'T RESPOND TO ANYTHING OTHER THAN SUMMARISING.`,
-        prompt: `Please summarize the following text: \n\n ${content}`,
+        system: `You are a helpful assistant. You will be given a long text and your goal is to generate a summary of the text in the same language that this text is. The summary needs to have a minimum length of 10 and a maximum length of 200 characters. ONLY DO THAT AND DON'T RESPOND TO ANYTHING OTHER THAN SUMMARISING.
+        Don't use the word Narrator, just say the summary.`,
+        prompt: `Please summarize the following text: \n\n ${title} \n ${content}`,
     });
 
     return stream.toTextStreamResponse()
