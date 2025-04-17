@@ -13,10 +13,15 @@ export default function Summarize({ id }: Props) {
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [hide, setHide] = useState<boolean>(true); // Controls visibility of the UI
 
+
+
+
+
   const onSummaryClick = async () => {
     setSummarizing(true);
     setAiResponse("");
     setHide(false);
+
     const response = await fetch(`/api/journal/${await id}/summarize`, {
       method: "GET",
     });
@@ -26,19 +31,27 @@ export default function Summarize({ id }: Props) {
     }
 
     const reader = response.body.getReader();
-    const decoder = new TextDecoder("utf-8");
     let done = false;
     let result = "";
+
     while (!done) {
       const { value, done: readerDone } = await reader.read();
       done = readerDone;
+
       if (value) {
-        const chunk = decoder.decode(value, { stream: true });
-        result += chunk;
-        setAiResponse(result); // Update the response progressively
+        try {
+          // Parse the chunk directly as JSON
+          const parsedChunk = new TextDecoder().decode(value);
+          // Check if the chunk contains the "0" key
+          result += parsedChunk; // Append the content
+          setAiResponse(result); // Update the response progressively
+        } catch (error) {
+          console.error("Error parsing chunk as JSON:", error);
+        }
       }
     }
-    setSummarizing(false)
+
+    setSummarizing(false);
   };
 
   return (
@@ -66,7 +79,7 @@ function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summar
         className={cn(
           "hidden sm:inline",
           summarizing &&
-            "relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
+          "relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
         )}
       >
         {summarizing ? "Summarizing" : "Summarize"}
