@@ -103,7 +103,7 @@ const TiptapEditor = ({
     },
     editorProps: {
       attributes: {
-        class: "prose dark:prose-invert max-w-none focus:outline-none prose-p:text-main-1 prose-h2:text-main-1 prose-h3:text-main-1 prose-h4:text-main-1 ",
+        class: "prose dark:prose-invert max-w-none focus:outline-none prose-p:text-main-1 prose-h2:text-main-1 prose-h3:text-main-1 prose-h4:text-main-1 prose-b:text-main-1 ",
       },
     },
   });
