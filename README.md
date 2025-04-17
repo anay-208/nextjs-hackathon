@@ -1,4 +1,14 @@
+# LifeLog
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/actions-reference/cli/create-next-app).
+
+This project is made for Next.js Hackathon 2025.
+
+## Testing
+
+To test the application, visit the link mentioned on the repo.
+There is a "Preview as anonymous feature", powered by better-auth, used in this.
+
 
 ## Getting Started
 
