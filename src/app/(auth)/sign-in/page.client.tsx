@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { authClient } from '@/auth/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
