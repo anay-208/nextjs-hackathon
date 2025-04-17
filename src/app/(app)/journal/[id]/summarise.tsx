@@ -22,7 +22,7 @@ export default function Summarize({ id }: Props) {
     });
 
     if (!response.body) {
-      throw new Error("No response body");
+      throw new Error("No response body, aborting summarize");
     }
 
     const reader = response.body.getReader();
