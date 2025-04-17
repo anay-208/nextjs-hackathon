@@ -38,7 +38,7 @@ export default function Summarize({ id }: Props) {
         setAiResponse(result); // Update the response progressively
       }
     }
-    setSummarizing(false)
+    setSummarizing(false);
   };
 
   return (
@@ -51,13 +51,18 @@ export default function Summarize({ id }: Props) {
   );
 }
 
-
-function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summarizing: boolean }) {
+function SummarizeButton({
+  onClick,
+  summarizing,
+}: {
+  onClick: () => void;
+  summarizing: boolean;
+}) {
   return (
     <Button
       disabled={summarizing}
       className={cn(
-        "bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+        "flex items-center gap-2 bg-purple-600 text-white hover:bg-purple-700",
       )}
       onClick={onClick}
     >
@@ -66,7 +71,7 @@ function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summar
         className={cn(
           "hidden sm:inline",
           summarizing &&
-            "relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine"
+            "animate-shine relative inline-block bg-gradient-to-r from-yellow-400 via-white to-yellow-400 bg-clip-text text-transparent",
         )}
       >
         {summarizing ? "Summarizing" : "Summarize"}
@@ -74,9 +79,6 @@ function SummarizeButton({ onClick, summarizing }: { onClick: () => void; summar
     </Button>
   );
 }
-
-
-
 
 function AiResponseUI({
   content,
@@ -88,25 +90,25 @@ function AiResponseUI({
   return (
     <div
       className={cn(
-        "fixed z-10 top-5 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 text-white shadow-lg w-11/12 max-w-2xl border border-purple-500/50 backdrop-blur-md",
-        "animate-fade-in"
+        "fixed top-5 left-1/2 z-30 w-11/12 max-w-2xl -translate-x-1/2 transform rounded-lg border border-purple-500/50 bg-gradient-to-r from-purple-500/20 via-transparent to-purple-500/20 p-4 text-white shadow-lg backdrop-blur-md",
+        "animate-fade-in",
       )}
       style={{
         backdropFilter: "blur(25px)",
       }}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-medium text-black sm:text-3xl">Summary</h2>
         <button
           onClick={onClose}
-          className="text-black hover:text-gray-700 transition"
+          className="text-black transition hover:text-gray-700"
         >
           <X className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
       </div>
-      <p className="whitespace-pre-wrap text-base mt-4 text-black sm:text-lg">
+      <p className="mt-4 text-base whitespace-pre-wrap text-black sm:text-lg">
         {content ?? (
-          <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-white to-yellow-400 animate-shine">
+          <span className="animate-shine relative inline-block bg-gradient-to-r from-yellow-400 via-white to-yellow-400 bg-clip-text text-transparent">
             Summarizing...
           </span>
         )}
@@ -114,3 +116,4 @@ function AiResponseUI({
     </div>
   );
 }
+
