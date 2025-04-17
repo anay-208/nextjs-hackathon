@@ -1,12 +1,10 @@
-import { auth } from "@/auth";
-import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 import { APIResponse } from "./types";
+import { serverAuth } from "@/auth/actions";
 
 export const getValidUser = async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await serverAuth.getSession();
   if (!session || !session.user) return unauthorized();
-
   return session;
 };
 

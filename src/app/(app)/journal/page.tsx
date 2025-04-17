@@ -18,7 +18,9 @@ export default function Page(props: {
       <PageLocation>Journal</PageLocation>
       <PageTitle>My Journal</PageTitle>
       <Suspense>
-        <JournalPageList searchParams={props.searchParams} />
+        <div className={"animate-in fade-in-0"}>
+          <JournalPageList searchParams={props.searchParams} />
+        </div>
       </Suspense>
     </AppContent>
   );
@@ -32,7 +34,9 @@ async function JournalPageList(props: {
 }) {
   const searchParams = await props.searchParams;
   const { search } = searchParams;
-  const pageNumber : number = !isNaN(parseInt(searchParams.pageNumber)) ? parseInt(searchParams.pageNumber)  : 0;
+  const pageNumber: number = !isNaN(parseInt(searchParams.pageNumber))
+    ? parseInt(searchParams.pageNumber)
+    : 0;
   const journalList = await listJournals({
     page: pageNumber,
     pageSize: JournalDashboardSize,

@@ -102,6 +102,7 @@ export function SidebarButtonBase({ icon, label, href, ...props }: ComponentProp
     <Link
       {...props}
       href={href}
+      prefetch={true}
       className={cn(
         "size-10 flex items-center justify-center rounded-md text-muted clickable transition-transform",
         props['data-active'] ? "bg-selected text-fg" : "hover:bg-hover"

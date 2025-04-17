@@ -26,7 +26,11 @@ export function SidebarJournalItemListClient(
 
   return (
     <SidebarItemBase key={props.id} data-active={isActive}>
-      <Link href={`/journal/${ props.id }`} className="absolute opacity-0 inset-0 z-10" prefetch={true}></Link>
+      <Link
+        href={`/journal/${ props.id }`}
+        className="absolute opacity-0 inset-0 z-10"
+        prefetch={true}>
+      </Link>
       <div className="grow min-w-0 overflow-hidden text-ellipsis relative">
         {props.title || <span className="text-muted">Untitled Entry</span>}
       </div>
