@@ -131,8 +131,8 @@ async function UserRecentJournals() {
   return <>
     {journals.data.map((j) => {
       return <Link key={j.id} href={route.journalID(j.id)} className="flex gap-2 items-center p-2 rounded-lg hover:bg-hover">
-        <MaterialSymbolsAsterisk className="size-4.5 text-main-4/90" />
-        <div>
+        <MaterialSymbolsAsterisk className="size-4.5 text-main-4/90 shrink-0" />
+        <div className="line-clamp-1">
           {j.title || <span className="text-muted">Untitled Entry</span>}
         </div>
       </Link>
@@ -249,8 +249,8 @@ async function UserRecentGoals() {
     {goals.data.slice(0, 3).map((j) => {
       return (
         <div key={j.id} className="flex gap-2 items-center py-2 rounded-lg">
-          <MaterialSymbolsTarget className="size-4.5 text-main-4/90" />
-          <div>
+          <MaterialSymbolsTarget className="size-4.5 text-main-4/90 shrink-0" />
+          <div className="line-clamp-1">
             {j.title || <span className="text-muted">Untitled Goal</span>}
           </div>
         </div>
