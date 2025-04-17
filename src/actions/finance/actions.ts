@@ -112,7 +112,7 @@ export const updateCategory = async (
   );
 };
 
-export const getCategories = async (options: {
+export const getCategories = async (options?: {
   sort?: Pick<TransactionsSorting, "created_at">;
 }) =>
   handle(
@@ -120,7 +120,7 @@ export const getCategories = async (options: {
       withAuth(({ user }) =>
         dbGetCategories(user.id, {
           ...options,
-          sort: options.sort || { created_at: "desc" },
+          sort: options?.sort || { created_at: "desc" },
         }),
       ),
     "getCategories",
