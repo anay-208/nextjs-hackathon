@@ -67,6 +67,7 @@ export const listTransactions = async (data: {
           user_id: user.id,
           page: data.page || 0,
           pageSize: data.pageSize || 10,
+          sort: data.sort || { created_at: "desc" },
         }),
       ),
     "listTransactions",
@@ -74,7 +75,10 @@ export const listTransactions = async (data: {
 
 export const getTransactionPresets = async (sort?: TransactionsSorting) =>
   handle(
-    () => withAuth(({ user }) => dbGetTransactionPresets(user.id, sort)),
+    () =>
+      withAuth(({ user }) =>
+        dbGetTransactionPresets(user.id, sort || { created_at: "desc" }),
+      ),
     "getTransactionPresets",
   );
 
@@ -108,9 +112,17 @@ export const updateCategory = async (
   );
 };
 
-export const getCategories = async () =>
+export const getCategories = async (options?: {
+  sort?: Pick<TransactionsSorting, "created_at">;
+}) =>
   handle(
-    () => withAuth(({ user }) => dbGetCategories(user.id)),
+    () =>
+      withAuth(({ user }) =>
+        dbGetCategories(user.id, {
+          ...options,
+          sort: options?.sort || { created_at: "desc" },
+        }),
+      ),
     "getCategories",
   );
 
