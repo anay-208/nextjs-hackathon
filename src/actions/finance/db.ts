@@ -200,7 +200,12 @@ export const dbCreateCategory = async (data: AddCategoryInput) => {
   return result[0];
 };
 
-export const dbGetCategories = async (user_id: string) => {
+export const dbGetCategories = async (
+  user_id: string,
+  data: {
+    sort?: Pick<TransactionsSorting, "created_at">;
+  },
+) => {
   "use cache";
   cacheTag("categories");
   return db.query.categoriesTable.findMany({
@@ -208,6 +213,16 @@ export const dbGetCategories = async (user_id: string) => {
     columns: {
       user_id: false,
     },
+
+    orderBy: (table, { asc, desc }) =>
+      [
+        data.sort?.created_at
+          ? data.sort.created_at === "asc"
+            ? asc(table.created_at)
+            : desc(table.created_at)
+          : undefined,
+      ].filter((elmt) => typeof elmt !== "undefined"),
+
     where: eq(categoriesTable.user_id, user_id),
   });
 };
