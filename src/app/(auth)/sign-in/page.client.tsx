@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { revalidate } from "@/auth/revalidate";
+// import { revalidate } from "@/auth/revalidate";
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -48,7 +48,7 @@ export default function SignInPage() {
     toast.promise(async () => {
       try {
         await authClient.signIn.anonymous()
-        await revalidate()        
+        // await revalidate()        
         router.push(redirectTo)
       } catch (err) {
         setError('Failed to sign in anonymously. Please try again.')

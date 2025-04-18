@@ -44,7 +44,6 @@ export const dbMarkGoalAsComplete = async (
   goalId: string,
   completed: boolean,
 ) => {
-  console.log(userId, goalId, completed)
   const res = await db
     .update(goalsTable)
     .set({

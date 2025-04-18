@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { authClient } from "./client";
 import { route } from "@/app/routes";
 import type { ComponentProps, MouseEvent } from "react";
-import { revalidate } from "./revalidate";
+// import { revalidate } from "./revalidate";
 import { toast } from "sonner";
 
 export function AnonymousSignInButton({
@@ -25,7 +25,7 @@ export function AnonymousSignInButton({
     toast.promise(async () => {
     try {
       await authClient.signIn.anonymous();
-      await revalidate();
+      // await revalidate();
       router.push(redirectTo ?? route.dashboard);
     } catch (err) {
       console.error(err);

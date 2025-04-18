@@ -23,6 +23,7 @@ import { CalendarIcon, Plus } from "lucide-react";
 import Form from "next/form";
 import { startTransition, useOptimistic, useState } from "react";
 import type { Goal } from "./types";
+import { toast } from "sonner";
 
 export default function GoalsPage(props: {
   goalsList: Goal[];
@@ -170,21 +171,23 @@ function AddGoalDialogContent(props: { onCreate: (goal: Goal) => void }) {
   return (
     <div>
       <Form
-        action={(form) => {
+        action={async (form) => {
           const goalTitle = form.get("goal-title") as string;
           const goalDeadline = date;
           startTransition(async () => {
-            props.onCreate({
-              title: goalTitle,
-              deadline: goalDeadline,
-              completed: false,
-              id: "",
-              user_id: "",
-              created_at: new Date(),
-              updated_at: new Date(),
-            });
-            await createGoal(goalTitle, goalDeadline);
-          });
+            toast.promise(async () => {
+              const newGoal = await createGoal(goalTitle, goalDeadline);
+              if (newGoal.error || !newGoal.data) {
+                console.log(newGoal);
+                throw new Error("failed to create goal")
+              }
+              props.onCreate(newGoal.data[0]);
+            }, {
+              loading: "Creating goal...",
+              success: "Goal created successfully!",
+              error: "Failed to create goal. Please try again or contact me@anayparaswani.dev or discord @anay_208.",
+            })
+          })
         }}
         className="flex flex-col gap-2"
       >
