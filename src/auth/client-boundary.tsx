@@ -5,6 +5,7 @@ import { authClient } from "./client";
 import { route } from "@/app/routes";
 import type { ComponentProps, MouseEvent } from "react";
 import { revalidate } from "./revalidate";
+import { toast } from "sonner";
 
 export function AnonymousSignInButton({
   redirectTo,
@@ -21,6 +22,7 @@ export function AnonymousSignInButton({
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
     onClick?.(e);
+    toast.promise(async () => {
     try {
       await authClient.signIn.anonymous();
       await revalidate();
@@ -29,6 +31,11 @@ export function AnonymousSignInButton({
       console.error(err);
       onError?.("Failed to sign in anonymously. Please try again.");
     }
+  }, {
+    loading: "Signing in anonymously...",
+    success: "Signed in anonymously! Please refresh if you're not redirected.",
+    error: "Failed to sign in anonymously. Please try again or report it to me@anayparaswani.dev or discord @anay_208!",
+  })
   };
 
   return <button onClick={handleAnonymousSignIn} {...props} />;

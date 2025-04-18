@@ -18,6 +18,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
+
     // Redirect unauthenticated users to sign-in for protected routes
     if (!session && protectedRoutes.includes(currentPath)) {
         return NextResponse.redirect(new URL('/sign-in', request.url));

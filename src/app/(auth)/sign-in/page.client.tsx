@@ -1,13 +1,12 @@
 'use client'
-
+import { toast } from "sonner";
 import { useState } from 'react'
 import { authClient } from '@/auth/client'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { route } from '@/app/routes'
+import { revalidate } from "@/auth/revalidate";
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -18,8 +17,8 @@ export default function SignInPage() {
   const sp = useSearchParams()
   const redirectTo = (() => {
     const url = sp.get('redirectTo')
-    if (!url) return '/'
-    if (!url.startsWith('/')) return '/'
+    if (!url) return '/dashboard'
+    if (!url.startsWith('/')) return '/dashboard'
     return url
   })()
 
@@ -46,13 +45,19 @@ export default function SignInPage() {
   }
 
   const handleAnonymousSignIn = async () => {
-    try {
-      const res = await authClient.signIn.anonymous()
-      console.log(res)
-      router.push(redirectTo)
-    } catch (err) {
-      setError('Failed to sign in anonymously. Please try again.')
-    }
+    toast.promise(async () => {
+      try {
+        await authClient.signIn.anonymous()
+        await revalidate()        
+        router.push(redirectTo)
+      } catch (err) {
+        setError('Failed to sign in anonymously. Please try again.')
+      }
+    }, {
+      loading: 'Signing in anonymously...',
+      success: "Signed in anonymously! Please refresh if you're not redirected.",
+      error: 'Failed to sign in anonymously. Please try again or report it to me@anayparaswani.dev or discord @anay_208!',
+    })
   }
 
   return (
@@ -116,9 +121,9 @@ export default function SignInPage() {
             </Button>
           </div>
 
-          <Link href={route.signup} className="text-sm text-main-3 hover:text-main-4">
+          {/* <Link href={route.signup} className="text-sm text-main-3 hover:text-main-4">
             Don't have an account? Sign up
-          </Link>
+          </Link> */}
         </form>
       </div>
     </div>

@@ -51,7 +51,7 @@ export default async function Home() {
                 <Link href={route.dashboard}>
                   <Button className="h-10 px-5 text-base">
                     Get started now →
-                  </Button>
+                  </Button> -
                 </Link>
                 <Button asChild variant="secondary" className="h-10 px-5 text-base">
                   <AnonymousSignInButton
