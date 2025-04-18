@@ -48,11 +48,11 @@ export default async function Home() {
                 All your thoughts, goals, finances, and reflections — in one
                 secure, cozy space.
               </div>
-              <div className="flex gap-2">
-                <Link href={route.dashboard}>
+              <div className="flex gap-2 flex-col items-stretch sm:flex-row">
+                <Link href={route.dashboard} className="flex flex-col items-stretch">
                   <Button className="h-10 px-5 text-base">
                     Get started now →
-                  </Button> -
+                  </Button>
                 </Link>
                 <Button asChild variant="secondary" className="h-10 px-5 text-base">
                   <AnonymousSignInButton
