@@ -2,7 +2,13 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/actions-reference/cli/create-next-app).
 
+Life Log is your personal operating system for real life — bringing your thoughts, goals, finances, and reflections into one cozy, secure space. Designed for clarity and control, Life Log gives you a beautiful dashboard to track your life at a glance, a journal to write about your day, a smart goal planner to remind you of deadlines, and an expense tracker that tracks your spending to help you work on them. Whether you're reflecting on your day, planning your next big thing, or keeping tabs on your spending — Life Log helps you do it all in one place. Clean, focused, and intentionally designed for peace of mind.
+
 This project is made for Next.js Hackathon 2025.
+
+
+
+Note: If you're using Ai features, please don't input any personal information as this is a part of hackathon, and google might use the info to train their Ai(as they mentioned in their free plan)
 
 ## Testing
 
