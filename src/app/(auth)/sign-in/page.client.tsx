@@ -46,15 +46,15 @@ export default function SignInPage() {
   const handleAnonymousSignIn = async () => {
     toast.promise(async () => {
       try {
-        const res = await authClient.signIn.anonymous()
-        console.log(res)
+        await authClient.signIn.anonymous()
+        await router.refresh()        
         router.push(redirectTo)
       } catch (err) {
         setError('Failed to sign in anonymously. Please try again.')
       }
     }, {
       loading: 'Signing in anonymously...',
-      success: 'Signed in anonymously!',
+      success: "Signed in anonymously! Please refresh if you're not redirected.",
       error: 'Failed to sign in anonymously. Please try again or report it to me@anayparaswani.dev or discord @anay_208!',
     })
   }

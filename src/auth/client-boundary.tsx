@@ -33,7 +33,7 @@ export function AnonymousSignInButton({
     }
   }, {
     loading: "Signing in anonymously...",
-    success: "Signed in anonymously!",
+    success: "Signed in anonymously! Please refresh if you're not redirected.",
     error: "Failed to sign in anonymously. Please try again or report it to me@anayparaswani.dev or discord @anay_208!",
   })
   };
