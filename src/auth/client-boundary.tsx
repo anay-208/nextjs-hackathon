@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { authClient } from "./client"
-import { route } from "@/app/routes"
-import type { ComponentProps, MouseEvent } from "react"
+import { useRouter } from "next/navigation";
+import { authClient } from "./client";
+import { route } from "@/app/routes";
+import type { ComponentProps, MouseEvent } from "react";
+import { revalidate } from "./revalidate";
 
 export function AnonymousSignInButton({
   redirectTo,
@@ -11,25 +12,25 @@ export function AnonymousSignInButton({
   onClick,
   ...props
 }: {
-  redirectTo?: string
-  onError?: (error: string) => void
+  redirectTo?: string;
+  onError?: (error: string) => void;
 } & ComponentProps<"button">) {
+  const router = useRouter();
 
-  const router = useRouter()
-
-
-  const handleAnonymousSignIn = async (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
-    onClick?.(e)
+  const handleAnonymousSignIn = async (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
+  ) => {
+    onClick?.(e);
     try {
-      const res = await authClient.signIn.anonymous()
-      console.log(res)
-      router.push(redirectTo ?? route.dashboard)
+      await authClient.signIn.anonymous();
+      await revalidate();
+      router.push(redirectTo ?? route.dashboard);
     } catch (err) {
-      onError?.('Failed to sign in anonymously. Please try again.')
+      console.error(err);
+      onError?.("Failed to sign in anonymously. Please try again.");
     }
-  }
+  };
 
-  return (
-    <button onClick={handleAnonymousSignIn} {...props} />
-  )
+  return <button onClick={handleAnonymousSignIn} {...props} />;
 }
+
