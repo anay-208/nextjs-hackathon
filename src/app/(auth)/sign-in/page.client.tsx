@@ -17,8 +17,8 @@ export default function SignInPage() {
   const sp = useSearchParams()
   const redirectTo = (() => {
     const url = sp.get('redirectTo')
-    if (!url) return '/'
-    if (!url.startsWith('/')) return '/'
+    if (!url) return '/dashboard'
+    if (!url.startsWith('/')) return '/dashboard'
     return url
   })()
 
