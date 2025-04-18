@@ -118,6 +118,7 @@ function GoalItem(props: { data: Goal }) {
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-2">
             <Checkbox
+              disabled={goal.id.startsWith('OPTIMISTIC')}
               checked={goal.completed}
               onCheckedChange={() => {
                 startTransition(async () => {
@@ -176,7 +177,7 @@ function AddGoalDialogContent(props: { onCreate: (goal: Goal) => void }) {
               title: goalTitle,
               deadline: goalDeadline,
               completed: false,
-              id: "",
+              id: "OPTIMISTIC",
               user_id: "",
               created_at: new Date(),
               updated_at: new Date(),
