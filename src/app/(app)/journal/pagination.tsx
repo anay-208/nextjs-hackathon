@@ -29,7 +29,9 @@ export async function Pagination(props: { currentPage: number }) {
         </Link>
       </Button>
 
-      <p className="flex w-8 items-center justify-center">{currentPage + 1}</p>
+      <p className="flex w-8 items-center justify-center">
+        {currentPage + 1}/{totalPages}
+      </p>
 
       <Button asChild disabled={!hasNextPage} variant="ghost" size="icon">
         <Link
@@ -47,4 +49,3 @@ export async function Pagination(props: { currentPage: number }) {
     </div>
   );
 }
-
