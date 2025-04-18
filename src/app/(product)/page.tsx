@@ -1,4 +1,5 @@
 import Icon from "@/assets/icon.png";
+import Demo1 from "@/assets/demo1.png";
 import { serverAuth } from "@/auth/actions";
 import { Button } from "@/components/ui/button";
 import { CollapsibleColumn } from "@/components/ui/collapsible";
@@ -13,7 +14,7 @@ import { AnonymousSignInButton } from "@/auth/client-boundary";
 export default async function Home() {
   return (
     <div
-      className="min-h-[100svh] w-full"
+      className="min-h-[100svh] w-full overflow-x-clip"
       style={{
         "--max-w": "1080px",
         "--px": "2rem",
@@ -37,10 +38,10 @@ export default async function Home() {
       </header>
 
       <main>
-        <section className="mx-auto max-w-(--max-w) px-(--px)">
+        <section className="mx-auto max-w-(--max-w) px-(--px) md:pt-20">
           <div className="flex flex-col gap-2 gap-y-8 py-20 md:flex-row">
             <div className="flex flex-col gap-8">
-              <h1 className="text-6xl font-semibold tracking-tighter text-pretty">
+              <h1 className="text-7xl font-semibold tracking-tighter text-pretty">
                 Your Personal Operating System for Real Life
               </h1>
               <div className="text-2xl font-medium tracking-tighter text-pretty">
@@ -62,16 +63,17 @@ export default async function Home() {
                 </Button>
               </div>
             </div>
-            <div className="flex h-80 w-full min-w-0 grow items-center justify-center rounded-lg">
+            <div className="flex h-80 w-full -mx-8 md:-mt-20 min-w-0 grow items-center justify-center rounded-lg">
               <Illustration1 className="h-[130%]" />
             </div>
           </div>
-          <div className="h-160 rounded-lg bg-zinc-100">
+          <div className="rounded-lg bg-[#F6F6FA] border border-border shadow-lg min-w-2xl">
             <div className="flex gap-2 p-3">
-              <div className="size-3 rounded-full bg-zinc-200" />
-              <div className="size-3 rounded-full bg-zinc-200" />
-              <div className="size-3 rounded-full bg-zinc-200" />
+              <div className="size-3 rounded-full bg-main-4/10" />
+              <div className="size-3 rounded-full bg-main-4/10" />
+              <div className="size-3 rounded-full bg-main-4/10" />
             </div>
+            <Image src={Demo1} alt={"Demo"} className="rounded-lg" />
           </div>
         </section>
       </main>
