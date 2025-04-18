@@ -5,7 +5,6 @@ import { JournalDashboardSize } from "./constants";
 import { Button } from "@/components/ui/button";
 
 export async function Pagination(props: { currentPage: number }) {
-
   const currentPage = props.currentPage;
   const countRes = await getJournalCount();
   const count = countRes.data ?? 0;
@@ -18,8 +17,9 @@ export async function Pagination(props: { currentPage: number }) {
     <div className="flex flex-row items-center gap-2">
       <Button asChild disabled={!hasPrevPage} variant="ghost" size="icon">
         <Link
-          href={`/journal?pageNumber=${ currentPage - 1 }`}
+          href={`/journal?pageNumber=${currentPage - 1}`}
           scroll={false}
+          prefetch={true}
           aria-label="Previous page"
         >
           <ChevronLeft
@@ -29,12 +29,13 @@ export async function Pagination(props: { currentPage: number }) {
         </Link>
       </Button>
 
-      <p className="w-8 flex items-center justify-center">{currentPage + 1}</p>
+      <p className="flex w-8 items-center justify-center">{currentPage + 1}</p>
 
       <Button asChild disabled={!hasNextPage} variant="ghost" size="icon">
         <Link
-          href={`/journal?pageNumber=${ currentPage + 1 }`}
+          href={`/journal?pageNumber=${currentPage + 1}`}
           scroll={false}
+          prefetch={true}
           aria-label="Next page"
         >
           <ChevronRight
@@ -43,7 +44,7 @@ export async function Pagination(props: { currentPage: number }) {
           />
         </Link>
       </Button>
-
     </div>
   );
 }
+
