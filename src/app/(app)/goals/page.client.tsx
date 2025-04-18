@@ -109,6 +109,8 @@ function GoalItem(props: { data: Goal }) {
     }
   };
 
+  console.log(goal.id)
+
   return (
     <Card
       key={goal.id}

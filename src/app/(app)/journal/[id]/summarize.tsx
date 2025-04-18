@@ -75,7 +75,7 @@ function SummarizeButton({
   return (
     <>
       <Button
-        title="Your data might be used by Google to train their AI. Please don't input any personal information as this is a part of a hackathon."
+        title="*Your data might be used by Google to train their AI. Please don't input any personal information as this is a part of a hackathon."
         disabled={summarizing}
         className={cn(
           "flex items-center gap-2 text-white",

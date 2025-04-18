@@ -1,6 +1,6 @@
 export const route = {
   signin: (redirectTo?: string) => `/sign-in${redirectTo ? `?redirectTo=${redirectTo}` : ""}`,
-  signup: "/sign-up",
+  // signup: "/sign-up",
   dashboard: "/dashboard",
   journal: "/journal",
   journalID: (id: string) => `/journal/${ id }`,
