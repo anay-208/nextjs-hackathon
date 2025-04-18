@@ -1,1 +1,1 @@
-export const JournalDashboardSize = 10;
+export const JournalDashboardSize = 9;
