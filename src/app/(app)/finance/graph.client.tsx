@@ -60,7 +60,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         </p>
         <p className="text-muted text-sm font-medium tracking-tight">
           Amount:{" "}
-          <span className="text-fg">₹{payload[0].value.toFixed(2)}</span>
+          <span className="text-fg">${payload[0].value.toFixed(2)}</span>
         </p>
       </div>
     );
@@ -163,7 +163,7 @@ export function AmountGraph({
         <ReferenceLine
           y={minAmount}
           label={{
-            value: `Min: ₹${minAmount.toFixed(2)}`,
+            value: `Min: $${minAmount.toFixed(2)}`,
             position: "insideBottomRight",
             style: { fill: "#ef4444", fontSize: "12px" },
           }}
@@ -173,7 +173,7 @@ export function AmountGraph({
         <ReferenceLine
           y={maxAmount}
           label={{
-            value: `Max: ₹${maxAmount.toFixed(2)}`,
+            value: `Max: $${maxAmount.toFixed(2)}`,
             position: "insideTopRight",
             style: { fill: "#22c55e", fontSize: "12px" },
           }}
