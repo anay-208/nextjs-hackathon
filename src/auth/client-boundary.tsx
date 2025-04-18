@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { authClient } from "./client";
 import { route } from "@/app/routes";
-import type { ComponentProps, MouseEvent } from "react";
+import { useState, type ComponentProps, type MouseEvent } from "react";
 import { revalidate } from "./revalidate";
-import { toast } from "sonner";
 
 export function AnonymousSignInButton({
   redirectTo,
@@ -17,12 +16,13 @@ export function AnonymousSignInButton({
   onError?: (error: string) => void;
 } & ComponentProps<"button">) {
   const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
 
   const handleAnonymousSignIn = async (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
     onClick?.(e);
-    toast.promise(async () => {
+    setIsPending(true);
     try {
       await authClient.signIn.anonymous();
       await revalidate();
@@ -30,14 +30,12 @@ export function AnonymousSignInButton({
     } catch (err) {
       console.error(err);
       onError?.("Failed to sign in anonymously. Please try again.");
+    } finally {
+      setIsPending(false);
     }
-  }, {
-    loading: "Signing in anonymously...",
-    success: "Signed in anonymously! Please refresh if you're not redirected.",
-    error: "Failed to sign in anonymously. Please try again or report it to me@anayparaswani.dev or discord @anay_208!",
-  })
   };
 
-  return <button onClick={handleAnonymousSignIn} {...props} />;
+  return (
+    <button disabled={isPending} onClick={handleAnonymousSignIn} {...props} />
+  );
 }
-
