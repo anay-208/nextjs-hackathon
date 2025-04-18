@@ -96,7 +96,8 @@ export default function GlobalDrawerClient({
         >
           <SheetHeader className="px-0">
             <SheetTitle className="text-main-0 text-xl">
-              Create a New Transaction
+              Create a new{" "}
+              {transaction.type === "income" ? "Income" : "Expense"}
             </SheetTitle>
             <SheetDescription className="text-main-2">
               Enter the details of your transaction below
