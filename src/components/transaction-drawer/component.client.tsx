@@ -96,7 +96,8 @@ export default function GlobalDrawerClient({
         >
           <SheetHeader className="px-0">
             <SheetTitle className="text-main-0 text-xl">
-              Create a New Transaction
+              Create a new{" "}
+              {transaction.type === "income" ? "Income" : "Expense"}
             </SheetTitle>
             <SheetDescription className="text-main-2">
               Enter the details of your transaction below
@@ -133,6 +134,12 @@ export default function GlobalDrawerClient({
                 transaction={transaction}
                 setTransaction={setTransaction}
               />
+            </div>
+            <div className="border-border-strong flex h-fit w-full flex-col items-center justify-center border-y">
+              <p className="text-muted-foreground text-main-2 py-2 text-sm">
+                We value your time, click any of the options below to autofill
+                the fields
+              </p>
             </div>
             <TransactionTabs
               setTransaction={setTransaction}
