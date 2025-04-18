@@ -1,1 +1,1 @@
-export const FinancePageSize = 10;
+export const FinancePageSize = 9;

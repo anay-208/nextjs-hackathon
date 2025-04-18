@@ -26,6 +26,7 @@ export async function Pagination(props: {
         <Link
           href={`/finance/${type}?pageNumber=${currentPage - 1}`}
           scroll={false}
+          prefetch={true}
           aria-label="Previous page"
         >
           <ChevronLeft
@@ -41,6 +42,7 @@ export async function Pagination(props: {
         <Link
           href={`/finance/${type}?pageNumber=${currentPage + 1}`}
           scroll={false}
+          prefetch={true}
           aria-label="Next page"
         >
           <ChevronRight
